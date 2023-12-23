@@ -1,0 +1,125 @@
+
+.btn.btn-rounded {
+    border-radius: 50px
+}
+
+.btn-outline-facebook {
+    border: 1px solid #3b579d;
+    color: #3b579d
+}
+
+.btn-outline-facebook:hover {
+    background: #3b579d;
+    color: #ffffff
+}
+
+.btn-outline-youtube {
+    border: 1px solid #e52d27;
+    color: #e52d27
+}
+
+.btn-outline-twitter {
+    border: 1px solid #2caae1;
+    color: #2caae1
+}
+
+.btn-outline-dribbble {
+    border: 1px solid #ea4c89;
+    color: #ea4c89
+}
+
+.btn-outline-linkedin {
+    border: 1px solid #0177b5;
+    color: #0177b5
+}
+
+.btn-outline-instagram {
+    border: 1px solid #dc4a38;
+    color: #dc4a38
+}
+
+.btn-outline-twitter:hover {
+    background: #2caae1;
+    color: #ffffff
+}
+
+.btn-outline-linkedin:hover {
+    background: #0177b5;
+    color: #ffffff
+}
+
+.btn-outline-youtube:hover {
+    background: #e52d27;
+    color: #ffffff
+}
+
+.btn-outline-instagram:hover {
+    background: #e52d27;
+    color: #ffffff
+}
+
+.btn-facebook {
+    background: #3b579d;
+    color: #ffffff
+}
+
+.btn-youtube {
+    background: #e52d27;
+    color: #ffffff
+}
+
+.btn-twitter {
+    background: #2caae1;
+    color: #ffffff
+}
+
+.btn-dribbble {
+    background: #ea4c89;
+    color: #ffffff
+}
+
+.btn-linkedin {
+    background: #0177b5;
+    color: #ffffff
+}
+
+.btn-instagram {
+    background: #dc4a38;
+    color: #ffffff
+}
+
+.btn-facebook:hover,
+.btn-facebook:focus {
+    background: #2d4278;
+    color: #ffffff
+}
+
+.btn-youtube:hover,
+.btn-youtube:focus {
+    background: #c21d17;
+    color: #ffffff
+}
+
+.btn-twitter:hover,
+.btn-twitter:focus {
+    background: #1b8dbf;
+    color: #ffffff
+}
+
+.btn-dribbble:hover,
+.btn-dribbble:focus {
+    background: #e51e6b;
+    color: #ffffff
+}
+
+.btn-linkedin:hover,
+.btn-linkedin:focus {
+    background: #015682;
+    color: #ffffff
+}
+
+.btn-instagram:hover,
+.btn-instagram:focus {
+    background: #bf3322;
+    color: #ffffff
+}
