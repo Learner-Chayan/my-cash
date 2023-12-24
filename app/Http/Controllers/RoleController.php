@@ -13,7 +13,7 @@ class RoleController extends Controller
 
     function __construct()
     {
-        $this->middleware(['auth','role:super-admin','Setting']);
+        $this->middleware(['auth','Setting']);
     }
 
 
@@ -33,8 +33,9 @@ class RoleController extends Controller
         ]);
 
         $role = Role::create(['name' => $request->input('name')]);
-        $role->syncPermissions($request->input('permission'));
-
+        $permissionIds = $request->input('permission'); // this is an array of IDs
+        $permissionNames = Permission::find($permissionIds)->pluck('name');
+        $role->syncPermissions($permissionNames);
         return redirect()->back()
             ->with('success','Role created successfully');
     }
@@ -71,8 +72,10 @@ class RoleController extends Controller
         $role = Role::find($id);
         $role->name = $request->input('name');
 //        $role->save();
-
-//        $role->syncPermissions($request->input('permission'));
+//
+//        $permissionIds = $request->input('permission'); // this is an array of IDs
+//        $permissionNames = Permission::find($permissionIds)->pluck('name');
+//        $role->syncPermissions($permissionNames);
 
         return redirect()->route('roles.index')
             ->with('error','Role not updated successfully');

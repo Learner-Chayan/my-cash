@@ -18,25 +18,23 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    {!! Form::open(array('route' => 'roles.store','method'=>'POST')) !!}
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Role Name</label>
-                        <input type="text" class="form-control"  name="name" value="{{old('name')}}" required  placeholder="Role Name">
-                    </div>
-                    <div class="form-group">
-                        <label>Permission</label>
-                        <select class="select2bs4" multiple="multiple" name="permission[]" required data-placeholder="Select a State" style="width: 100%;">
-                            @foreach($permission as $value)
-                                <option value="{{$value->id}}"> {{$value->name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <!-- /.card-body -->
-
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                    {!! Form::close() !!}
+                    <form action="{{route('roles.store')}}" method="post">
+                        @csrf
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Role Name</label>
+                            <input type="text" class="form-control"  name="name" value="{{old('name')}}" required  placeholder="Role Name">
+                        </div>
+                        <div class="form-group">
+                            <label>Permission</label>
+                            <select class="select2bs4" multiple="multiple" name="permission[]" required data-placeholder="Select a State" style="width: 100%;">
+                                @foreach($permission as $value)
+                                    <option> {{$value->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <!-- /.card-body -->
+                        <button type="submit" class="btn btn-primary float-right">Submit</button>
+                    </form>
                 </div>
                 <!-- /.card -->
             </div>

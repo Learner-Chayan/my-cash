@@ -18,41 +18,40 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    {!! Form::model($user, ['method' => 'PATCH','route' => ['users.update', $user->id]]) !!}
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Name</label>
-                                <input type="text" class="form-control"  name="name" value="{{$user->name}}" required  placeholder="User Name">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Phone</label>
-                                <input type="text" class="form-control"  name="phone" value="{{$user->phone}}" required  placeholder="User Phone Number">
-                            </div>
+                    <form action="{{ route('users.update', $user->id) }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Name</label>
+                                    <input type="text" class="form-control"  name="name" value="{{$user->name}}" required  placeholder="User Name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Phone</label>
+                                    <input type="text" class="form-control"  name="phone" value="{{$user->phone}}" required  placeholder="User Phone Number">
+                                </div>
 
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Email</label>
-                                <input type="email" class="form-control"  name="email" value="{{$user->email}}" required  placeholder="User Email">
                             </div>
-                            <div class="form-group">
-                                <label>Role</label>
-                                <select class="select2bs4" name="roles[]" required data-placeholder="Select a State" style="width: 100%;">
-                                    <option value="">Select One</option>
-                                    @foreach($roles as $role)
-                                        <option value="{{$role->id}}" {{ $user->roles()->pluck('name')->implode(' , ') == $role->name ? 'selected' : '' }}>{!! $role->name !!}</option>
-                                    @endforeach
-                                </select>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Email</label>
+                                    <input type="email" class="form-control"  name="email" value="{{$user->email}}" required  placeholder="User Email">
+                                </div>
+                                <div class="form-group">
+                                    <label>Role</label>
+                                    <select class="select2bs4" name="roles" required data-placeholder="Select a State" style="width: 100%;">
+                                        <option value="">Select One</option>
+                                        @foreach($roles as $role)
+                                            <option value="{{$role->id}}" {{ $user->roles()->pluck('name')->implode(' , ') == $role->name ? 'selected' : '' }}>{!! $role->name !!}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- /.card-body -->
-
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                    {!! Form::close() !!}
+                        <!-- /.card-body -->
+                        <button type="submit" class="btn btn-primary float-right">Submit</button>
+                    </form>
                 </div>
                 <!-- /.card -->
             </div>

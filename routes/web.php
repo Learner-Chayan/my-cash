@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -60,17 +63,11 @@ Route::get('get-copy-right', [BasicController::class, 'indexCopy'])->name('get-c
 Route::post('get-copy-right-update', [BasicController::class, 'updateCopy'])->name('get-copy-right-update');
 
 
-    // Route::resource('roles','RoleController');
-    // Route::resource('permissions','PermissionController');
-    // Route::resource('users','UserController');
-    // Route::resource('sliders','Controllers\SliderController');
-    // Route::resource('socials','Controllers\SocialController');
-    // Route::resource('faqs','Controllers\FaqController');
+     Route::resource('roles',RoleController::class);
+     Route::resource('permissions',PermissionController::class);
+     Route::resource('users',UserController::class);
+//     Route::resource('sliders','Controllers\SliderController');
+//     Route::resource('socials','Controllers\SocialController');
+//     Route::resource('faqs','Controllers\FaqController');
 
-    // Route::get('advertisement', ['as' => 'advertisement', 'uses' => 'controllers\FaqController@indexAdvertisement']);
-    // Route::get('advertisement-create', ['as' => 'advertisement-create', 'uses' => 'controllers\FaqController@createAdvertisement']);
-    // Route::post('advertisement-store', ['as' => 'advertisement-store', 'uses' => 'controllers\FaqController@storeAdvertisement']);
-    // Route::get('advertisement-edit/{id}', ['as' => 'advertisement-edit', 'uses' => 'controllers\FaqController@editAdvertisement']);
-    // Route::post('advertisement-update', ['as' => 'advertisement-update', 'uses' => 'controllers\FaqController@updateAdvertisement']);
-    // Route::delete('advertisement-delete', ['as' => 'advertisement-delete', 'uses' => 'controllers\FaqController@deleteAdvertisement']);
 });

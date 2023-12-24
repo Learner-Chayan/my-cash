@@ -18,48 +18,46 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    {!! Form::open(array('route' => 'users.store','method'=>'POST')) !!}
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Name</label>
-                                <input type="text" class="form-control"  name="name" value="{{old('name')}}" required  placeholder="User Name">
+                    <form action="{{route('users.store')}}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Name</label>
+                                    <input type="text" class="form-control"  name="name" value="{{old('name')}}" required  placeholder="User Name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Phone</label>
+                                    <input type="text" class="form-control"  name="phone" value="{{old('phone')}}" required  placeholder="User Phone Number">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Email</label>
+                                    <input type="email" class="form-control"  name="email" value="{{old('email')}}" required  placeholder="User Email">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Phone</label>
-                                <input type="text" class="form-control"  name="phone" value="{{old('phone')}}" required  placeholder="User Phone Number">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Email</label>
-                                <input type="email" class="form-control"  name="email" value="{{old('email')}}" required  placeholder="User Email">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Password</label>
+                                    <input type="password" class="form-control"  name="password" required  placeholder="Password">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Confirm Password</label>
+                                    <input type="password" class="form-control"  name="confirm-password" required  placeholder="Confirm Password">
+                                </div>
+                                <div class="form-group">
+                                    <label>Role</label>
+                                    <select class="select2bs4" name="roles" required data-placeholder="Select a State" style="width: 100%;">
+                                        <option value="">Select One</option>
+                                        @foreach($roles as $role)
+                                            <option>{!! $role->name !!}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Password</label>
-                                <input type="password" class="form-control"  name="password" required  placeholder="Password">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Confirm Password</label>
-                                <input type="password" class="form-control"  name="confirm-password" required  placeholder="Confirm Password">
-                            </div>
-                            <div class="form-group">
-                                <label>Role</label>
-                                <select class="select2bs4" name="roles[]" required data-placeholder="Select a State" style="width: 100%;">
-                                    <option value="">Select One</option>
-                                    @foreach($roles as $role)
-                                        <option>{!! $role->name !!}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.card-body -->
+                        <button type="submit" class="btn btn-primary float-right">Submit</button>
 
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                    {!! Form::close() !!}
+                    </form>
                 </div>
                 <!-- /.card -->
             </div>

@@ -65,8 +65,10 @@
                                                 @if($user->id !== 0)
                                                     <a class="btn btn-sm btn-primary fa fa-edit" href="{{ route('users.edit',$user->id) }}" title="Edit"></a>
                                                     @can('delete')
-                                                        {!! Form::button('<i class="fa fa-trash"></i> ', ['title' => 'Delete', 'class' => 'btn btn-sm btn-danger bold uppercase delete_button','data-toggle'=>"modal",'data-target'=>"#DelModal",'data-id'=>$user->id]) !!}
-                                                    @endcan
+                                                        <button title="Delete" class="btn btn-sm btn-danger bold uppercase delete_button" data-toggle="modal" data-target="#DelModal" data-id="{{ $user->id }}">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                     @endcan
                                                 @endif
                                             </td>
                                         </tr>

@@ -11,11 +11,21 @@ class UserController extends Controller
 {
     function __construct()
     {
-        $this->middleware(['auth','role:admin|super-admin','Setting']);
+        $this->middleware(['auth','Setting']);
     }
 
     public function index()
     {
+
+        $user = User::find(1); // or however you retrieve your user
+        $user->assignRole('super-admin');
+        $roleName = auth()->user()->getRoleNames()->first();
+        dd($roleName);
+        if (auth()->user()->hasRole('super-admin')) {
+            dd('ok');
+        }else{
+            dd('heleo');
+        }
         $page_title = "Manage User";
         $data       = User::with('roles')->where('id','!=',1)->get();
         return view('admin.users.index',compact('data','page_title'));
@@ -57,7 +67,7 @@ class UserController extends Controller
     public function edit($id) {
         $data['page_title'] = "User Edit";
         $data['user']  = User::findOrFail($id);
-        $data['roles'] = Role::where('name','!=','super-admin')->get();
+        $data['roles'] = Role::where('name','=','super-admin')->get();
         return view('admin.users.edit',$data);
 
     }
@@ -72,11 +82,10 @@ class UserController extends Controller
         ]);
 
         $input = $request->only(['name', 'email','phone', 'password']);
-        $roles = $request['roles'];
         $user->fill($input)->save();
-
-        if (isset($roles)) {
-            $user->roles()->sync($roles);
+        $roleId = $request->input('roles'); // this is an array of IDs
+        if (isset($roleId)) {
+            $user->roles()->sync($roleId);
         }
         else {
             $user->roles()->detach();

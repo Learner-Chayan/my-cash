@@ -18,29 +18,30 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    {!! Form::open(['route'=>['roles.update',$role->id],'method'=>'put','files'=>'true' ]) !!}
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Role Name</label>
-                        <input type="text" class="form-control"  name="name" value="{{$role->name}}" required  placeholder="Role Name">
-                    </div>
-                    <div class="form-group">
-                        <label class="text-bold text-uppercase">Assign Permissions</label>
+                    <form action="{{route('roles.update',$role->id)}}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
 
-                        @foreach($permission as $value)
-                            <div class="custom-control custom-checkbox">
-                                <label>{{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, array('class' => 'name')) }}
-                                    {{ $value->name }}</label>
-                            </div>
-                            <label></label>
-                            <br/>
-                        @endforeach
-                    </div>
-                    <!-- /.card-body -->
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Role Name</label>
+                            <input type="text" class="form-control"  name="name" value="{{$role->name}}" required  placeholder="Role Name">
+                        </div>
+                        <div class="form-group">
+                            <label class="text-bold text-uppercase">Assign Permissions</label>
 
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                    {!! Form::close() !!}
+                            @foreach($permission as $value)
+                                <div class="custom-control custom-checkbox">
+                                    <label>
+                                        <input type="checkbox" name="permission[]" value="{{ $value->id }}" {{ in_array($value->id, $rolePermissions) ? 'checked' : '' }} class="name">
+                                        {{ $value->name }}
+                                    </label>
+                                </div>
+                                <br/>
+                            @endforeach
+                        </div>
+                        <!-- /.card-body -->
+                        <button type="submit" class="btn btn-primary float-right">Submit</button>
+                    </form>
                 </div>
                 <!-- /.card -->
             </div>

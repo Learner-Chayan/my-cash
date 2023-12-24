@@ -19,35 +19,29 @@
                     <div class="card card-primary card-outline">
                         <div class="card-header">
                             <h3 class="card-title">{{$page_title}}</h3>
-{{--                            <div class="pull-right box-tools">--}}
-{{--                                <div class="float-right mt-1">--}}
-{{--                                    <a class="btn btn-primary uppercase text-bold" href="{{ route('roles.create') }}"> New Role</a>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-5">
-                                    {!! Form::open(array('route' => 'roles.store','method'=>'POST')) !!}
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1">Role Name <code>*</code></label>
-                                        <input type="text" class="form-control"  name="name" value="{{old('name')}}" required  placeholder="Role Name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Permission <code>*</code></label>
-                                        <select class="select2bs4" multiple="multiple" name="permission[]" required data-placeholder="Select a State" style="width: 100%;">
-                                            @foreach($permission as $value)
-                                                <option value="{{$value->id}}"> {{$value->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <!-- /.card-body -->
+                                    <form action="{{route('roles.store')}}" method="post">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Role Name <code>*</code></label>
+                                            <input type="text" class="form-control"  name="name" value="{{old('name')}}" required  placeholder="Role Name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Permission <code>*</code></label>
+                                            <select class="select2bs4" multiple="multiple" name="permission[]" required data-placeholder="Select a State" style="width: 100%;">
+                                                @foreach($permission as $value)
+                                                    <option value="{{$value->id}}"> {{$value->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <!-- /.card-body -->
+                                        <button type="submit" class="btn btn-primary float-right">Submit</button>
 
-                                    <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                    </div>
-                                    {!! Form::close() !!}
+                                    </form>
                                 </div>
                                 <div class="col-md-7">
                                     <div class="table-responsive">
