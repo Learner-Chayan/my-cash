@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    {!! Form::open(['route'=>['change-password'],'method'=>'POST','files'=>'true' ]) !!}
+                    <form action="{{route('change-password')}}" method="post">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Old Password</label>
                         <input type="password" class="form-control" name="old_password" required placeholder="Enter Your Old Password">
@@ -27,13 +27,9 @@
                         <label for="exampleInputEmail1">Confirm Password</label>
                         <input type="password" class="form-control" name="password_confirmation" required placeholder="Enter Confirm Password">
                     </div>
-
                     <!-- /.card-body -->
-
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-primary float-right">Update Password</button>
-                    </div>
-                    {!! Form::close() !!}
+                    <button type="submit" class="btn btn-primary float-right">Update Password</button>
+                    </form>
                 </div>
                 <!-- /.card -->
             </div>

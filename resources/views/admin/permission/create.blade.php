@@ -36,10 +36,13 @@
                                     <strong>Assign Permission to Role:</strong>
                                     <br />
                                     @foreach ($roles as $value)
-                                        <label>{{ Form::checkbox('role[]', $value->id, false, ['class' => 'name']) }}
-                                            {{ $value->name }}</label>
+                                        <label>
+                                            <input type="checkbox" name="role[]" value="{{ $value->id }}" class="name">
+                                            {{ $value->name }}
+                                        </label>
                                         <br />
                                     @endforeach
+
                                 </div>
                             </div>
                         </div>

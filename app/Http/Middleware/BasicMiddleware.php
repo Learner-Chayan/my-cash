@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\BasicSetting;
+use App\Models\BasicSetting;
 use Closure;
 use Illuminate\Support\Facades\View;
 
