@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\BasicSetting;
+use App\Models\BasicSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -13,8 +13,7 @@ class BasicController extends Controller
 {
     function __construct()
     {
-        // $this->middleware(['auth','role:super-admin|admin','Setting']);
-        $this->middleware(['auth','Setting']);
+         $this->middleware(['auth','check_role:super-admin|admin','Setting']);
     }
 
     public function index()

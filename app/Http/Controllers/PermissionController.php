@@ -12,7 +12,7 @@ class PermissionController extends Controller
 {
     function __construct()
     {
-        $this->middleware(['auth','Setting']);
+        $this->middleware(['auth','check_role:super-admin','Setting']);
 //        $this->middleware('permission:permission',['only' => ['index']]);
 //        $this->middleware('permission:permission-create',['only' => ['create']]);
 //        $this->middleware('permission:permission-edit',['only' => ['edit']]);

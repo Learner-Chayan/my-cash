@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
+use App\Models\User;
 use Spatie\Permission\Models\Role;
 
 
@@ -11,21 +11,11 @@ class UserController extends Controller
 {
     function __construct()
     {
-        $this->middleware(['auth','Setting']);
+        $this->middleware(['auth','check_role:super-admin','Setting']);
     }
 
     public function index()
     {
-
-        $user = User::find(1); // or however you retrieve your user
-        $user->assignRole('super-admin');
-        $roleName = auth()->user()->getRoleNames()->first();
-        dd($roleName);
-        if (auth()->user()->hasRole('super-admin')) {
-            dd('ok');
-        }else{
-            dd('heleo');
-        }
         $page_title = "Manage User";
         $data       = User::with('roles')->where('id','!=',1)->get();
         return view('admin.users.index',compact('data','page_title'));
@@ -46,6 +36,7 @@ class UserController extends Controller
             'name'  => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
+            'phone'    => 'required|unique:users,phone',
         ]);
 
         $input = $request->all();
@@ -67,7 +58,7 @@ class UserController extends Controller
     public function edit($id) {
         $data['page_title'] = "User Edit";
         $data['user']  = User::findOrFail($id);
-        $data['roles'] = Role::where('name','=','super-admin')->get();
+        $data['roles'] = Role::where('name','!=','super-admin')->get();
         return view('admin.users.edit',$data);
 
     }
@@ -79,6 +70,8 @@ class UserController extends Controller
             'name'  => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
             'password' => 'same:confirm-password',
+            'phone'    => 'required|unique:users,phone,'.$id,
+
         ]);
 
         $input = $request->only(['name', 'email','phone', 'password']);
