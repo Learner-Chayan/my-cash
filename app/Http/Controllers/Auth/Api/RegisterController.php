@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends BaseController
 {
+    public function index ()
+    {
+       return response()->json("index");
+    }
     public function register(Request $request)
     {
 

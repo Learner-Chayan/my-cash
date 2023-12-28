@@ -15,14 +15,13 @@ class CreateBasicSettingsTable extends Migration
             $table->string('phone','20');
             $table->string('email','100');
             $table->string('address','255');
-            $table->Text('meta_tag');
-            $table->Text('description');
             $table->string('footer');
             $table->string('copy');
             $table->string('faq');
             $table->string('about');
             $table->string('privacy');
             $table->string('terms');
+            $table->string('currency');
             $table->timestamps();
         });
     }
