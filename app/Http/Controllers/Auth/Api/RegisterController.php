@@ -10,6 +10,12 @@ use App\Http\Requests\SignupRequest;
 
 class RegisterController
 {
+
+    public function index ()
+    {
+       return response()->json("index");
+    }
+
     public function register(SignupRequest $request)
     {
         $user = User::create([
