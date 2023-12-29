@@ -18,7 +18,7 @@
                             <h3 class="card-title">{{$page_title}}</h3>
                             <div class="pull-right box-tools">
                                 <div class="float-right mt-1">
-                                    <a class="btn btn-primary uppercase text-bold" href="{{ route('users.create') }}"> New User</a>
+                                    <button class="btn text-light btn-primary" data-target="#createAsset" data-toggle="modal">Asset Add</button>
                                 </div>
                             </div>
                         </div>
@@ -29,9 +29,8 @@
                                     <thead>
                                     <tr>
                                         <th class="text-bold text-uppercase">#SL</th>
-                                        <th class="text-bold text-uppercase">Name</th>
-                                        <th class="text-bold text-uppercase">Email</th>
-                                        <th class="text-bold text-uppercase">Phone</th>
+                                        <th class="text-bold text-uppercase">Title</th>
+                                        <th class="text-bold text-uppercase">Status</th>
                                         <th class="text-bold text-uppercase">Action</th>
                                     </tr>
                                     </thead>
@@ -39,19 +38,15 @@
                                     @foreach ($assets as $key => $asset)
                                         <tr>
                                             <td>{{ ++$key }}</td>
-                                            <td>{{ $asset->name }}</td>
-                                            <td>{{ $asset->email }}</td>
-                                            <td>{{ $asset->phone }}</td>
-
+                                            <td>{{ $asset->title }}</td>
+                                            <td>{{ $asset->status}}</td>
                                             <td>
-                                                @if($asset->id !== 0)
-                                                    <a class="btn btn-sm btn-primary fa fa-edit" href="{{ route('users.edit',$asset->id) }}" title="Edit"></a>
-                                                    @can('delete')
-                                                        <button title="Delete" class="btn btn-sm btn-danger bold uppercase delete_button" data-toggle="modal" data-target="#DelModal" data-id="{{ $asset->id }}">
-                                                            <i class="fa fa-trash"></i>
-                                                        </button>
-                                                     @endcan
-                                                @endif
+                                                <button class="btn btn-sm btn-primary fa fa-edit" data-toggle="modal" data-target="#assetEdit" onclick="showFormData({{$asset}})"> Edit</button>
+{{--                                                @can('delete')--}}
+{{--                                                    <button title="Delete" class="btn btn-sm btn-danger bold uppercase delete_button" data-toggle="modal" data-target="#DelModal" data-id="{{ $asset->id }}">--}}
+{{--                                                        <i class="fa fa-trash"></i>--}}
+{{--                                                    </button>--}}
+{{--                                                @endcan--}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -71,6 +66,68 @@
     </section>
     <!-- /.content -->
 
+    <!-- Create Modal -->
+    <div id="createAsset" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <form enctype="multipart/form-data" id="storeAsset">
+                        <div class="form-group">
+                            <label>Asset Title <code>*</code></label>
+                            <input type="text" class="form-control" required name="title" placeholder="Asset Title">
+                        </div>
+                        <div class="form-group">
+                            <label>Status<code>*</code></label>
+                            <select name="status" id="status" class="form-control" required>
+                                <option value="1">Unlock</option>
+                                <option value="2">Lock</option>
+                            </select>
+                        </div>
+                        <div class="form-group text-center">
+                            <button type="submit" id="submit-edit" class="btn text-light btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit -->
+    <div id="assetEdit" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <form enctype="multipart/form-data" id="assetUpdate">
+                        <input type="hidden" id="edit_asset_id" name="asset_id">
+                        <div class="form-group">
+                            <label>Asset Title<code>*</code></label>
+                            <input type="text" class="form-control" id="edit_title" required name="title" placeholder="Asset Title">
+                        </div>
+                        <div class="form-group">
+                            <label>Status<code>*</code></label>
+                            <select name="status" id="edit_status" class="form-control" required>
+                                <option value="1">Unlock</option>
+                                <option value="2">Lock</option>
+                            </select>
+                        </div>
+                        <div class="form-group text-center">
+                            <button type="submit" id="submit-edit" class="btn text-light btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Delete modal -->
     <div class="modal fade" id="DelModal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -123,6 +180,82 @@
     </script>
     <script>
         $(document).ready(function () {
+            $('#storeAsset').on('submit',(function(e) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                e.preventDefault();
+                var formData;
+                formData = new FormData(this);
+                $.ajax({
+
+                    type:'POST',
+                    url: "{{route('asset.store')}}",
+                    data:formData,
+                    cache:false,
+                    contentType: false,
+                    processData: false,
+
+                    success: function(data) {
+                        // console.log(data)
+                        if($.isEmptyObject(data.error)){
+                            setTimeout(() => {
+                                // toastr.success("Successfully Save Data!");
+                                location.reload();
+                            },500)
+                        }else{
+                            printErrorMsg(data.error);
+                        }
+                    }
+                });
+
+                $('#createAsset').modal('toggle');
+
+            }));
+            $('#assetUpdate').on('submit',(function(e) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                e.preventDefault();
+                var formData;
+                formData = new FormData(this);
+                $.ajax({
+
+                    type:'POST',
+                    url: "{{route('asset-update')}}",
+                    data:formData,
+                    cache:false,
+                    contentType: false,
+                    processData: false,
+
+                    success: function(data) {
+                        console.log(data)
+                        if($.isEmptyObject(data.error)){
+                            setTimeout(() => {
+                                location.reload();
+                            },500)
+                        }else{
+                            printErrorMsg(data.error);
+                        }
+                    }
+                });
+
+
+                $('#assetEdit').modal('toggle');
+
+            }));
+            function printErrorMsg (msg) {
+                $(".print-error-msg").find("ul").html('');
+                $(".print-error-msg").css('display','block');
+                $.each( msg, function( key, value ) {
+                    // toastr.warning(value);
+                    $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+                });
+            }
             $(document).on("click", '.delete_button', function (e) {
                 var id = $(this).data('id');
                 var url = '{{ route("users.destroy",":id") }}';
@@ -131,5 +264,11 @@
                 $("#delete_id").val(id);
             });
         });
+        function showFormData(data){
+            console.log('helo')
+            $("#edit_asset_id").val(data.id);
+            $("#edit_title").val(data.title);
+            $('#edit_status').val(data.status).trigger('change');
+        }
     </script>
 @endpush

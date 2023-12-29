@@ -26,7 +26,6 @@ class AssetService{
     }
     public function store(array $data)
     {
-        return $data;
         return Asset::create($data);
     }
 
