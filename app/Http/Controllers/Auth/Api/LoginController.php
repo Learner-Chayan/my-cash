@@ -24,7 +24,7 @@ class LoginController extends Controller
 
         if(!Auth::guard('web')->attempt($request->only('email','password'))) {
             return new JsonResponse([
-                'error'=> ['validation' => 'Invalid Credientials'],
+                'error'=> ['validation' => 'Invalid Credentials'],
             ]);
         }
 

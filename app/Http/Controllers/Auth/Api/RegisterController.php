@@ -24,8 +24,6 @@ class RegisterController
             'email' => $request->email,
             'password' => $request->password,
         ]);
-        // $success['token'] = $user->createToken('RestApi')->plainTextToken;
-        // $success['name']  = $user->name;
 
         return response(['status' => true, 'message' => 'Registration Completed Successfully'], 201);
     }
