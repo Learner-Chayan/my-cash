@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Enums\Status;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -22,13 +23,14 @@ class LoginController extends Controller
             return new JsonResponse($valid->errors(),422);
         }
 
-        if(!Auth::guard('web')->attempt($request->only('email','password'))) {
+        $request->merge(['status'=>Status::ACTIVE]);
+        if(!Auth::guard('web')->attempt($request->only('email', 'password', 'status'))) {
             return new JsonResponse([
                 'error'=> ['validation' => 'Invalid Credentials'],
             ]);
         }
 
-        $user = User::where('email', $request->email)->first();
+        $user = Auth::user();
         $token = $user->createToken('login_token')->plainTextToken;
 
         return new JsonResponse([

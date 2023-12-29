@@ -29,6 +29,14 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{route('asset.index')}}" class="nav-link {{Request::is('admin/asset') ? 'active' : ''}}">
+                        <i class="nav-icon fas fa-dollar-sign"></i>
+                        <p>
+                            Asset
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-item {{Request::is('admin/get-basic') || Request::is('admin/get-about') || Request::is('admin/get-terms') || Request::is('admin/get-privacy') ? 'menu-open' : ''}}">
                     <a href="#" class="nav-link {{Request::is('admin/get-basic') || Request::is('admin/get-about') || Request::is('admin/get-terms') || Request::is('admin/get-privacy') ? 'active' : ''}}">
                         <i class="nav-icon fas fa-cogs"></i><p>Website Setting<i class="fas fa-angle-left right"></i></p>
