@@ -28,6 +28,12 @@ class RegisterController
 
     public function register(SignupRequest $request)
     {
+//        $user = User::create([
+//            'name'  => $request->name,
+//            'phone' => $request->phone,
+//            'email' => $request->email,
+//            'password' => $request->password,
+//        ]);
         try {
             $user = User::create([
                 'name'  => $request->name,
@@ -35,7 +41,7 @@ class RegisterController
                 'email' => $request->email,
                 'password' => $request->password,
             ]);
-    
+
             $otp =  $this->otpService->otp($user->phone);
             if ($otp) {
                 return response(['status' => true, 'message' => 'Otp send to your phone. Otp = '.Otp::where("phone", $user->phone)->first()->code], 201);

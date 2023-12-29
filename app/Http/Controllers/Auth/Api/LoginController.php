@@ -26,7 +26,7 @@ class LoginController extends Controller
         $request->merge(['status'=>Status::ACTIVE]);
         if(!Auth::guard('web')->attempt($request->only('email', 'password', 'status'))) {
             return new JsonResponse([
-                'error'=> ['validation' => 'Invalid Credientials'],
+                'error'=> ['validation' => 'Invalid Credentials'],
             ]);
         }
 

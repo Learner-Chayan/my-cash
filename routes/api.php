@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('users',[RegisterController::class,'index']);
-Route::post('registration',[RegisterController::class,'register']);
+//Route::get('users',[\App\Http\Controllers\Auth\Api\RegisterController::class,'index']);
 Route::post('/registration',[RegisterController::class,'register']);
 Route::post('/account-verification',[RegisterController::class,'accountVerify']);
 Route::post('/login', [LoginController::class,'login']);
