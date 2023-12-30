@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Auth\Api\RegisterController;
 use App\Http\Controllers\Auth\Api\LoginController;
 use Illuminate\Http\Request;
@@ -15,12 +16,15 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('users',[RegisterController::class,'index']);
-//Route::get('users',[\App\Http\Controllers\Auth\Api\RegisterController::class,'index']);
 Route::post('/registration',[RegisterController::class,'register']);
 Route::post('/account-verification',[RegisterController::class,'accountVerify']);
 Route::post('/login', [LoginController::class,'login']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/user-profile', [ProfileController::class,'index']);
 });

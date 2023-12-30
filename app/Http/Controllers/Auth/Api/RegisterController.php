@@ -21,19 +21,8 @@ class RegisterController
         $this->otpService = $otpService;
     }
 
-    public function index ()
-    {
-       return response()->json("index");
-    }
-
     public function register(SignupRequest $request)
     {
-//        $user = User::create([
-//            'name'  => $request->name,
-//            'phone' => $request->phone,
-//            'email' => $request->email,
-//            'password' => $request->password,
-//        ]);
         try {
             $user = User::create([
                 'name'  => $request->name,
