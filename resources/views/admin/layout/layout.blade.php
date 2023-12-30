@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title> {{$page_title}} | {{$site_title}}</title>
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('public/favicon.png') }}">
 
@@ -24,6 +25,7 @@
     <link rel="stylesheet" href="{{asset('/assets')}}/daterangepicker/daterangepicker.css">
 
     <link rel="stylesheet" href="{{asset('/assets')}}/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <link rel="stylesheet" href="{{asset('/assets')}}/toastr/toastr.css">
     @stack('css')
 
 </head>
@@ -130,6 +132,8 @@
 <!-- SweetAlert2 -->
 <script src="{{asset('/assets')}}/sweetalert2/sweetalert2.min.js"></script>
 <!-- Toastr -->
+<link rel="stylesheet" href="{{asset('/assets')}}/toastr/toastr.min.js">
+
 <script>
     $(function() {
         var Toast = Swal.mixin({
@@ -152,6 +156,41 @@
         })
         @endif
     });
+    @if(Session::has('message'))
+        toastr.options =
+        {
+            "closeButton" : true,
+            "progressBar" : true
+        }
+    toastr.success("{{ session('message') }}");
+    @endif
+
+        @if(Session::has('error'))
+        toastr.options =
+        {
+            "closeButton" : true,
+            "progressBar" : true
+        }
+    toastr.error("{{ session('error') }}");
+    @endif
+
+        @if(Session::has('info'))
+        toastr.options =
+        {
+            "closeButton" : true,
+            "progressBar" : true
+        }
+    toastr.info("{{ session('info') }}");
+    @endif
+
+        @if(Session::has('warning'))
+        toastr.options =
+        {
+            "closeButton" : true,
+            "progressBar" : true
+        }
+    toastr.warning("{{ session('warning') }}");
+    @endif
 </script>
 @stack('js')
 

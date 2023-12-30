@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AssetRequest extends FormRequest
 {
@@ -22,8 +23,14 @@ class AssetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255|unique:assets,title',
-            'status' => 'required'
+            'title' => [
+                'required',
+                'string',
+                'max:255',
+                // Specify the table name, column name, and the ID to ignore
+                Rule::unique('assets', 'title')->ignore($this->asset_id),
+            ],
+            'status' => 'required',
         ];
     }
 }

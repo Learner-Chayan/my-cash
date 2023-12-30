@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             RolesHasPermissionSeeder::class,
             ModelHasRoleSeeder::class,
             BasicSettingSeeder::class,
+            AssetSeeder::class,
         ]);
     }
 }

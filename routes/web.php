@@ -64,12 +64,11 @@ Route::get('get-copy-right', [BasicController::class, 'indexCopy'])->name('get-c
 Route::post('get-copy-right-update', [BasicController::class, 'updateCopy'])->name('get-copy-right-update');
 
 
-     Route::resource('roles',RoleController::class);
-     Route::resource('permissions',PermissionController::class);
-     Route::resource('users',UserController::class);
-     Route::resource('asset',AssetController::class);
-//     Route::resource('sliders','Controllers\SliderController');
-//     Route::resource('socials','Controllers\SocialController');
-//     Route::resource('faqs','Controllers\FaqController');
+ Route::resource('roles',RoleController::class);
+ Route::resource('permissions',PermissionController::class);
+ Route::resource('users',UserController::class);
+ Route::resource('asset',AssetController::class);
+ Route::post('asset-update', [AssetController::class, 'update'])->name('asset-update');
+
 
 });

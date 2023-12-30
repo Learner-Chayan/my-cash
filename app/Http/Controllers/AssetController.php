@@ -25,9 +25,9 @@ class AssetController extends Controller
     {
         $in   = $request->all();
         $test = $this->assetService->store($in);
-        dd($test);
         session()->flash('success','Asset created successfully');
-        return redirect()->back();
+        return response()->json($test);
+
 
     }
     public function edit($id)
@@ -36,5 +36,15 @@ class AssetController extends Controller
        return response()->json($asset);
     }
 
+    public function update(AssetRequest $request)
+    {
+        $id = $request->asset_id;
+        $in   = $request->except('asset_id');
+        $test = $this->assetService->update($in,$id);
+        session()->flash('success','Asset Update successfully');
+        return response()->json($test);
+
+
+    }
 
 }
