@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class LoginController extends Controller
 {
@@ -38,5 +39,31 @@ class LoginController extends Controller
             'token'=> $token,
             'user'=> new UserResource($user),
         ], 201);
+    }
+
+    public function refreshToken(Request $request):JsonResponse
+    {
+
+        try {
+            $request->validate([
+                'token' => ['required','string'], 
+            ]);
+    
+            $oldToken = $request->get('token');
+            $token = PersonalAccessToken::findToken($oldToken);
+            $user = $token->tokenable;
+            //$token->delete();
+            $newToken = $user->createToken('login_token')->plainTextToken;
+            return new JsonResponse([
+                'message' => 'Token Generated Successfully',
+                'token'=> $newToken,
+            ], 201);
+        } catch (\Throwable $th) {
+            return new JsonResponse([
+                'status' => false,
+                'message'=> "Something Went Wrong.",
+            ], 422);
+        }
+
     }
 }
