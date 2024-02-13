@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth\Api;
 
+use App\Enums\UserIdTypeEnums;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Enums\Status;
@@ -11,24 +12,39 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Sanctum\PersonalAccessToken;
+use App\Http\Requests\SigninRequest;
 
 class LoginController extends Controller
 {
-    public function login(Request $request):JsonResponse
+    public function login(SigninRequest $request):JsonResponse
     {
-        $valid = Validator::make($request->all(), [
-            'email' => ['required','string','email', 'max:255'],
-            'password'=> ['required','string','min:8'],
-        ]);
-        if ($valid->fails()) {
-            return new JsonResponse($valid->errors(),422);
-        }
+        // $valid = Validator::make($request->all(), [
+        //     'email' => ['required','string','email', 'max:255'],
+        //     'password'=> ['required','string','min:8'],
+        // ]);
+        // if ($valid->fails()) {
+        //     return new JsonResponse($valid->errors(),422);
+        // }
 
         $request->merge(['status'=>Status::ACTIVE]);
-        if(!Auth::guard('web')->attempt($request->only('email', 'password', 'status'))) {
-            return new JsonResponse([
-                'error'=> ['validation' => 'Invalid Credentials'],
-            ]);
+        if($request->user_id_type === UserIdTypeEnums::EMAIL){
+            $request->merge(['email' => $request->user_id]);
+            if(!Auth::guard('web')->attempt($request->only('email', 'password', 'status'))) {
+                return new JsonResponse([
+                    'status'=> false,
+                    'message'=>  'Invalid Credentials',
+                    "errors" => []
+                ]);
+            }
+        }else{
+            $request->merge(['phone' => $request->user_id]);
+            if(!Auth::guard('web')->attempt($request->only('phone', 'password', 'status'))) {
+                return new JsonResponse([
+                    'status'=> false,
+                    'message'=>  'Invalid Credentials',
+                    "errors" => []
+                ]);
+            }
         }
 
         $user = Auth::user();
@@ -52,9 +68,10 @@ class LoginController extends Controller
             $oldToken = $request->get('token');
             $token = PersonalAccessToken::findToken($oldToken);
             $user = $token->tokenable;
-            //$token->delete();
+            $token->delete();
             $newToken = $user->createToken('login_token')->plainTextToken;
             return new JsonResponse([
+                'status' => true,
                 'message' => 'Token Generated Successfully',
                 'token'=> $newToken,
             ], 201);
@@ -62,6 +79,7 @@ class LoginController extends Controller
             return new JsonResponse([
                 'status' => false,
                 'message'=> "Something Went Wrong.",
+                'token'  => null
             ], 422);
         }
 

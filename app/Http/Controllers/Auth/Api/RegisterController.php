@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth\Api;
 
+use App\Enums\UserIdTypeEnums;
 use App\Http\Controllers\BaseController as BaseController;
 use App\Models\User;
 use App\Services\OtpServices;
@@ -24,19 +25,33 @@ class RegisterController
     public function register(SignupRequest $request)
     {
         try {
-            $user = User::create([
-                'name'  => $request->name,
-                'phone' => $request->phone,
-                'email' => $request->email,
-                'password' => $request->password,
-            ]);
 
-            $otp =  $this->otpService->otp($user->phone);
-            if ($otp) {
-                return response(['status' => true, 'message' => 'Otp send to your phone. Otp = '.Otp::where("phone", $user->phone)->first()->code], 201);
+            $user = null;
+            if($request->user_id_type == UserIdTypeEnums::EMAIL){
+                $user = User::where('email', $request->user_id)->first();
+            }else{
+                $user = User::where('phone', $request->user_id)->first();
             }
 
-            return response(['status' => false, 'message' => 'Something went wrong , contact with us'], 422);
+            if(!$user){
+                $user = User::create([
+                    'name'  => $request->name??" ",
+                    'phone' => $request->user_id_type == UserIdTypeEnums::PHONE ? $request->user_id : null,
+                    'email' => $request->user_id_type == UserIdTypeEnums::EMAIL ? $request->user_id : null,
+                    'pay_id' => $this->generatePayId(),
+                    'password' => $request->password,
+                ]);
+            }
+
+            $otp =  $this->otpService->otp($request->user_id,$request->user_id_type);
+            if ($otp) {
+                return response(['status' => true, 
+                'message' => 'Otp send to your '.$request->user_id_type.'. Otp = '.Otp::where("".$request->user_id_type, $request->user_id)->first()->code,
+                'errors' => []
+            ], 201);
+            }
+
+            return response(['status' => false, 'message' => 'Something went wrong , contact with us', 'errors'=>[]], 422);
         } catch (Exception $e) {
             return response(['status'=> false, 'message'=> $e->getMessage()],422);
         }
@@ -47,8 +62,7 @@ class RegisterController
         try {
             $verified = $this->otpService->accountVerify($request);
             if ($verified) {
-
-                $user  = User::where('phone', $request->phone)->first();
+                $user  = User::where($request->user_id_type, $request->user_id)->first();
                 $user->status = Status::ACTIVE;
                 $user->save();
 
@@ -60,4 +74,24 @@ class RegisterController
             return response(['status'=> false, 'message'=> $e->getMessage()],422);
         }
     }
+
+    public function generatePayId() {
+        // Get current timestamp
+        $timestamp = microtime(true);
+        
+        // Convert timestamp to a string
+        $timestampStr = strval($timestamp);
+        
+        // Extract the decimal part of the timestamp and remove the dot
+        $decimalPart = substr(str_replace('.', '', $timestampStr - floor($timestampStr)), 0, 7);
+        
+        // Generate a random number
+        $random = mt_rand(1000, 9999);
+        
+        // Concatenate timestamp and random number
+        $uniqueId = $decimalPart . $random;
+        
+        return $uniqueId;
+    }
+    
 }

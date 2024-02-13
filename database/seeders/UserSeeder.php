@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
             'name' => 'super Admin',
             'email' => 'super-admin@gmail.com',
             'phone' => '01704211825',
+            'pay_id'=> 1234567891,
             'password' => bcrypt('superadmin'),
             'status' => Status::ACTIVE,
         ]);
@@ -25,6 +26,7 @@ class UserSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'phone' => '01704211895',
+            'pay_id'=> 1234567892,
             'password' => bcrypt('1234567'),
             'status' => Status::ACTIVE,
         ]);
@@ -32,6 +34,7 @@ class UserSeeder extends Seeder
             'name' => 'agent',
             'email' => 'agent@gmail.com',
             'phone' => '01707211895',
+            'pay_id'=> 1234567893,
             'password' => bcrypt('1234567'),
             'status' => Status::ACTIVE,
         ]);
@@ -39,6 +42,7 @@ class UserSeeder extends Seeder
             'name' => 'customer',
             'email' => 'customer@gmail.com',
             'phone' => '01707217895',
+            'pay_id'=> 1234567894,
             'password' => bcrypt('1234567'),
             'status' => Status::ACTIVE,
         ]);
