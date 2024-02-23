@@ -7,16 +7,16 @@ use App\Models\Otp;
 class OtpService {
     public function __construct() { }
 
-    public function otp($phone):bool
+    public function otp($user_id,$user_id_type):bool
     {
-        $otp = Otp::where("phone", $phone)->first();
+        $otp = Otp::where("".$user_id_type, $user_id)->first();
         if($otp){
             $otp->delete();
          }
 
          $otpCode = rand(100000,999999);
          Otp::create([
-            "phone"=> $phone,
+            "".$user_id_type => $user_id,
             "code"=> $otpCode,
          ]);
 
@@ -26,7 +26,7 @@ class OtpService {
 
     public function accountVerify(AccountVerificationRequest $request):bool
     {
-        $otp = Otp::where("phone", $request->phone)
+        $otp = Otp::where("".$request->user_id_type, $request->user_id)
                 ->where("code", $request->code)
                 ->first();
         if($otp){
