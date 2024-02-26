@@ -33,4 +33,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/update', [ProfileController::class,'update']);
         Route::match(['put','patch'],'/change-password', [ProfileController::class,'changePassword']);
      });
+
+     Route::get('/wallet', [ProfileController::class, 'wallet'])->name('wallet');
 });
