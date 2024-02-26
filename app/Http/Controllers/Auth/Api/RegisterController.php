@@ -14,6 +14,7 @@ use App\Http\Requests\AccountVerificationRequest;
 use App\Services\OtpService;
 use App\Enums\Status;
 use App\Models\Otp;
+use App\Models\Wallet;
 
 class RegisterController
 {
@@ -60,19 +61,44 @@ class RegisterController
     public function accountVerify(AccountVerificationRequest $request)
     {
         try {
-            $verified = $this->otpService->accountVerify($request);
-            if ($verified) {
-                $user  = User::where($request->user_id_type, $request->user_id)->first();
-                $user->status = Status::ACTIVE;
-                $user->save();
 
-                return response(['status'=> true, 'message'=> 'Account Verified Successfully'],200);
+            $otp = Otp::where("".$request->user_id_type, $request->user_id)
+                ->where("code", $request->code)
+                ->first();
+            if($otp){
+                //check if token expired
+                $isExpired = $this->otpService->isOTPExpired($request);
+                if($isExpired){
+                    return response(['status'=> false, 'message'=> 'OTP Expired !!'],422);
+                }
+
+                // check verified or not
+                // $verified = $this->otpService->accountVerify($request);
+                // if ($verified) {
+                    $user  = User::where($request->user_id_type, $request->user_id)->first();
+                    $user->status = Status::ACTIVE;
+                    $user->save();
+
+                    $this->createdWallet($user->id);
+
+                    return response(['status'=> true, 'message'=> 'Account Verified Successfully'],200);
             } else {
                 return response(['status'=> false, 'message'=> 'Invalid Otp'],422);
             }
         } catch (Exception $e) {
             return response(['status'=> false, 'message'=> $e->getMessage()],422);
         }
+    }
+
+    public function createdWallet($user_id){
+        Wallet::create([
+            'user_id' => $user_id,
+            'bdt' => 0.00,
+            'gold' => 0.00,
+            'platinium' => 0.00,
+            'palladium' => 0.00,
+            'silver' => 0.00,
+        ]);
     }
 
     public function generatePayId() {
