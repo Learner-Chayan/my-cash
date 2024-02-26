@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('transaction_type');
             $table->double('amount',15,2);
             $table->string('trans_id', 20);
+            $table->tinyInteger('status');
 
             $table->timestamps();
         });
