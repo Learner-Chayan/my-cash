@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Enums\TransactionStatusEnums;
 use App\Services\TransactionService;
+use Exception;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 
-class SendController extends Controller
+class SendController extends BaseController
 {
     protected $userService;
     protected $transactionService;
@@ -28,15 +29,27 @@ class SendController extends Controller
             'type' => $type,
             'value' => $value,
         ];
-        return $this->userService->getUser($data);
+        try{
+            return response(
+                ['status' => true,
+                'message' => 'Successfully Get',
+                'data' => $this->userService->getUser($data),
+            ], 200);
+        }
+        catch (Exception $e){
+            return response(['status'=> false, 'message'=> $e->getMessage()],422);
+        }
+
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function checkBalance(Request $request)
     {
-        //
+        $in = $request->all();
+        $test = $this->transactionService->checkSederBalance($in);
+        return $test;
     }
 
     /**
@@ -47,18 +60,22 @@ class SendController extends Controller
         $valid = $this->validate($request,[
             'sender_id' => 'required|exists:users,id',
             'receiver_id' => 'required|exists:users,id',
+            'asset_type' => 'required',
             'transaction_type' => 'required',
             'amount' => 'required',
         ]);
         if (!$valid) {
-    //            return redirect()->withErrors($valid->errors());
             return response()->json(['errors' => $valid->errors()->all()]);
         }
         $in = $request->except('_token');
         $in['trans_id'] = uniqid();
         $in['status'] = TransactionStatusEnums::PENDING;
-        $test = $this->transactionService->store($in);
-        return $test;
+        $trans = $this->transactionService->store($in);
+        return response(
+            ['status' => true,
+                'message' => 'Successfully save data!',
+                'data' => $trans,
+            ], 201);
 
     }
 

@@ -9,6 +9,6 @@ class TransactionPin extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'transaction_id ','pin ','expiration_time','amoattempsunt'
+        'transaction_id','pin','expiration_time','attemps'
     ];
 }

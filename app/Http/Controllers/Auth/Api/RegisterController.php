@@ -4,19 +4,15 @@ namespace App\Http\Controllers\Auth\Api;
 
 use App\Enums\AssetTypeEnums;
 use App\Enums\UserIdTypeEnums;
-use App\Http\Controllers\BaseController as BaseController;
 use App\Models\Account;
 use App\Models\User;
 use App\Services\OtpServices;
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\SignupRequest;
 use App\Http\Requests\AccountVerificationRequest;
 use App\Services\OtpService;
 use App\Enums\Status;
 use App\Models\Otp;
-use App\Models\Wallet;
 
 class RegisterController
 {

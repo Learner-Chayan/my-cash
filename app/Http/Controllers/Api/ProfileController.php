@@ -11,6 +11,23 @@ use App\Models\Wallet;
 
 class ProfileController extends Controller
 {
+    public function payPin()
+    {
+        $user = Auth::user();
+        if ($user->pay_pin == null){
+            return new JsonResponse([
+                'status'=> false,
+                'message'=> "Please Insert Pay Pin!",
+            ], 400);
+        }else{
+            return new JsonResponse([
+                'status'=> true,
+                'message'=> "Already have pay pin!",
+            ], 200);
+        }
+
+    }
+
     public function index ()
     {
         $user = Auth::user();
