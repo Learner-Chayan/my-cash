@@ -7,6 +7,7 @@ use App\Enums\TransactionTypeEnums;
 use App\Models\Account;
 use App\Models\Transaction;
 use App\Models\TransactionPin;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -24,7 +25,18 @@ class TransactionService{
             $this->senderAccountUpdate($trans);// update account
             $pin = $this->transactionPin($trans);// make for transaction pin
             $trans->transaction_pin = $pin;
-            return ['status' => true, 'message' => 'Successfully Data Save!','data' => $trans];
+            $returnData = [
+                'transaction_type' => $trans->transaction_type,
+                'asset_type' => $trans->asset_type,
+                'amount' => $trans->amount,
+                'note' => $trans->note,
+                'trans_id' => $trans->trans_id,
+                'transaction_pin' => $pin,
+                'receiver_pay_id' => $data['receiver_pay_id'],
+                'sender_pay_id'   => auth()->user()->pay_id,
+
+            ];
+            return ['status' => true, 'message' => 'Successfully Data Save!','data' => $returnData];
         }else{
             return ['status' => false, 'message' => 'Wrong Pin Enter'];
         }
@@ -70,38 +82,48 @@ class TransactionService{
 
         $tp = TransactionPin::create([
            'transaction_id' => $transId,
-           'pin'=> rand(000,99999),
+           'trans_id' => $trans->trans_id,
+           'pin'=> rand(10000,99999),
            'expiration_time' => $validDate,
-           'attemps' => $attempts,
+           'attempts' => $attempts,
         ]);
         return $tp->pin;
     }
 
     public function unlockMoney($data)
     {
-        $pinForCheck = TransactionPin::where('transaction_id',$data['transaction_id'])->first();
-
+        $pinForCheck = TransactionPin::where('trans_id',$data['trans_id'])->first();
         if ($pinForCheck->pin == $data['pin']){
             $baseQuery = [
-                'transaction_id' => $data['transaction_id'],
+                'trans_id' => $data['trans_id'],
                 'pin' => $data['pin'],
             ];
             $pinDetails = TransactionPin::where($baseQuery)->first();
             if ($pinDetails){
                 $recived = $this->recieved($pinDetails);
+                $receiverPayId = $this->findReceiver($recived->receiver_id);
+                $returnData = [
+                    'transaction_type' => $recived->transaction_type,
+                    'asset_type' => $recived->asset_type,
+                    'amount' => $recived->amount,
+                    'trans_id' => $recived->trans_id,
+                    'status'   => $recived->status,
+                    'receiver_pay_id' => $receiverPayId,
+                    'sender_pay_id'   => auth()->user()->pay_id,
+                ];
                 $pinForCheck->delete(); // delete the transaction pin if attempt is 0;
-                return ['status' => true ,'message' => "Successfully Received Amount!",'data' => $recived];
+                return ['status' => true ,'message' => "Successfully Received Amount!",'data' => $returnData];
             }
         }else{
-            $pinForCheck->attemps -= 1;
+            $pinForCheck->attempts -= 1;
             $pinForCheck->save();
-            if ($pinForCheck->attemps <= 0) {
+            if ($pinForCheck->attempts <= 0) {
 
                 $this->refund($pinForCheck); // update sender account
                 $pinForCheck->delete(); // delete the transaction pin if attempt is 0;
                 return ['status' => false ,'message' => "Attempt failed your limit. transaction refund the sender!"];
             }else{
-                return ['status' => false ,'message' => "Attempt failed. You have {$pinForCheck->attemps} attempts left."];
+                return ['status' => false ,'message' => "Attempt failed. You have {$pinForCheck->attempts} attempts left."];
 
             }
 
@@ -146,5 +168,10 @@ class TransactionService{
 
     }
 
+    public function findReceiver($receiverId)
+    {
+        return User::findOrFail($receiverId)->pay_id;
+
+    }
 }
 ?>

@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('transaction_pins', function (Blueprint $table) {
             $table->id();
             $table->string('transaction_id');
+            $table->string('trans_id');
             $table->integer('pin');
             $table->dateTime('expiration_time');
-            $table->integer('attemps')->default(3)->comment('3 means max attemp');
+            $table->integer('attempts')->default(3)->comment('3 means max attempt');
             $table->timestamps();
         });
     }

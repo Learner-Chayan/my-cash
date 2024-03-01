@@ -32,14 +32,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class,'index']);
         Route::get('/update', [ProfileController::class,'update']);
-        Route::get('check-pay-pin', [ProfileController::class,'payPin']);
+        Route::get('check-pay-pin-status', [ProfileController::class,'payPin']);
         Route::post('set-pay-pin', [ProfileController::class,'payPinStore']);
         Route::match(['put','patch'],'/change-password', [ProfileController::class,'changePassword']);
      });
 
     Route::prefix('send')->group(function () {
-        Route::get('get-customer/{type}/{value}', [SendController::class,'index']);
-        Route::get('check-balance', [SendController::class,'checkBalance']);
+        Route::get('get-receiver', [SendController::class,'index']);
+        Route::get('check-sending-balance', [SendController::class,'checkBalance']);
         Route::post('send-store', [SendController::class,'store']);
         Route::get('unlock-send-money', [SendController::class,'unlockSendMoney']);
     });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TransactionStatusEnums;
+use App\Models\User;
 use App\Services\TransactionService;
 use Exception;
 use App\Services\UserService;
@@ -23,22 +24,18 @@ class SendController extends BaseController
     /**
      * Display a listing of the resource.
      */
-    public function index($type, $value)
+    public function index(Request $request)
     {
-        $data = [
-            'type' => $type,
-            'value' => $value,
-        ];
-        try{
-            return response(
-                ['status' => true,
-                'message' => 'Successfully Get',
-                'data' => $this->userService->getUser($data),
-            ], 200);
+        $in = $request->except('_token');
+        $user = $this->userService->getUser($in);
+        if (!$user['status']) {
+            return response(['status' => false, 'message' => $user['message']], 404);
+        }else{
+
+            return response(['status' => true, 'message' => $user['message'],'data' => $user['data']], 200);
+
         }
-        catch (Exception $e){
-            return response(['status'=> false, 'message'=> $e->getMessage()],422);
-        }
+
 
     }
 
@@ -71,8 +68,7 @@ class SendController extends BaseController
     public function store(Request $request)
     {
         $valid = $this->validate($request,[
-            'sender_id' => 'required|exists:users,id',
-            'receiver_id' => 'required|exists:users,id',
+            'receiver_pay_id' => 'required|exists:users,pay_id',
             'asset_type' => 'required',
             'transaction_type' => 'required',
             'amount' => 'required',
@@ -86,8 +82,13 @@ class SendController extends BaseController
         if (!$balanceCheck['status']) {
             return response(['status' => false, 'message' => $balanceCheck['message']], 400);
         }
-        $in['trans_id'] = uniqid();
-        $in['status'] = TransactionStatusEnums::PENDING;
+        $receiver = $this->userService->getPayIdUser($request->receiver_pay_id);
+
+        $in['trans_id']    = uniqid();
+        $in['status']      = TransactionStatusEnums::PENDING;
+        $in['sender_id']   = auth()->user()->id;
+        $in['receiver_id'] = $receiver['data']['id'];
+
         $trans = $this->transactionService->store($in);
         if (!$trans['status']) {
             return response(['status' => false, 'message' => $trans['message']], 400);
@@ -106,7 +107,7 @@ class SendController extends BaseController
     public function unlockSendMoney(Request $request)
     {
         $valid = $this->validate($request,[
-            'transaction_id' => 'required|exists:transaction_pins,transaction_id',
+            'trans_id' => 'required|exists:transaction_pins,trans_id',
             'pin' => 'required',
 //            'pin' => 'required|exists:transaction_pins,pin',
         ]);
@@ -115,6 +116,7 @@ class SendController extends BaseController
         }
         $in = $request->except('_token');
         $unlock = $this->transactionService->unlockMoney($in);
+        return $unlock;
         if (!$unlock['status']) {
             return response(['status' => false, 'message' => $unlock['message']], 400);
         }else{

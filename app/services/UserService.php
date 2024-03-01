@@ -11,7 +11,25 @@ class UserService
 
     public function getUser($data)
     {
-        return User::select('id','name','phone','email','pay_id')->where($data['type'],$data['value'])->first();
+        $user = User::select('id','name',$data['type'],'pay_id')->where($data['type'],$data['value'])->first();
+
+        if ($user){
+            return ['status' => true,'message' => 'Successfully Get User','data' => $user];
+        }else{
+            return ['status' => false,'message' => 'Not Found'];
+
+        }
+    }
+    public function getPayIdUser($data)
+    {
+//        return $data;
+        $user = User::where('pay_id','=',$data)->first();
+        if ($user){
+            return ['status' => true,'message' => 'Successfully Get User','data' => $user];
+        }else{
+            return ['status' => false,'message' => 'Not Found'];
+
+        }
     }
 
 }
