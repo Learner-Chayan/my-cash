@@ -47,9 +47,22 @@ class SendController extends BaseController
      */
     public function checkBalance(Request $request)
     {
-        $in = $request->all();
-        $test = $this->transactionService->checkSederBalance($in);
-        return $test;
+        $valid = $this->validate($request,[
+            'asset_type' => 'required|exists:accounts,asset_type',
+            'amount' => 'required',
+        ]);
+        if (!$valid) {
+            return response()->json(['errors' => $valid->errors()->all()]);
+        }
+        $in = $request->except('_token');
+        $balanceCheck = $this->transactionService->checkSederBalance($in);
+        if (!$balanceCheck['status']) {
+            return response(['status' => false, 'message' => $balanceCheck['message']], 400);
+        }else{
+
+            return response(['status' => true, 'message' => $balanceCheck['message']], 200);
+
+        }
     }
 
     /**
@@ -68,23 +81,47 @@ class SendController extends BaseController
             return response()->json(['errors' => $valid->errors()->all()]);
         }
         $in = $request->except('_token');
+        // Check sender balance
+        $balanceCheck = $this->transactionService->checkSederBalance($in);
+        if (!$balanceCheck['status']) {
+            return response(['status' => false, 'message' => $balanceCheck['message']], 400);
+        }
         $in['trans_id'] = uniqid();
         $in['status'] = TransactionStatusEnums::PENDING;
         $trans = $this->transactionService->store($in);
-        return response(
-            ['status' => true,
-                'message' => 'Successfully save data!',
-                'data' => $trans,
-            ], 201);
+        if (!$trans['status']) {
+            return response(['status' => false, 'message' => $trans['message']], 400);
+        }else{
+
+            return response(['status' => true, 'message' => $trans['message'],'data' => $trans['data']], 200);
+
+        }
+
 
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function unlockSendMoney(Request $request)
     {
-        //
+        $valid = $this->validate($request,[
+            'transaction_id' => 'required|exists:transaction_pins,transaction_id',
+            'pin' => 'required',
+//            'pin' => 'required|exists:transaction_pins,pin',
+        ]);
+        if (!$valid) {
+            return response()->json(['errors' => $valid->errors()->all()]); //422 unprocessable content
+        }
+        $in = $request->except('_token');
+        $unlock = $this->transactionService->unlockMoney($in);
+        if (!$unlock['status']) {
+            return response(['status' => false, 'message' => $unlock['message']], 400);
+        }else{
+
+            return response(['status' => true, 'message' => $unlock['message'],'data' => $unlock['data']], 200);
+
+        }
     }
 
     /**

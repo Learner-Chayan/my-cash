@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [ProfileController::class,'index']);
         Route::get('/update', [ProfileController::class,'update']);
         Route::get('check-pay-pin', [ProfileController::class,'payPin']);
+        Route::post('set-pay-pin', [ProfileController::class,'payPinStore']);
         Route::match(['put','patch'],'/change-password', [ProfileController::class,'changePassword']);
      });
 
@@ -40,7 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('get-customer/{type}/{value}', [SendController::class,'index']);
         Route::get('check-balance', [SendController::class,'checkBalance']);
         Route::post('send-store', [SendController::class,'store']);
-        Route::match(['put','patch'],'/change-password', [ProfileController::class,'changePassword']);
+        Route::get('unlock-send-money', [SendController::class,'unlockSendMoney']);
     });
 
      Route::get('/wallet', [ProfileController::class, 'wallet'])->name('wallet');
