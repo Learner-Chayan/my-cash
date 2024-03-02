@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TransactionStatusEnums;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Services\TransactionService;
 use Exception;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class SendController extends BaseController
 {
@@ -84,7 +86,7 @@ class SendController extends BaseController
         }
         $receiver = $this->userService->getPayIdUser($request->receiver_pay_id);
 
-        $in['trans_id']    = uniqid();
+        $in['trans_id']    = $this->generateUniqueTransactionID();
         $in['status']      = TransactionStatusEnums::PENDING;
         $in['sender_id']   = auth()->user()->id;
         $in['receiver_id'] = $receiver['data']['id'];
@@ -116,7 +118,6 @@ class SendController extends BaseController
         }
         $in = $request->except('_token');
         $unlock = $this->transactionService->unlockMoney($in);
-        return $unlock;
         if (!$unlock['status']) {
             return response(['status' => false, 'message' => $unlock['message']], 400);
         }else{
@@ -126,27 +127,27 @@ class SendController extends BaseController
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+    function generateUniqueTransactionID() {
+        $unique = false;
+        $transactionID = '';
+
+        while (!$unique) {
+            // Generate random string
+            $randomString = strtoupper(Str::random(3)); // 3 random letters
+            $randomNumbers = rand(100, 999); // 3 random numbers
+
+            // Combine them
+            $transactionID = $randomNumbers . $randomString;
+
+            // Check if it exists in the database (assuming your model is called Transaction)
+            $exists = Transaction::where('trans_id', $transactionID)->exists();
+
+            if (!$exists) {
+                $unique = true;
+            }
+        }
+
+        return $transactionID;
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }
