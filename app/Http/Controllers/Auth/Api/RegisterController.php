@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\Auth\Api;
 
+use App\Enums\AssetTypeEnums;
 use App\Enums\UserIdTypeEnums;
-use App\Http\Controllers\BaseController as BaseController;
+use App\Models\Account;
 use App\Models\User;
 use App\Services\OtpServices;
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\SignupRequest;
 use App\Http\Requests\AccountVerificationRequest;
 use App\Services\OtpService;
 use App\Enums\Status;
 use App\Models\Otp;
-use App\Models\Wallet;
 
 class RegisterController
 {
@@ -46,7 +44,7 @@ class RegisterController
 
             $otp =  $this->otpService->otp($request->user_id,$request->user_id_type);
             if ($otp) {
-                return response(['status' => true, 
+                return response(['status' => true,
                 'message' => 'Otp send to your '.$request->user_id_type.'. Otp = '.Otp::where("".$request->user_id_type, $request->user_id)->first()->code,
                 'errors' => []
             ], 201);
@@ -79,7 +77,7 @@ class RegisterController
                     $user->status = Status::ACTIVE;
                     $user->save();
 
-                    $this->createdWallet($user->id);
+                    $this->createdAccount($user->id);
 
                     return response(['status'=> true, 'message'=> 'Account Verified Successfully'],200);
             } else {
@@ -90,34 +88,36 @@ class RegisterController
         }
     }
 
-    public function createdWallet($user_id){
-        Wallet::create([
-            'user_id' => $user_id,
-            'bdt' => 0.00,
-            'gold' => 0.00,
-            'platinium' => 0.00,
-            'palladium' => 0.00,
-            'silver' => 0.00,
-        ]);
+    public function createdAccount($user_id){
+
+       foreach(AssetTypeEnums::cases() as $statusCase){
+           Account::create([
+               'user_id' => $user_id,
+               'asset_type' => $statusCase->value,
+               'balance' => 0.00,
+
+           ]);
+       }
+
     }
 
     public function generatePayId() {
         // Get current timestamp
         $timestamp = microtime(true);
-        
+
         // Convert timestamp to a string
         $timestampStr = strval($timestamp);
-        
+
         // Extract the decimal part of the timestamp and remove the dot
         $decimalPart = substr(str_replace('.', '', $timestampStr - floor($timestampStr)), 0, 7);
-        
+
         // Generate a random number
         $random = mt_rand(1000, 9999);
-        
+
         // Concatenate timestamp and random number
         $uniqueId = $decimalPart . $random;
-        
+
         return $uniqueId;
     }
-    
+
 }

@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TransactionPin extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'transaction_id','trans_id','pin','expiration_time','attempts'
+    ];
 }

@@ -15,9 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('sender_id')->constrained('users');
             $table->foreignId('receiver_id')->constrained('users');
+            $table->integer('asset_type');
             $table->integer('transaction_type');
             $table->double('amount',15,2);
             $table->string('trans_id', 20);
+            $table->tinyInteger('status')->default(\App\Enums\TransactionStatusEnums::PENDING);
+            $table->string('note')->nullable();
 
             $table->timestamps();
         });

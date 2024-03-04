@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Auth\Api\RegisterController;
 use App\Http\Controllers\Auth\Api\LoginController;
+use App\Http\Controllers\SendController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,8 +32,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class,'index']);
         Route::get('/update', [ProfileController::class,'update']);
+        Route::get('check-pay-pin-status', [ProfileController::class,'payPin']);
+        Route::post('set-pay-pin', [ProfileController::class,'payPinStore']);
         Route::match(['put','patch'],'/change-password', [ProfileController::class,'changePassword']);
      });
+
+    Route::prefix('send')->group(function () {
+        Route::get('get-receiver', [SendController::class,'index']);
+        Route::get('check-sending-balance', [SendController::class,'checkBalance']);
+        Route::post('send-store', [SendController::class,'store']);
+        Route::get('unlock-send-money', [SendController::class,'unlockSendMoney']);
+    });
 
      Route::get('/wallet', [ProfileController::class, 'wallet'])->name('wallet');
 });

@@ -11,6 +11,43 @@ use App\Models\Wallet;
 
 class ProfileController extends Controller
 {
+    public function payPin()
+    {
+        $user = Auth::user();
+        if ($user->pay_pin == null){
+            return new JsonResponse([
+                'status'=> false,
+                'message'=> "Please Insert Pay Pin!",
+            ], 400);
+        }else{
+            return new JsonResponse([
+                'status'=> true,
+                'message'=> "Already have pay pin!",
+            ], 200);
+        }
+
+    }
+    public function payPinStore(Request $request)
+    {
+        $valid = $this->validate($request,[
+            'pay_pin' => [
+                'required',
+                'numeric',
+                'regex:/^\d{5,}$/',
+            ],
+        ]);
+
+        if (!$valid) {
+            return response(['status' => false, 'message' => 'Validation error'], 400);
+        }
+        $in   = $request->input('pay_pin');
+        $user = auth()->user();
+        $user->pay_pin = bcrypt($in);
+        $user->save();
+        return response(['status' => true,'message'=> 'Successfully Saved!'],200);
+
+    }
+
     public function index ()
     {
         $user = Auth::user();
