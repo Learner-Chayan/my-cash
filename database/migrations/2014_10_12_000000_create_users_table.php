@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->unsignedBigInteger('pay_id')->unique();
+            $table->string('pay_pin')->nullable()->default(null);
             $table->unsignedTinyInteger('status')->default(Status::INACTIVE)->comment(Status::ACTIVE."= Active , ".Status::INACTIVE."= Inactive");
             $table->rememberToken();
             $table->timestamps();
