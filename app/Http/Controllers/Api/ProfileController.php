@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\AssetTypeEnums;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\Account;
+use App\Models\Asset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
@@ -66,29 +69,30 @@ class ProfileController extends Controller
     public function wallet(){
 
         $user = Auth::user();
-        $wallet = Wallet::where('user_id', $user->id)->first();
-        if($wallet) {
-            return new JsonResponse([
-                'status'=> true,
-                'wallet' => [
-                    'bdt' => $wallet->bdt,
-                    'gold' =>  $wallet->gold,
-                    'platinium' =>  $wallet->platinium,
-                    'palladium' =>  $wallet->palladium,
-                    'silver' =>  $wallet->silver,
-                ]
-            ], 200);
-        }
 
-        return new JsonResponse([
-            'status'=> true,
-            'wallet' => [
-                'bdt' => 0.00,
-                'gold' =>  0.00,
-                'platinium' =>  0.00,
-                'palladium' =>  0.00,
-                'silver' =>  0.00,
-            ]
+        $accounts = Account::where('user_id', $user->id)
+            ->whereIn('asset_type', [
+                AssetTypeEnums::BDT->value,
+                AssetTypeEnums::GOLD->value,
+                AssetTypeEnums::PLATINUM->value,
+                AssetTypeEnums::PALLADIUM->value,
+                AssetTypeEnums::SILVER->value
+            ])
+            ->get()
+            ->keyBy('asset_type');
+
+        $wallet = [
+            'bdt' => $accounts->get(AssetTypeEnums::BDT->value) ? $accounts->get(AssetTypeEnums::BDT->value)->balance : 0,
+            'gold' => $accounts->get(AssetTypeEnums::GOLD->value) ? $accounts->get(AssetTypeEnums::GOLD->value)->balance : 0,
+            'platinum' => $accounts->get(AssetTypeEnums::PLATINUM->value) ? $accounts->get(AssetTypeEnums::PLATINUM->value)->balance : 0,
+            'palladium' => $accounts->get(AssetTypeEnums::PALLADIUM->value) ? $accounts->get(AssetTypeEnums::PALLADIUM->value)->balance : 0,
+            'silver' => $accounts->get( AssetTypeEnums::SILVER->value) ? $accounts->get( AssetTypeEnums::SILVER->value)->balance : 0,
+        ];
+
+        return response()->json([
+            'status' => true,
+            'wallet' => $wallet,
         ], 200);
+
     }
 }
