@@ -51,6 +51,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // transaction
     Route::prefix(('trasaction-history'))->group(function() {
         Route::get('/' , [TransactionHistoryController::class, 'list']);
+        Route::get('/receives' , [TransactionHistoryController::class, 'receives']);
+        Route::get('/sends' , [TransactionHistoryController::class, 'sends']);
     });
 
 });
