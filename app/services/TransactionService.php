@@ -21,6 +21,7 @@ class TransactionService{
 
         if (Hash::check($data['pay_pin'],auth()->user()->pay_pin)){
 
+            $data["date"] = date("Y-m-d H:i:s");
             $trans = Transaction::create($data);// create transaction
             $this->senderAccountUpdate($trans);// update account
             $pin = $this->transactionPin($trans);// make for transaction pin
@@ -93,6 +94,7 @@ class TransactionService{
     public function unlockMoney($data)
     {
         $pinForCheck = TransactionPin::where('trans_id',$data['trans_id'])->first();
+
         if ($pinForCheck->pin == $data['pin']){
             $baseQuery = [
                 'trans_id' => $data['trans_id'],

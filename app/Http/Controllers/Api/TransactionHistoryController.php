@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TransactionHistoryResource;
 use App\Services\TransactionHistoryService;
+use Illuminate\Http\Request;
 
 
 class TransactionHistoryController extends Controller
@@ -14,28 +15,28 @@ class TransactionHistoryController extends Controller
        $this->transactionHistoryService = $transactionHistoryService;
     }
 
-    public function list()
+    public function list(Request $request)
     {
         try{
-            return TransactionHistoryResource::collection($this->transactionHistoryService->list());
+            return TransactionHistoryResource::collection($this->transactionHistoryService->list($request));
         }catch(\Exception $e) {
             return response([ "status" => false, "message" => $e->getMessage()], 422);
         }
     }
 
-    public function receives()
+    public function receives(Request $request)
     {
         try{
-            return TransactionHistoryResource::collection($this->transactionHistoryService->receives());
+            return TransactionHistoryResource::collection($this->transactionHistoryService->receives($request));
         }catch(\Exception $e) {
             return response([ "status" => false, "message" => $e->getMessage()], 422);
         }
     }
 
-    public function sends()
+    public function sends(Request $request)
     {
         try{
-            return TransactionHistoryResource::collection($this->transactionHistoryService->sends());
+            return TransactionHistoryResource::collection($this->transactionHistoryService->sends($request));
         }catch(\Exception $e) {
             return response([ "status" => false, "message" => $e->getMessage()], 422);
         }

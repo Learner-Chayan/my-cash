@@ -21,7 +21,8 @@ class TransactionHistoryResource extends JsonResource
                 "transaction_type" => $this->transaction_type,
                 "amount" => $this->amount,
                 "status" => $this->status,
-                "note"  => $this->note
+                "note"  => $this->note,
+                "date"  => date('Y-m-d', strtotime($this->date))
         ];
     }
 }

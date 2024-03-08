@@ -116,6 +116,14 @@ class SendController extends BaseController
         if (!$valid) {
             return response()->json(['errors' => $valid->errors()->all()]); //422 unprocessable content
         }
+
+        //Check the receiver id & trans_id matched or not 
+        $user = auth()->user();
+        $transaction = Transaction::where(['receiver_id' => $user->id, 'trans_id' => $request->trans_id])->first();
+        if(!$transaction){
+            return response(['status' => false, 'message' => "Unauthorized !! Invalid Request"], 401); 
+        }
+
         $in = $request->except('_token');
         $unlock = $this->transactionService->unlockMoney($in);
         if (!$unlock['status']) {
@@ -133,7 +141,7 @@ class SendController extends BaseController
 
         while (!$unique) {
             // Generate random string
-            $randomString = strtoupper(Str::random(3)); // 3 random letters
+            $randomString = strtoupper(Str::random(6)); // 3 random letters
             $randomNumbers = rand(100, 999); // 3 random numbers
 
             // Combine them
