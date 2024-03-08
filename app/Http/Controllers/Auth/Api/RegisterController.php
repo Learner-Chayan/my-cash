@@ -109,7 +109,7 @@ class RegisterController
         $timestampStr = strval($timestamp);
 
         // Extract the decimal part of the timestamp and remove the dot
-        $decimalPart = substr(str_replace('.', '', $timestampStr - floor($timestampStr)), 0, 7);
+        $decimalPart = substr(str_replace('.', '', $timestampStr - floor($timestampStr)), 0, 6);
 
         // Generate a random number
         $random = mt_rand(1000, 9999);

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Auth\Api\RegisterController;
 use App\Http\Controllers\Auth\Api\LoginController;
+use App\Http\Controllers\Api\TransactionHistoryController;
 use App\Http\Controllers\SendController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/registration',[RegisterController::class,'register']);
 Route::post('/account-verification',[RegisterController::class,'accountVerify']);
 Route::post('/login', [LoginController::class,'login']);
-Route::match(['get', 'post'], '/refresh-token',[LoginController::class,'refreshToken']);
+//Route::match(['get', 'post'], '/refresh-token',[LoginController::class,'refreshToken']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -44,5 +45,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('unlock-send-money', [SendController::class,'unlockSendMoney']);
     });
 
-     Route::get('/wallet', [ProfileController::class, 'wallet'])->name('wallet');
+    //Route::get('/wallet', [ProfileController::class, 'wallet'])->name('wallet');
+    Route::match(['get', 'post'], '/refresh-token',[LoginController::class,'refreshToken']);
+
+    // transaction
+    Route::prefix(('trasaction-history'))->group(function() {
+        Route::get('/' , [TransactionHistoryController::class, 'list']);
+        Route::get('/receives' , [TransactionHistoryController::class, 'receives']);
+        Route::get('/sends' , [TransactionHistoryController::class, 'sends']);
+    });
+
 });

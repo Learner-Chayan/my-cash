@@ -15,7 +15,7 @@ class OtpService {
             $otp->delete();
          }
 
-         $otpCode = rand(100000,999999);
+         $otpCode = rand(10000,99999);
          Otp::create([
             "".$user_id_type => $user_id,
             "code"=> $otpCode,

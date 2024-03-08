@@ -70,10 +70,12 @@ class LoginController extends Controller
             $user = $token->tokenable;
             $token->delete();
             $newToken = $user->createToken('login_token')->plainTextToken;
+            $user = Auth::user();
             return new JsonResponse([
                 'status' => true,
                 'message' => 'Token Generated Successfully',
                 'token'=> $newToken,
+                'user'=> new UserResource($user),
             ], 201);
         } catch (\Throwable $th) {
             return new JsonResponse([

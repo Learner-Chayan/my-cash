@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -49,4 +50,15 @@ class User extends Authenticatable implements HasMedia
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+    public function sends():HasMany
+    {
+        return $this->hasMany(Transaction::class, 'sender_id', 'id');
+    }
+
+    public function receives():HasMany
+    {
+        return $this->hasMany(Transaction::class, 'receiver_id', 'id');
+    }
 }

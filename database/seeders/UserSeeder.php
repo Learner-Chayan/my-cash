@@ -43,7 +43,6 @@ class UserSeeder extends Seeder
             'email' => 'customer@gmail.com',
             'phone' => '01707217895',
             'pay_id'=> 1234567894,
-            'pay_pin' => bcrypt('12345'),
             'password' => bcrypt('1234567'),
             'status' => Status::ACTIVE,
         ]);
