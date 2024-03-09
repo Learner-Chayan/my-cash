@@ -27,11 +27,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
 
     //Route::get('/user-profile', [ProfileController::class,'index']);
     Route::prefix('home-profile')->group(function () {
-        Route::post('/', [ProfileController::class,'name']);
+        Route::post('/update-name', [ProfileController::class,'updateName']);
+        Route::post('/update-image', [ProfileController::class, 'updateImage']);
      });
 
     Route::prefix('profile')->group(function () {

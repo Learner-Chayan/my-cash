@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\AssetTypeEnums;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\updateImageRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Account;
 use App\Models\Asset;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use App\Models\Wallet;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -97,7 +99,7 @@ class ProfileController extends Controller
     }
 
     //name update user
-    public function name(Request $request)
+    public function updateName(Request $request)
     {
         $valid = $this->validate($request,[
             'name' => 'required|string',
@@ -108,6 +110,27 @@ class ProfileController extends Controller
         $user = auth()->user();
         $user->name = $request->name;
         $user->save();
-        return $user;
+       
+        return response(
+            ["status" => true , "message" => "Name Updated Successfully"]
+        );
+    }
+
+    public function updateImage(updateImageRequest $request)
+    {
+        try {
+            $user = User::find(auth()->user()->id);
+            if ($request->image) {
+                $user->clearMediaCollection('profile');
+                $user->addMediaFromRequest('image')->toMediaCollection('profile');
+            }
+            $user->save();
+            return response([
+                "status" => true,
+                "image"   => $user->image
+            ]);
+        } catch (\Exception $exception) {
+            return response(['status' => false, 'message' => $exception->getMessage()], 422);
+        }
     }
 }
