@@ -4,7 +4,7 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Auth\Api\RegisterController;
 use App\Http\Controllers\Auth\Api\LoginController;
 use App\Http\Controllers\Api\TransactionHistoryController;
-use App\Http\Controllers\SendController;
+use App\Http\Controllers\Api\SendController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +30,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
 
     //Route::get('/user-profile', [ProfileController::class,'index']);
+    Route::prefix('home-profile')->group(function () {
+        Route::post('/', [ProfileController::class,'name']);
+     });
+
     Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class,'index']);
         Route::get('/update', [ProfileController::class,'update']);
@@ -45,11 +49,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('unlock-send-money', [SendController::class,'unlockSendMoney']);
     });
 
-    //Route::get('/wallet', [ProfileController::class, 'wallet'])->name('wallet');
+    Route::get('/wallet', [ProfileController::class, 'wallet'])->name('wallet');
     Route::match(['get', 'post'], '/refresh-token',[LoginController::class,'refreshToken']);
 
     // transaction
-    Route::prefix(('trasaction-history'))->group(function() {
+    Route::prefix(('transaction-history'))->group(function() {
         Route::get('/' , [TransactionHistoryController::class, 'list']);
         Route::get('/receives' , [TransactionHistoryController::class, 'receives']);
         Route::get('/sends' , [TransactionHistoryController::class, 'sends']);
