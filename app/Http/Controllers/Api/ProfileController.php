@@ -95,4 +95,19 @@ class ProfileController extends Controller
         ], 200);
 
     }
+
+    //name update user
+    public function name(Request $request)
+    {
+        $valid = $this->validate($request,[
+            'name' => 'required|string',
+        ]);
+        if (!$valid) {
+            return response()->json(['errors' => $valid->errors()->all()]); //422 unprocessable content
+        }
+        $user = auth()->user();
+        $user->name = $request->name;
+        $user->save();
+        return $user;
+    }
 }
