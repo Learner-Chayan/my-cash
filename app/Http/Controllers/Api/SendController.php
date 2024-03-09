@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Enums\TransactionStatusEnums;
+use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Services\TransactionService;
@@ -11,7 +12,7 @@ use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class SendController extends BaseController
+class SendController extends controller
 {
     protected $userService;
     protected $transactionService;
