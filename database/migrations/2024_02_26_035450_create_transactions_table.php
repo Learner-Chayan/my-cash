@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('trans_id', 20);
             $table->tinyInteger('status')->default(\App\Enums\TransactionStatusEnums::PENDING);
             $table->string('note')->nullable();
-
+            $table->dateTime('date');
             $table->timestamps();
         });
     }
