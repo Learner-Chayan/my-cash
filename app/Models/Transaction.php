@@ -12,17 +12,12 @@ class Transaction extends Model
 
     protected $table = "transactions";
     protected $fillable = [
-        'sender_id','receiver_id','transaction_type','asset_type','amount','trans_id','note', 'date'
+        'user_id','transaction_type','asset_type','amount','trans_id','note', 'date'
     ];
 
 
-    public function sender():BelongsTo
+    public function user():BelongsTo
     {
-        return $this->belongsTo(User::class, 'sender_id', 'id');
-    }
-
-    public function receiver(): BelongsTo 
-    {
-        return $this->belongsTo(User::class, 'receiver_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

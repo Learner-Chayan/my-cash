@@ -9,39 +9,79 @@ use App\Models\Transaction;
 use App\Models\TransactionPin;
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class TransactionService{
 
 
+    public $returnData;
 
     public function store(array $data)
     {
+        try {
+            DB::transaction(function () use ($data) { 
+                $data["date"] = date("Y-m-d H:i:s");
+                $trans = Transaction::create([
+                    "user_id"           => $data["sender_id"],
+                    "asset_type"        => $data["asset_type"],
+                    "transaction_type"  => TransactionTypeEnums::SEND,
+                    "amount"            => $data["amount"],
+                    "trans_id"          => $data["trans_id"], 
+                    "status"            =>  TransactionStatusEnums::SENT,
+                    "note"              => $data["note"],
+                    "date"              => $data["date"]
+                ]);// create transactions for sender
 
-        if (Hash::check($data['pay_pin'],auth()->user()->pay_pin)){
+                $trans = Transaction::create([
+                    "user_id"           => $data["receiver_id"],
+                    "asset_type"        => $data["asset_type"],
+                    "transaction_type"  => TransactionTypeEnums::RECEIVED,
+                    "amount"            => $data["amount"],
+                    "trans_id"          => $data["trans_id"], 
+                    "status"            => TransactionStatusEnums::PENDING,
+                    "note"              => $data["note"],
+                    "date"              => $data["date"]
+                ]); // create transaction for receiver
 
-            $data["date"] = date("Y-m-d H:i:s");
-            $trans = Transaction::create($data);// create transaction
-            $this->senderAccountUpdate($trans);// update account
-            $pin = $this->transactionPin($trans);// make for transaction pin
-            $trans->transaction_pin = $pin;
-            $returnData = [
-                'transaction_type' => $trans->transaction_type,
-                'asset_type' => $trans->asset_type,
-                'amount' => $trans->amount,
-                'note' => $trans->note,
+                //update balance
+                Account::where([
+                    'asset_type' => $data['asset_type'],
+                    'user_id' => Auth::user()->id,
+                ])->update([
+                    'balance' => DB::raw('balance - ' . $trans->amount),
+                ]);
+
+                //$pin = $this->transactionPin($trans);// make for transaction pin
+                $validDate = Carbon::parse(Carbon::now()->addDays(7))->format('Y-m-d H:i:s');
+                $tp = TransactionPin::create([
+                'transaction_id' => $trans->id,
                 'trans_id' => $trans->trans_id,
-                'transaction_pin' => $pin,
-                'receiver_pay_id' => $data['receiver_pay_id'],
-                'sender_pay_id'   => auth()->user()->pay_id,
+                'pin'=> rand(10000,99999),
+                'expiration_time' => $validDate,
+                'attempts' => 3,
+                ]);
 
-            ];
-            return ['status' => true, 'message' => 'Successfully Data Save!','data' => $returnData];
-        }else{
-            return ['status' => false, 'message' => 'Wrong Pin Enter'];
+                $trans->transaction_pin = $tp->pin;
+                $this->returnData = [
+                    'transaction_type' => $trans->transaction_type,
+                    'asset_type' => $trans->asset_type,
+                    'amount' => $trans->amount,
+                    'note' => $trans->note,
+                    'trans_id' => $trans->trans_id,
+                    'transaction_pin' => $tp->pin,
+                    'receiver_pay_id' => $data['receiver_pay_id'],
+                    'sender_pay_id'   => auth()->user()->pay_id,
+
+                ];
+            });
+            return response(['status' => true, 'message' => "Transaction Success",'data' => $this->returnData], 200);
+        } catch (Exception $exception) {
+            DB::rollBack();
+            throw new Exception($exception->getMessage(), 422);
         }
-
     }
 
     public function checkSederBalance($data)
@@ -61,36 +101,6 @@ class TransactionService{
 
     }
 
-    public function senderAccountUpdate($trans)
-    {
-        $baseQuery = [
-            'asset_type' => $trans->asset_type,
-            'user_id' => $trans->sender_id,
-        ];
-        $account = Account::where($baseQuery)->first();
-        $account->balance -= $trans->amount;
-        $account->save();
-        return $account;
-    }
-    public function transactionPin($trans)
-    {
-        $transId = $trans->id;
-        $now = Carbon::now();
-        $sevenDaysBefore = $now->addDay(7);
-        $validDate = Carbon::parse($sevenDaysBefore)->format('Y-m-d H:i:s');
-
-        $attempts = 3;
-
-        $tp = TransactionPin::create([
-           'transaction_id' => $transId,
-           'trans_id' => $trans->trans_id,
-           'pin'=> rand(10000,99999),
-           'expiration_time' => $validDate,
-           'attempts' => $attempts,
-        ]);
-        return $tp->pin;
-    }
-
     public function unlockMoney($data)
     {
         $pinForCheck = TransactionPin::where('trans_id',$data['trans_id'])->first();
@@ -103,7 +113,7 @@ class TransactionService{
             $pinDetails = TransactionPin::where($baseQuery)->first();
             if ($pinDetails){
                 $recived = $this->recieved($pinDetails);
-                $receiverPayId = $this->findReceiver($recived->receiver_id);
+                $receiverPayId = $this->findReceiver($recived->user_id);
                 $returnData = [
                     'transaction_type' => $recived->transaction_type,
                     'asset_type' => $recived->asset_type,
@@ -159,7 +169,7 @@ class TransactionService{
 
         // account update
         $baseQuery = [
-            'user_id' => $transaction->receiver_id,
+            'user_id' => $transaction->user_id,
             'asset_type' => $transaction->asset_type,
         ];
         $account = Account::where($baseQuery)->first();

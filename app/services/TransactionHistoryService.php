@@ -2,6 +2,7 @@
 
 namespace App\Services;
 use App\Enums\TransactionStatusEnums;
+use App\Enums\TransactionTypeEnums;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Exception;
@@ -15,9 +16,8 @@ class TransactionHistoryService {
             $user = auth()->user();
             $requests = $request->all();
 
-            $transactions =  Transaction::with('sender')
-                ->with('receiver')
-                ->where('sender_id', $user->id)
+            $transactions =  Transaction::with('user')
+                ->where('user_id', $user->id)
                 ->where(function($query) use ($requests) {
                     if(isset($requests['start_date']) && isset($requests['end_date'])){
                         $start_date =  date('Y-m-d', strtotime($requests['start_date']));
@@ -30,7 +30,6 @@ class TransactionHistoryService {
                         $query->whereDate('date' , '>=' , $start_date)->whereDate('date', '<=' , $end_date);
                     }
                 })
-                ->orWhere('receiver_id', $user->id)
                 ->get();
 
            return $transactions;
@@ -46,9 +45,9 @@ class TransactionHistoryService {
         try {
             $user = auth()->user();
             $requests = $request->all();
-            $transactions =  Transaction::with('sender')
-                ->with('receiver')
-                ->where('receiver_id', $user->id)
+            $transactions =  Transaction::with('user')
+                ->where('user_id', $user->id)
+                ->where('transaction_type', TransactionTypeEnums::RECEIVED)
                 ->where(function($query) use ($requests) {
                     if(isset($requests['start_date']) && isset($requests['end_date'])){
                         $start_date =  date('Y-m-d', strtotime($requests['start_date']));
@@ -75,9 +74,9 @@ class TransactionHistoryService {
             $user = auth()->user();
             $requests = $request->all();
 
-            $transactions =  Transaction::with('sender')
-                ->with('receiver')
-                ->where('sender_id', $user->id)
+            $transactions =  Transaction::with('user')
+                ->where('user_id', $user->id)
+                ->where('transaction_type', TransactionTypeEnums::SEND)
                 ->where(function($query) use ($requests) {
                     if(isset($requests['start_date']) && isset($requests['end_date'])){
                         $start_date =  date('Y-m-d', strtotime($requests['start_date']));

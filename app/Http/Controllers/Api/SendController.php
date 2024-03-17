@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Enums\TransactionStatusEnums;
+use App\Enums\TransactionTypeEnums;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Models\User;
@@ -11,6 +12,7 @@ use Exception;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Http\Requests\SendRequest;
 
 class SendController extends controller
 {
@@ -68,40 +70,28 @@ class SendController extends controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(SendRequest $request)
     {
-        $valid = $this->validate($request,[
-            'receiver_pay_id' => 'required|exists:users,pay_id',
-            'asset_type' => 'required',
-            'transaction_type' => 'required',
-            'amount' => 'required',
-        ]);
-        if (!$valid) {
-            return response()->json(['errors' => $valid->errors()->all()]);
+
+        try {
+            $in = $request->all();
+            // Check sender balance
+            $balanceCheck = $this->transactionService->checkSederBalance($in);
+            if (!$balanceCheck['status']) {
+                return response(['status' => false, 'message' => $balanceCheck['message']], 400);
+            }
+            if (strcmp($request['pay_pin'], auth()->user()->pay_pin) !== 0){
+                return response(['status' => false, 'message' => "Wrong pay pin !!"], 400);
+            }
+    
+            $receiver = $this->userService->getPayIdUser($request->receiver_pay_id);
+            $in['trans_id']    = $this->generateUniqueTransactionID();
+            $in['sender_id']   = auth()->user()->id;
+            $in['receiver_id'] = $receiver['data']['id'];
+            return $this->transactionService->store($in);
+        } catch (Exception $exception) {
+            throw new Exception($exception->getMessage(), 422);
         }
-        $in = $request->except('_token');
-        // Check sender balance
-        $balanceCheck = $this->transactionService->checkSederBalance($in);
-        if (!$balanceCheck['status']) {
-            return response(['status' => false, 'message' => $balanceCheck['message']], 400);
-        }
-        $receiver = $this->userService->getPayIdUser($request->receiver_pay_id);
-
-        $in['trans_id']    = $this->generateUniqueTransactionID();
-        $in['status']      = TransactionStatusEnums::PENDING;
-        $in['sender_id']   = auth()->user()->id;
-        $in['receiver_id'] = $receiver['data']['id'];
-
-        $trans = $this->transactionService->store($in);
-        if (!$trans['status']) {
-            return response(['status' => false, 'message' => $trans['message']], 400);
-        }else{
-
-            return response(['status' => true, 'message' => $trans['message'],'data' => $trans['data']], 200);
-
-        }
-
-
     }
 
     /**
@@ -120,7 +110,7 @@ class SendController extends controller
 
         //Check the receiver id & trans_id matched or not 
         $user = auth()->user();
-        $transaction = Transaction::where(['receiver_id' => $user->id, 'trans_id' => $request->trans_id])->first();
+        $transaction = Transaction::where(['user_id' => $user->id, 'transaction_type'=> TransactionTypeEnums::RECEIVED , 'trans_id' => $request->trans_id])->first();
         if(!$transaction){
             return response(['status' => false, 'message' => "Unauthorized !! Invalid Request"], 401); 
         }
@@ -130,9 +120,7 @@ class SendController extends controller
         if (!$unlock['status']) {
             return response(['status' => false, 'message' => $unlock['message']], 400);
         }else{
-
             return response(['status' => true, 'message' => $unlock['message'],'data' => $unlock['data']], 200);
-
         }
     }
 
