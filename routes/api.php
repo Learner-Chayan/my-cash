@@ -18,9 +18,9 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('/registration',[RegisterController::class,'register']);
-Route::post('/account-verification',[RegisterController::class,'accountVerify']);
-Route::post('/login', [LoginController::class,'login']);
+Route::post('/registration',[RegisterController::class,'register'])->name('register');
+Route::post('/account-verification',[RegisterController::class,'accountVerify'])->name('acc-verify');
+Route::post('/login', [LoginController::class,'login'])->name('login');
 //Route::match(['get', 'post'], '/refresh-token',[LoginController::class,'refreshToken']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

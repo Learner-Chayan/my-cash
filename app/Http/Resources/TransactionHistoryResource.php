@@ -15,14 +15,15 @@ class TransactionHistoryResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-                "sender" => new UserResource($this->sender),
-                "receiver" => new UserResource($this->receiver),
+               // "sender" => new UserResource($this->sender),
+               // "receiver" => new UserResource($this->receiver),
                 "asset_type" => $this->asset_type,
                 "transaction_type" => $this->transaction_type,
+                "trans_id"  => $this->trans_id,
                 "amount" => $this->amount,
                 "status" => $this->status,
                 "note"  => $this->note,
-                "date"  => date('Y-m-d', strtotime($this->date))
+                "date"  => date('Y-m-d H:i:s', strtotime($this->date))
         ];
     }
 }

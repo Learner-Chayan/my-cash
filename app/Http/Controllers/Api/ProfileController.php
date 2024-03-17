@@ -47,7 +47,7 @@ class ProfileController extends Controller
         }
         $in   = $request->input('pay_pin');
         $user = auth()->user();
-        $user->pay_pin = bcrypt($in);
+        $user->pay_pin = $in;
         $user->save();
         return response(['status' => true,'message'=> 'Successfully Saved!'],200);
 
