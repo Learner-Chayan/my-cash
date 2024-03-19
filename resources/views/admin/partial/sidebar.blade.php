@@ -1,8 +1,11 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    @php $user = auth()->user() @endphp
+    @php
+        $user  = auth()->user();
+        $media = $user->getMedia('user')->first()
+    @endphp
     <!-- Brand Logo -->
     <a href="{{route('dashboard')}}" class="brand-link">
-        <img src="{{asset('public')}}/logo.png" alt="{{$basic->title}}" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <img src="{{asset('logo.png')}}" alt="{{$basic->title}}" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">{{$basic->title}}</span>
     </a>
 
@@ -11,10 +14,10 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{$user->image !== null ? asset("public/images/user/$user->image") : asset('public/default.png')}}" class="img-circle elevation-2" alt="User Image">
+                <img src="{{ $media ? $media->getUrl() : asset('public/default.png')}}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">Alexander Pierce</a>
+                <a href="#" class="d-block">{{$user->name}}</a>
             </div>
         </div>
         <!-- Sidebar Menu -->
@@ -29,14 +32,14 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{route('asset.index')}}" class="nav-link {{Request::is('admin/asset') ? 'active' : ''}}">
-                        <i class="nav-icon fas fa-dollar-sign"></i>
-                        <p>
-                            Asset
-                        </p>
-                    </a>
-                </li>
+{{--                <li class="nav-item">--}}
+{{--                    <a href="#" class="nav-link {{Request::is('admin') ? 'active' : ''}}">--}}
+{{--                        <i class="nav-icon fas fa-dollar-sign"></i>--}}
+{{--                        <p>--}}
+{{--                            Asset--}}
+{{--                        </p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
                 <li class="nav-item {{Request::is('admin/get-basic') || Request::is('admin/get-about') || Request::is('admin/get-terms') || Request::is('admin/get-privacy') ? 'menu-open' : ''}}">
                     <a href="#" class="nav-link {{Request::is('admin/get-basic') || Request::is('admin/get-about') || Request::is('admin/get-terms') || Request::is('admin/get-privacy') ? 'active' : ''}}">
                         <i class="nav-icon fas fa-cogs"></i><p>Website Setting<i class="fas fa-angle-left right"></i></p>

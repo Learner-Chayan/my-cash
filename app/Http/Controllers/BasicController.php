@@ -37,7 +37,7 @@ class BasicController extends Controller
                 $logo = $request->file('logo');
                 $name = "logo".'.'.'png';
                 $location = public_path($name);
-                Image::make($logo)->resize(100,100)->save($location);
+                Image::make($logo)->save($location);
             }
             if ($request->hasFile('favicon')){
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -11,14 +12,39 @@ use Illuminate\Support\Facades\Hash;
 class HomeController extends Controller
 {
 
+    protected $user;
+
     public function __construct()
     {
-         $this->middleware(['auth','Setting']);
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user(); // Set the authenticated user
+
+            // Check if the user has the 'student' role
+            if ($this->user && $this->user->hasRole('customer')) {
+                // Redirect to the home page if the user is a student
+                Auth::logout();
+                return redirect('/')->with('message', 'You cannot access this panel!');
+
+            }
+            if ($this->user && $this->user->hasRole('agent')) {
+                // Redirect to the home page if the user is a instructor
+                Auth::logout();
+                return redirect('/')->with('message', 'You cannot access this panel!');
+            }
+
+            // Proceed with the request for users with other roles
+            return $next($request);
+        });
+        $this->middleware(['auth','Setting','role:super-admin|admin']);
     }
+
 
     public function dashboard()
     {
          $data['page_title'] = "Dashboard";
+         $data['totalCustomer']    = User::role('customer')->count();
+         $data['totalTransaction'] = Transaction::count();
+
          return view('admin.dashboard.dashboard',$data);
     }
     public function editProfile()
@@ -45,7 +71,11 @@ class HomeController extends Controller
 
         /** spattie media */
         //$user->addMedia
-        $user->addMedia($request->image)->toMediaCollection('user');
+        // Add the new image to the 'user' collection
+        if ($request->hasFile('image')) {
+            $user->clearMediaCollection('user');
+            $user->addMedia($request->image)->toMediaCollection('user');
+        }
         /** Spattie media */
 
 

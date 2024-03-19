@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Auth;
-use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -28,40 +26,26 @@ class LoginController extends Controller
         return view('auth.login',$data);
     }
 
-    public function redirectToGoogle()
+    protected function authenticated(Request $request, $user)
     {
-        return Socialite::driver('google')->redirect();
+        session()->flash('success', 'You are successfully logged in.');
     }
 
-    public function handleGoogleCallback()
+    public function logout(Request $request)
     {
-        try {
+        $this->guard()->logout();
 
-            $user = Socialite::driver('google')->user();
+        $request->session()->invalidate();
 
-            $finduser = User::where('google_id', $user->id)->first();
+        $request->session()->regenerateToken();
 
-            if($finduser){
+        // Flash a logout message to the session
+        $request->session()->flash('message', 'You are logged out.');
 
-                Auth::login($finduser);
-
-                 return redirect('/');
-
-            }else{
-                $newUser = User::create([
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'google_id'=> $user->id
-                ]);
-
-                Auth::login($newUser);
-
-                return redirect()->back();
-            }
-
-        } catch (Exception $e) {
-            return redirect('auth/google');
-        }
+        return $this->loggedOut($request) ?: redirect('/');
     }
+
+
+
 
 }
