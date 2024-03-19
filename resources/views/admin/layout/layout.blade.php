@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title> {{$page_title}} | {{$site_title}}</title>
-    <link rel="shortcut icon" type="image/x-icon" href="{{asset('public/favicon.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{asset('favicon.png') }}">
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -33,9 +33,9 @@
 <div class="wrapper">
 
     <!-- Preloader -->
-{{--    <div class="preloader flex-column justify-content-center align-items-center">--}}
-{{--        <img class="animation__shake" src="{{asset('/assets')}}/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">--}}
-{{--    </div>--}}
+    <div class="preloader flex-column justify-content-center align-items-center">
+        <img class="animation__shake" src="{{asset('logo.png')}}" alt="AdminLTELogo" height="60" width="60">
+    </div>
 
     <!-- Navbar -->
     @include('admin.partial.topbar')
@@ -88,7 +88,7 @@
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer">
-        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+        <strong>Copyright &copy; 2021-{{\Carbon\Carbon::now()->format('Y')}} <a href="https://halalcash.net/">Halal Cash</a>.</strong>
         All rights reserved.
 {{--        <div class="float-right d-none d-sm-inline-block">--}}
 {{--            <b>Version</b> 3.2.0--}}

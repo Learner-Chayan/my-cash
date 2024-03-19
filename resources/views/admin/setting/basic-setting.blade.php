@@ -62,10 +62,8 @@
                                     </div>
                                 </div>
                                 <!-- /.card-body -->
+                                <button type="submit" class="btn btn-primary float-right">Submit</button>
 
-                                <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </div>
                             </form>
                         </div>
                         <div class="tab-pane fade" id="basic-logo" role="tabpanel" aria-labelledby="basic-logo-tab">
@@ -77,7 +75,7 @@
                                     <div class="input-group">
                                         <div class="fileinput fileinput-new" data-provides="fileinput">
                                             <div class="fileinput-new thumbnail" style="width: 215px; height: 215px; padding: 0px;" data-trigger="fileinput">
-                                                <img style="width: 215px" src="{{asset('public/logo.png') }}" alt="Please Select Your Image......">
+                                                <img style="width: 215px" src="{{asset('logo.png') }}" alt="Please Select Your Image......">
                                             </div>
                                             <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 215px; max-height: 215px"></div>
                                             <div>
@@ -91,10 +89,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </div>
-                        </form>
+                                <button type="submit" class="btn btn-primary float-right">Submit</button>
+
+                            </form>
 
                         </div>
                         <div class="tab-pane fade" id="basic-favicon" role="tabpanel" aria-labelledby="basic-favicon-tab">
@@ -105,7 +102,7 @@
                                 <div class="input-group">
                                     <div class="fileinput fileinput-new" data-provides="fileinput">
                                         <div class="fileinput-new thumbnail" style="width: 215px; height: 215px; padding: 0px;" data-trigger="fileinput">
-                                            <img style="width: 215px" src="{{asset('public/favicon.png') }}" alt="Please Select Your Image......">
+                                            <img style="width: 215px" src="{{asset('favicon.png') }}" alt="Please Select Your Image......">
                                         </div>
                                         <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 215px; max-height: 215px"></div>
                                         <div>
@@ -119,9 +116,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
+                            <button type="submit" class="btn btn-primary float-right">Submit</button>
                             </form>
                         </div>
                     </div>
