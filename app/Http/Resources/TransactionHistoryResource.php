@@ -24,6 +24,11 @@ class TransactionHistoryResource extends JsonResource
                 "status" => $this->status,
                 "note"  => $this->note,
                 "date"  => date('Y-m-d H:i:s', strtotime($this->date))
+
+                // "name" => $user->name,
+                // "payId" => $user->pay_id,
+                // "userType" =>  $user->getRoleNames() ? $user->getRoleName : "Null",
+
         ];
     }
 }

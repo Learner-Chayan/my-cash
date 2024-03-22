@@ -14,6 +14,11 @@ class UserService
         $user = User::select('id','name',$data['type'],'pay_id')->where($data['type'],$data['value'])->first();
 
         if ($user){
+
+            if($user->id === auth()->user()->id){
+                return ['status' => false,'message' => 'Self to self transaction is not possible'];
+            }
+
             return ['status' => true,'message' => 'Successfully Get User','data' => $user];
         }else{
             return ['status' => false,'message' => 'Not Found'];

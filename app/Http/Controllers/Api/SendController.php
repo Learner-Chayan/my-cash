@@ -31,6 +31,11 @@ class SendController extends controller
      */
     public function index(Request $request)
     {
+        $request->validate([
+            'type' => 'required',
+            'value' => 'required'
+        ]);
+
         $in = $request->except('_token');
         $user = $this->userService->getUser($in);
         if (!$user['status']) {

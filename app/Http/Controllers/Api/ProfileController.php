@@ -112,7 +112,7 @@ class ProfileController extends Controller
         $user->save();
        
         return response(
-            ["status" => true , "message" => "Name Updated Successfully"]
+            ["status" => true , "data"=> new UserResource($user) , "message" => "Name Updated Successfully"]
         );
     }
 

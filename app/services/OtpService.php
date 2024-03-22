@@ -8,7 +8,7 @@ use Carbon\Carbon;
 class OtpService {
     public function __construct() { }
 
-    public function otp($user_id,$user_id_type):bool
+    public function otp($user_id,$user_id_type):int
     {
         $otp = Otp::where("".$user_id_type, $user_id)->first();
         if($otp){
@@ -21,7 +21,7 @@ class OtpService {
             "code"=> $otpCode,
          ]);
 
-         return true;
+         return $otpCode;
 
     }
 
