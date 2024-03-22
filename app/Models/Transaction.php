@@ -12,7 +12,7 @@ class Transaction extends Model
 
     protected $table = "transactions";
     protected $fillable = [
-        'user_id','transaction_type','asset_type','amount','trans_id','note', 'date'
+        'user_id','transaction_type','asset_type','amount','trans_id','note', 'status', 'date'
     ];
 
 

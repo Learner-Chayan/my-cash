@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth\Api;
 
 use App\Enums\AssetTypeEnums;
+use App\Enums\Role;
 use App\Enums\UserIdTypeEnums;
+use App\Http\SmsGateways\Twillio;
 use App\Models\Account;
 use App\Models\User;
 use App\Services\OtpServices;
@@ -17,8 +19,10 @@ use App\Models\Otp;
 class RegisterController
 {
     private OtpService $otpService;
-    public function __construct(OtpService $otpService) {
+    private Twillio $twillio;
+    public function __construct(OtpService $otpService,Twillio $twillio ) {
         $this->otpService = $otpService;
+        $this->twillio = $twillio;
     }
 
     public function register(SignupRequest $request)
@@ -40,12 +44,21 @@ class RegisterController
                     'pay_id' => $this->generatePayId(),
                     'password' => $request->password,
                 ]);
+
+                $user->assignRole(Role::REGULAR);
             }
 
             $otp =  $this->otpService->otp($request->user_id,$request->user_id_type);
             if ($otp) {
+
+                $msg = "Your OTP is : ".$otp;
+                if($request->user_id_type == UserIdTypeEnums::PHONE)
+                {
+                    $this->twillio->send($user->phone, $msg);
+                }
+
                 return response(['status' => true,
-                'message' => 'Otp send to your '.$request->user_id_type.'. Otp = '.Otp::where("".$request->user_id_type, $request->user_id)->first()->code,
+                'message' => 'Otp send to your '.$request->user_id_type.'. Otp = '.$otp,
                 'errors' => []
             ], 201);
             }

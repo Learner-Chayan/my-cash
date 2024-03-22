@@ -4,12 +4,12 @@ namespace App\Enums;
 
 
 enum TransactionTypeEnums: int {
-    case DEPOSIT  = 1;
-    case SEND = 2;
-    case RECEIVED = 3;
-    case REFUND = 4;
-    case GIFT = 5;
-    case TOPUP = 6;
-    case WITHDRAW  = 7;
+    case DEPOSIT  = 300;
+    case SEND = 301;
+    case RECEIVED = 302;
+    case REFUND = 303;
+    case GIFT = 304;
+    case TOPUP = 305;
+    case WITHDRAW  = 306;
 
 }

@@ -3,8 +3,8 @@
 namespace App\Enums;
 
 interface Role {
-    const ADMIN = 3;
-    const AGENT = 4;
-    const CUSTOMER =5;
+    const ADMIN = 2;
+    const AGENT = 3;
+    const REGULAR = 4;
     
 }

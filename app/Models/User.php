@@ -62,6 +62,16 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(Transaction::class, 'receiver_id', 'id');
     }
 
+    public function getUserRoleAttribute()
+    {
+        return $this->roles->pluck('id', 'id')->first();
+    }
+
+    public function getUserRoleNameAttribute()
+    {
+        return $this->roles->pluck('name', 'name')->first();
+    }
+
     public function getImageAttribute(): string
     {
         if (!empty($this->getFirstMediaUrl('profile'))) {

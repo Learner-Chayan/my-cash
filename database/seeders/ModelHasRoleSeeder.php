@@ -25,7 +25,7 @@ class ModelHasRoleSeeder extends Seeder
                 $user->assignRole('agent');
 
             }elseif ($key == 3){
-                $user->assignRole('customer');
+                $user->assignRole('regular');
 
             }
         }
