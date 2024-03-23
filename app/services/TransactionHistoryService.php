@@ -16,7 +16,7 @@ class TransactionHistoryService {
             $user = auth()->user();
             $requests = $request->all();
 
-            $transactions =  Transaction::with('user')
+            $transactions =  Transaction::with('model')
                 ->where('user_id', $user->id)
                 ->where(function($query) use ($requests) {
                     if(isset($requests['start_date']) && isset($requests['end_date'])){
@@ -45,7 +45,7 @@ class TransactionHistoryService {
         try {
             $user = auth()->user();
             $requests = $request->all();
-            $transactions =  Transaction::with('user')
+            $transactions =  Transaction::with('model')
                 ->where('user_id', $user->id)
                 ->where('transaction_type', TransactionTypeEnums::RECEIVED)
                 ->where(function($query) use ($requests) {
@@ -74,7 +74,7 @@ class TransactionHistoryService {
             $user = auth()->user();
             $requests = $request->all();
 
-            $transactions =  Transaction::with('user')
+            $transactions =  Transaction::with('model')
                 ->where('user_id', $user->id)
                 ->where('transaction_type', TransactionTypeEnums::SEND)
                 ->where(function($query) use ($requests) {

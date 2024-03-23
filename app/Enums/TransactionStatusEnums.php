@@ -3,9 +3,10 @@
 namespace App\Enums;
 
 enum TransactionStatusEnums : int {
-    case SENT    = 210;
-    case PENDING = 211;
-    case CLAIMED = 212;
-    case EXPIRED = 213;
-    case REFUND  = 214;
+    case RECEIVED_FAILED = 24;
+    case SENT    = 25;
+    case PENDING = 26;
+    case CLAIMED = 27;
+    case EXPIRED = 28;
+    case REFUND  = 29;
 }

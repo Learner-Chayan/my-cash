@@ -52,16 +52,6 @@ class User extends Authenticatable implements HasMedia
     ];
 
 
-    public function sends():HasMany
-    {
-        return $this->hasMany(Transaction::class, 'sender_id', 'id');
-    }
-
-    public function receives():HasMany
-    {
-        return $this->hasMany(Transaction::class, 'receiver_id', 'id');
-    }
-
     public function getUserRoleAttribute()
     {
         return $this->roles->pluck('id', 'id')->first();
