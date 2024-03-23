@@ -26,6 +26,8 @@ class TransactionService{
                 $data["date"] = date("Y-m-d H:i:s");
                 $trans = Transaction::create([
                     "user_id"           => $data["sender_id"],
+                    "model_id"          => $data["receiver_id"],
+                    "model_type"        => User::class,
                     "asset_type"        => $data["asset_type"],
                     "transaction_type"  => TransactionTypeEnums::SEND,
                     "amount"            => $data["amount"],
@@ -36,6 +38,8 @@ class TransactionService{
                 ]);// create transactions for sender
 
                 $trans = Transaction::create([
+                    "model_id"          => $data["sender_id"],
+                    "model_type"        => User::class,
                     "user_id"           => $data["receiver_id"],
                     "asset_type"        => $data["asset_type"],
                     "transaction_type"  => TransactionTypeEnums::RECEIVED,
@@ -145,13 +149,27 @@ class TransactionService{
 
     public function refund($pinForCheck)
     {
+        $user = auth()->user();
+        // which transaction try to receive
         $transaction = Transaction::find($pinForCheck->transaction_id);
-        $transaction->status = TransactionStatusEnums::REFUND;
-        $transaction->transaction_type = TransactionTypeEnums::REFUND;
+        $transaction->status = TransactionStatusEnums::RECEIVED_FAILED;
 
+        // insert new transaction row for refund to sender
+        Transaction::create([
+            "model_id"          => $user->id,
+            "model_type"        => User::class,
+            "user_id"           => $transaction->model->id,
+            "asset_type"        => $transaction->asset_type,
+            "transaction_type"  => TransactionTypeEnums::REFUND,
+            "amount"            => $transaction->asset_type,
+            "trans_id"          => $transaction->trans_id, 
+            "status"            => TransactionStatusEnums::REFUND,
+            "note"              => "Got Refund",
+            "date"              =>  date("Y-m-d H:i:s")
+        ]); // create transaction for receiver
         // account update
         $baseQuery = [
-            'user_id' => $transaction->sender_id,
+            'user_id' => $transaction->model->id,
             'asset_type' => $transaction->asset_type,
         ];
         $account = Account::where($baseQuery)->first();
@@ -186,4 +204,4 @@ class TransactionService{
 
     }
 }
-?>
+

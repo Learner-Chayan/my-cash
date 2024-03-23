@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
+            $table->unsignedBigInteger('model_id');
+            $table->string('model_type');
             $table->integer('asset_type');
             $table->integer('transaction_type');
             $table->double('amount',15,2);

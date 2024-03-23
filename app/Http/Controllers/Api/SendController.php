@@ -17,7 +17,7 @@ use App\Http\Requests\SendRequest;
 class SendController extends controller
 {
     protected $userService;
-    protected $transactionService;
+    protected TransactionService $transactionService;
     public function __construct(UserService $userService, TransactionService $transactionService)
     {
         $this->middleware(['auth','Setting',]);
