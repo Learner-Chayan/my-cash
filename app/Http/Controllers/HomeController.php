@@ -20,7 +20,7 @@ class HomeController extends Controller
             $this->user = Auth::user(); // Set the authenticated user
 
             // Check if the user has the 'student' role
-            if ($this->user && $this->user->hasRole('customer')) {
+            if ($this->user && $this->user->hasRole('regular')) {
                 // Redirect to the home page if the user is a student
                 Auth::logout();
                 return redirect('/')->with('message', 'You cannot access this panel!');
@@ -42,7 +42,7 @@ class HomeController extends Controller
     public function dashboard()
     {
          $data['page_title'] = "Dashboard";
-         $data['totalCustomer']    = User::role('customer')->count();
+         $data['totalCustomer']    = User::role('regular')->count();
          $data['totalTransaction'] = Transaction::count();
 
          return view('admin.dashboard.dashboard',$data);

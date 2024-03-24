@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\BasicSetting;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,8 +18,12 @@ class CheckUserHasRole
     public function handle(Request $request, Closure $next,$role)
     {
         if (!Auth::check() || !Auth::user()->hasRole($role)) {
-            // Optionally, you can use the "with" method to flash data to the session.
-            return redirect()->back()->with('error', 'You do not have permission to access this page!.');
+//            return redirect()->back()->with('error', 'You do not have permission to access this page!.');
+            $page_title = "Role Error!";
+            $site_title = BasicSetting::first()->title;
+            return response()->view('errors.role-error', ['page_title' => $page_title,'site_title' => $site_title, 'status' => 403]);
+
+
         }
 
         return $next($request);

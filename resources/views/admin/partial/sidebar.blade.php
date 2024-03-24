@@ -40,9 +40,31 @@
 {{--                        </p>--}}
 {{--                    </a>--}}
 {{--                </li>--}}
+                <li class="nav-header text-uppercase">Manage Customer</li>
+                <li class="nav-item {{Route::currentRouteNamed('customer') || Route::currentRouteNamed('show') ? 'menu-open' : ''}}">
+                    <a href="#" class="nav-link {{Route::currentRouteNamed('customer') || Route::currentRouteNamed('show') ? 'active' : ''}}">
+                        <i class="nav-icon fas fa-users"></i><p>Customer<i class="fas fa-angle-left right"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('customer','regular')}}" class="nav-link {{Request::is('admin/customer/regular') ? 'active' : ''}}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Regular Customer</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('customer','agent')}}" class="nav-link {{Request::is('admin/customer/agent') ? 'active' : ''}}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Agent Customer</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-header text-uppercase">Setting</li>
                 <li class="nav-item {{Request::is('admin/get-basic') || Request::is('admin/get-about') || Request::is('admin/get-terms') || Request::is('admin/get-privacy') ? 'menu-open' : ''}}">
                     <a href="#" class="nav-link {{Request::is('admin/get-basic') || Request::is('admin/get-about') || Request::is('admin/get-terms') || Request::is('admin/get-privacy') ? 'active' : ''}}">
-                        <i class="nav-icon fas fa-cogs"></i><p>Website Setting<i class="fas fa-angle-left right"></i></p>
+                        <i class="nav-icon fas fa-cog"></i><p>Website Basic<i class="fas fa-angle-left right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
 {{--                        <li class="nav-item">--}}

@@ -28,8 +28,15 @@
         </div>
     </form>
 
-{{--    <p class="mb-1">--}}
-{{--        <a href="{{route('password.request')}}">I forgot my password</a>--}}
-{{--    </p>--}}
+    <div class="row">
+        <!-- /.col -->
+        <div class="col-12">
+            <p class="mt-4">
+                <a class="btn btn-warning btn-block" href="{{route('send-otp-phone')}}">I forgot password</a>
+            </p>
+        </div>
+        <!-- /.col -->
+    </div>
+
 
 @endsection
