@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Services;
 use App\Http\Requests\AccountVerificationRequest;
@@ -6,6 +6,7 @@ use App\Models\Otp;
 use Carbon\Carbon;
 
 class OtpService {
+
     public function __construct() { }
 
     public function otp($user_id,$user_id_type):int
@@ -37,7 +38,7 @@ class OtpService {
         return false;
     }
 
-    public function isOTPExpired(AccountVerificationRequest $request):bool 
+    public function isOTPExpired(AccountVerificationRequest $request):bool
     {
         $otp = Otp::where("".$request->user_id_type, $request->user_id)
         ->where("code", $request->code)

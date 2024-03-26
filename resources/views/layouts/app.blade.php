@@ -24,7 +24,7 @@
             <div class="login-logo">
                 <a href="{{route('/')}}"><img src="{{asset('/logo.png')}}" alt="{{$basic->title}}"></a>
             </div>
-            <h3 class="text-center text-uppercase" style="color:indianred;font-family: 'Droid Serif';">{{$page_title}}</h3>
+            <h4 class="text-center" style="color:indianred;font-family: 'Droid Serif';">{{$page_title}}</h4>
             <hr>
             @if (session()->has('message'))
                 <div class="alert alert-warning alert-dismissable">

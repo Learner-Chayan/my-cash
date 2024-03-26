@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\AssetController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -23,6 +24,19 @@ Route::get('/clear', function() {
 
 Auth::routes();
 Route::get('/', [LoginController::class,'showLoginForm'])->name('/');
+Route::group(['prefix' => 'password',],function(){
+    Route::get('send-otp-email',[ForgotPasswordController::class,'email'])->name('send-otp-email');
+    Route::get('send-otp-phone',[ForgotPasswordController::class,'phone'])->name('send-otp-phone');
+
+    Route::post('send-otp',[ForgotPasswordController::class,'sendOtp'])->name('send-otp');
+    Route::get('otp-check',[ForgotPasswordController::class,'checkOtp'])->name('otp-check');
+
+    Route::post('match-otp',[ForgotPasswordController::class,'matchOtp'])->name('match-otp');
+    Route::post('submit-password',[ForgotPasswordController::class,'submitPassword'])->name('submit-password');
+
+});
+
+
 Route::get('dashboard',[HomeController::class,'dashboard'])->name('dashboard')->middleware('auth');
 
 Route::group(['prefix' => 'admin','middleware' => 'auth'], function () {
@@ -45,9 +59,22 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function () {
 //Route::post('get-terms-update', [BasicController::class, 'termsUpdate'])->name('get-terms-update');
 
 
-     Route::resource('roles',RoleController::class);
-     Route::resource('permissions',PermissionController::class);
-     Route::resource('users',UserController::class);
+
+
+    Route::group(['prefix' =>'customer' ,'middleware' => ['Setting','check_role:super-admin|admin']], function () {
+
+        Route::get('/{type}', [CustomerController::class, 'index'])->name('customer');
+        Route::get('edit/{id}', [CustomerController::class, 'edit'])->name('edit');
+        Route::patch('customer-update/{customer}', [CustomerController::class, 'update'])->name('customer-update');
+        Route::get('show/{id}', [CustomerController::class, 'show'])->name('show');
+
+
+    });
+    Route::group(['middleware' => ['Setting','check_role:super-admin']], function () {
+         Route::resource('roles',RoleController::class);
+         Route::resource('permissions',PermissionController::class);
+         Route::resource('users',UserController::class);
+     });
 
 
 
