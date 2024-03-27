@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AdsController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Auth\Api\RegisterController;
 use App\Http\Controllers\Auth\Api\LoginController;
@@ -58,6 +59,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/' , [TransactionHistoryController::class, 'list']);
         Route::get('/receives' , [TransactionHistoryController::class, 'receives']);
         Route::get('/sends' , [TransactionHistoryController::class, 'sends']);
+    });
+
+
+    //ads
+    Route::prefix('ads')->group(function() {
+        Route::get('/getAllAds', [AdsController::class, 'list']);
     });
 
 });

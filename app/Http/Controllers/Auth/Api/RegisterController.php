@@ -38,7 +38,7 @@ class RegisterController
 
             if(!$user){
                 $user = User::create([
-                    'name'  => $request->name??" ",
+                    'name'  => $request->name?? "Anonymous",
                     'phone' => $request->user_id_type == UserIdTypeEnums::PHONE ? $request->user_id : null,
                     'email' => $request->user_id_type == UserIdTypeEnums::EMAIL ? $request->user_id : null,
                     'pay_id' => $this->generatePayId(),

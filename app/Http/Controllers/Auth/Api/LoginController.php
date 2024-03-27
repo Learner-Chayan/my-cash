@@ -80,7 +80,7 @@ class LoginController extends Controller
         } catch (\Throwable $th) {
             return new JsonResponse([
                 'status' => false,
-                'message'=> "Something Went Wrong.",
+                'message'=> $th->getMessage(),
                 'token'  => null
             ], 422);
         }
