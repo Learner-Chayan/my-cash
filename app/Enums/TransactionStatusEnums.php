@@ -8,5 +8,5 @@ enum TransactionStatusEnums : int {
     case PENDING = 26;
     case CLAIMED = 27;
     case EXPIRED = 28;
-    case REFUND  = 29;
+    case REFUNDED  = 29;
 }

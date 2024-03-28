@@ -51,12 +51,12 @@ class TransactionService{
                 ]); // create transaction for receiver
 
                 //update balance
-                Account::where([
+                $acc = Account::where([
                     'asset_type' => $data['asset_type'],
                     'user_id' => Auth::user()->id,
-                ])->update([
-                    'balance' => DB::raw('balance - ' . $trans->amount),
-                ]);
+                ])->first();
+                $acc->balance = $acc->balance - $trans->amount;
+                $acc->save();
 
                 //$pin = $this->transactionPin($trans);// make for transaction pin
                 $validDate = Carbon::parse(Carbon::now()->addDays(7))->format('Y-m-d H:i:s');
@@ -163,7 +163,7 @@ class TransactionService{
             "transaction_type"  => TransactionTypeEnums::REFUND,
             "amount"            => $transaction->asset_type,
             "trans_id"          => $transaction->trans_id, 
-            "status"            => TransactionStatusEnums::REFUND,
+            "status"            => TransactionStatusEnums::REFUNDED,
             "note"              => "Got Refund",
             "date"              =>  date("Y-m-d H:i:s")
         ]); // create transaction for receiver
