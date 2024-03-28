@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class AssetPrice extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'asset_type','price','highest_price','date'
+    ];
 }

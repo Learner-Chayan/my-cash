@@ -14,10 +14,10 @@ class BasicSettingSeeder extends Seeder
     public function run(): void
     {
         BasicSetting::create([
-            'title' => 'your business title',
-            'phone' => 'your business phone',
-            'email' => 'your business email',
-            'address' => 'your business address',
+            'title' => 'Hala Pay',
+            'phone' => '0152200000',
+            'email' => 'halalpay@gmail.com',
+            'address' => 'Dhaka,Bangladesh',
             'copy'    => 'your copy right text',
             'footer' => 'your footer text',
             'faq' => 'your faq text',

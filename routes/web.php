@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AssetPriceController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\GiftController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -61,14 +63,19 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function () {
 
 
 
+
+    Route::group(['middleware' => ['Setting','check_role:super-admin|admin']], function () {
+
+        Route::resource('asset-price',AssetPriceController::class);
+        Route::resource('gift',GiftController::class);
+
+    });
     Route::group(['prefix' =>'customer' ,'middleware' => ['Setting','check_role:super-admin|admin']], function () {
 
         Route::get('/{type}', [CustomerController::class, 'index'])->name('customer');
         Route::get('edit/{id}', [CustomerController::class, 'edit'])->name('edit');
         Route::patch('customer-update/{customer}', [CustomerController::class, 'update'])->name('customer-update');
         Route::get('show/{id}', [CustomerController::class, 'show'])->name('show');
-
-
     });
     Route::group(['middleware' => ['Setting','check_role:super-admin']], function () {
          Route::resource('roles',RoleController::class);
