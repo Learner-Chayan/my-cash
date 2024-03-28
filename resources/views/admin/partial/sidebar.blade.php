@@ -32,28 +32,63 @@
                         </p>
                     </a>
                 </li>
-{{--                <li class="nav-item">--}}
-{{--                    <a href="#" class="nav-link {{Request::is('admin') ? 'active' : ''}}">--}}
-{{--                        <i class="nav-icon fas fa-dollar-sign"></i>--}}
-{{--                        <p>--}}
-{{--                            Asset--}}
-{{--                        </p>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
+
+                <li class="nav-header text-uppercase">Manage Gift Post</li>
+                <li class="nav-item {{Route::currentRouteNamed('gift.index') || Route::currentRouteNamed('gift.create') || Route::currentRouteNamed('gift.edit') ? 'menu-open' : ''}}">
+                    <a href="#" class="nav-link {{Route::currentRouteNamed('gift.index') || Route::currentRouteNamed('gift.create') || Route::currentRouteNamed('gift.edit') ? 'active' : ''}}">
+                        <i class="nav-icon fas fa-gift"></i><p>Gift Post<i class="fas fa-angle-left right"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('gift.create')}}" class="nav-link {{Route::currentRouteNamed('gift.create') ? 'active' : ''}}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Add Gift Post</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('gift.index')}}" class="nav-link {{Route::currentRouteNamed('gift.index') || Route::currentRouteNamed('gift.edit')  ? 'active' : ''}}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Gift Post List</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-header text-uppercase">Manage Asset Price</li>
+                <li class="nav-item {{Route::currentRouteNamed('asset-price.index') || Route::currentRouteNamed('asset-price.create') || Route::currentRouteNamed('asset-price.edit') ? 'menu-open' : ''}}">
+                    <a href="#" class="nav-link {{Route::currentRouteNamed('asset-price.index') || Route::currentRouteNamed('asset-price.create') || Route::currentRouteNamed('asset-price.edit') ? 'active' : ''}}">
+                        <i class="nav-icon fas fa-clipboard-check"></i><p>Asset Price<i class="fas fa-angle-left right"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('asset-price.create')}}" class="nav-link {{Route::currentRouteNamed('asset-price.create') ? 'active' : ''}}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Add Asset Price</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('asset-price.index')}}" class="nav-link {{Route::currentRouteNamed('asset-price.index') || Route::currentRouteNamed('asset-price.edit')  ? 'active' : ''}}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Asset Price List</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="nav-header text-uppercase">Manage Customer</li>
-                <li class="nav-item {{Route::currentRouteNamed('customer') || Route::currentRouteNamed('show') ? 'menu-open' : ''}}">
+                <li class="nav-item {{Route::currentRouteNamed('customer') || Route::currentRouteNamed('edit') || Route::currentRouteNamed('show') ? 'menu-open' : ''}}">
                     <a href="#" class="nav-link {{Route::currentRouteNamed('customer') || Route::currentRouteNamed('show') ? 'active' : ''}}">
                         <i class="nav-icon fas fa-users"></i><p>Customer<i class="fas fa-angle-left right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{route('customer','regular')}}" class="nav-link {{Request::is('admin/customer/regular') ? 'active' : ''}}">
+                            <a href="{{route('customer','regular')}}" class="nav-link {{Request::is('admin/customer/regular') || Route::currentRouteNamed('edit') ? 'active' : ''}}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Regular Customer</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('customer','agent')}}" class="nav-link {{Request::is('admin/customer/agent') ? 'active' : ''}}">
+                            <a href="{{route('customer','agent')}}" class="nav-link {{Request::is('admin/customer/agent') || Route::currentRouteNamed('edit') ? 'active' : ''}}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Agent Customer</p>
                             </a>
