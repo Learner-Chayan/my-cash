@@ -23,4 +23,13 @@ class AdsController extends Controller
             return response([ "status" => false, "message" => $e->getMessage()], 422);
         }
     }
+
+    public function store(Request $request)
+    {
+        try{
+            return new AdsResource($this->adsService->list($request));
+        }catch(\Exception $e) {
+            return response([ "status" => false, "message" => $e->getMessage()], 422);
+        }
+    }
 }

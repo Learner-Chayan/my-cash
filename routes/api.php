@@ -65,6 +65,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //ads
     Route::prefix('ads')->group(function() {
         Route::get('/getAllAds', [AdsController::class, 'list']);
+        Route::get('/store', [AdsController::class, 'store']);
     });
 
 });

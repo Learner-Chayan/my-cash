@@ -11,5 +11,17 @@ class Ad extends Model
 
     protected $table = "ads";
 
-    protected $fillable = [];
+    protected $fillable = [
+        "user_id",
+        "ads_unique_num",
+        "ad_type",
+        "asset_type",
+        "unit_price",
+        "highest_price",
+        "sell_price",
+        "price_type",
+        "total_amount",
+        "status",
+        "date",
+    ];
 }

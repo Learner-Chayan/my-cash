@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create('ad_backups', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->string('ads_unique_num',20);
+            $table->string('ads_unique_num',20)->unique();
             $table->unsignedTinyInteger('ad_type')->comment(AdsTypeEnums::buy."= buy , ".AdsTypeEnums::sell."= Sell");
             $table->unsignedTinyInteger('asset_type');
             $table->double('unit_price', 16,6);
