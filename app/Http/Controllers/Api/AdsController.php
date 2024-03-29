@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdsRequest;
 use App\Http\Resources\AdsResource;
 use App\Services\AdsService;
 use Illuminate\Http\Request;
@@ -24,10 +25,10 @@ class AdsController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(AdsRequest $request)
     {
         try{
-            return new AdsResource($this->adsService->list($request));
+            return $this->adsService->store($request);
         }catch(\Exception $e) {
             return response([ "status" => false, "message" => $e->getMessage()], 422);
         }

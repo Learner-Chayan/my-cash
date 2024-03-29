@@ -8,6 +8,7 @@ use App\Http\Requests\updateImageRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Account;
 use App\Models\Asset;
+use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
@@ -131,6 +132,39 @@ class ProfileController extends Controller
             ]);
         } catch (\Exception $exception) {
             return response(['status' => false, 'message' => $exception->getMessage()], 422);
+        }
+    }
+
+    public function storeContacts(Request $request){
+
+        try {
+  
+            $request->validate([
+                'contacts' => 'required'
+            ]);
+
+            $rows = [];
+            $user = auth()->user();
+
+            foreach ($request->contacts as $contact) {
+                array_push($rows, [
+                    "pay_id" => $user->pay_id,
+                    "name" => $contact["name"],
+                    "phone" => $contact["phone"],
+                ]);
+            }
+
+            Contact::insert($rows);
+
+            return response([
+                "status" => true,
+                "message" => "Success",
+            ]);
+        } catch (\Throwable $th) {
+            return response([
+                "status" => false,
+                "message" => $th->getMessage()
+            ]);
         }
     }
 }

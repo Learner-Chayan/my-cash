@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('gifts', function (Blueprint $table) {
+        Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->unsignedTinyInteger('asset_type');
-            $table->unsignedTinyInteger('gift_type');
-            $table->double("amount",16,6);
-            $table->dateTime('date');
+            $table->foreignId('pay_id');//->constrained('users');
+            $table->string('name',50);
+            $table->string('phone');
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('gifts');
+        Schema::dropIfExists('contacts');
     }
 };
