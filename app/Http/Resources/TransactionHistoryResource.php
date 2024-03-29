@@ -5,6 +5,7 @@ use App\Enums\Status;
 use App\Enums\TransactionTypeEnums;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon;
 
 class TransactionHistoryResource extends JsonResource
 {
@@ -22,7 +23,8 @@ class TransactionHistoryResource extends JsonResource
                 "amount" => $this->amount,
                 "status" => $this->status,
                 "note"  => $this->note,
-                "date"  => date('Y-m-d H:i:s', strtotime($this->date)),
+                "date"  => Carbon::parse($this->data)->format('Y-m-d h:i A'),
+                "pin"   => $this->transaction_type == TransactionTypeEnums::SEND ?  $this->transactionPin?->pin : null,
 
                 // opposite user info
                  "name" =>  $this->model?->name ?? null,

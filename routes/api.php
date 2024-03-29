@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AdsController;
+use App\Http\Controllers\Api\AssetsController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Auth\Api\RegisterController;
 use App\Http\Controllers\Auth\Api\LoginController;
@@ -66,6 +67,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('ads')->group(function() {
         Route::get('/getAllAds', [AdsController::class, 'list']);
         Route::post('/store', [AdsController::class, 'store']);
+    });
+
+    //assets
+    Route::prefix('asset')->group(function(){
+        Route::get('gold-price', [AssetsController::class, 'goldPrice']);
     });
 
     //contact

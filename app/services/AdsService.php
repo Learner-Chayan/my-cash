@@ -27,6 +27,7 @@ class AdsService
             $requests = $request->all();
 
             $ads =  Ad::where('user_id', $user->id)
+                ->where('status', Status::ACTIVE)
                 ->where(function($query) use ($requests) {
                     if(isset($requests['start_date']) && isset($requests['end_date'])){
                         $start_date =  date('Y-m-d', strtotime($requests['start_date']));
@@ -100,15 +101,3 @@ class AdsService
     }
 
 }
-
-// "user_id",
-//         "ads_unique_num",
-//         "ad_type",
-//         "asset_type",
-//         "unit_price",
-//         "highest_price",
-//         "sell_price",
-//         "price_type",
-//         "total_amount",
-//         "status",
-//         "date",
