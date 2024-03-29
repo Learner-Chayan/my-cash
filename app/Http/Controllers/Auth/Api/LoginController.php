@@ -48,6 +48,12 @@ class LoginController extends Controller
         }
 
         $user = Auth::user();
+        $userTokens = PersonalAccessToken::where('tokenable_id', $user->id)
+                                ->where('tokenable_type', User::class)
+                                ->get();
+        foreach ($userTokens as $token) {
+            $token->delete();
+        }
         $token = $user->createToken('login_token')->plainTextToken;
 
         return new JsonResponse([

@@ -16,7 +16,7 @@ class TransactionHistoryService {
             $user = auth()->user();
             $requests = $request->all();
 
-            $transactions =  Transaction::with('model')
+            $transactions =  Transaction::with('model','transactionPin')
                 ->where('user_id', $user->id)
                 ->where(function($query) use ($requests) {
                     if(isset($requests['start_date']) && isset($requests['end_date'])){

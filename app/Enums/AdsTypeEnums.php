@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum AdsTypeEnums:int {
-    case sell = 50;
-    case buy  = 51;
+interface AdsTypeEnums {
+    const SELL = 50;
+    const BUY  = 51;
 }

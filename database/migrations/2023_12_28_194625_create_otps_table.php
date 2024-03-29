@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('phone')->nullable()->default(null);
             $table->string('email')->nullable()->default(null);
             $table->string('code');
+            $table->string('is_verified')->nullable()->default(null);
             $table->timestamps();
         });
     }

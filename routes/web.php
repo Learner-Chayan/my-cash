@@ -24,6 +24,11 @@ Route::get('/clear', function() {
 //    return redirect()->route('dashboard');
 });
 
+Route::get('/run-storage-link', function () {
+    Artisan::call('storage:link');
+    return 'Storage link created successfully!';
+});
+
 Auth::routes();
 Route::get('/', [LoginController::class,'showLoginForm'])->name('/');
 Route::group(['prefix' => 'password',],function(){

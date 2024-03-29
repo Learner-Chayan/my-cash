@@ -19,7 +19,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->string('ads_unique_num',20)->unique();
-            $table->unsignedTinyInteger('ad_type')->comment(AdsTypeEnums::buy."= buy , ".AdsTypeEnums::sell."= Sell");
+            $table->unsignedTinyInteger('ad_type')->comment(AdsTypeEnums::BUY."= buy , ".AdsTypeEnums::SELL."= Sell");
             $table->unsignedTinyInteger('asset_type');
             $table->double('unit_price', 16,6);
             $table->double('highest_price', 16,6);

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Enums\UserIdTypeEnums;
 
-class AccountVerificationRequest extends FormRequest
+class PasswordResetRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,7 @@ class AccountVerificationRequest extends FormRequest
             'user_id_type' => ['required','string','in:email,phone'],
             'user_id'  => $this->input('user_id_type') == UserIdTypeEnums::EMAIL ?  ['required','email','max:255'] : 
                         ['required','string','min:10','max:14','regex:/^[0-9]+$/'],
-            "code" => ["required"],
+            "password" => ["required","min:8"],
         ];
     }
 }

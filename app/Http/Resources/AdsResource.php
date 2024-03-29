@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon;
 
 class AdsResource extends JsonResource
 {
@@ -14,7 +15,19 @@ class AdsResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+
+            "ads_unique_num" => $this->ads_unique_num,
+            "ad_type" => $this->ad_type,
+            "asset_type" => $this->asset_type,
+            "unit_price" => $this->unit_price,
+            "highest_price" => $this->highest_price,
+            "sell_price" => $this->sell_price,
+            "price_type" => $this->price_type,
+            "total_amount" => $this->total_amount,
+            "status" => $this->status,
+            "date" => Carbon::parse($this->date)->format('Y-m-d h:i A'),
+        ];
     }
 }
 

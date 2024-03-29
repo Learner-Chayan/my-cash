@@ -4,6 +4,6 @@ namespace App\Enums;
 
 enum GiftTypeEnums:int {
 
-    case ALLUSER = 50;
-    case NEWUSER = 51;
+    case ALLUSER = 60;
+    case NEWUSER = 61;
 }
