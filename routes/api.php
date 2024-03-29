@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\Api\RegisterController;
 use App\Http\Controllers\Auth\Api\LoginController;
 use App\Http\Controllers\Api\TransactionHistoryController;
 use App\Http\Controllers\Api\SendController;
+use App\Http\Controllers\Api\PasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,15 @@ Route::post('/registration',[RegisterController::class,'register'])->name('regis
 Route::post('/account-verification',[RegisterController::class,'accountVerify'])->name('acc-verify');
 Route::post('/login', [LoginController::class,'login'])->name('login');
 //Route::match(['get', 'post'], '/refresh-token',[LoginController::class,'refreshToken']);
+
+// reset password
+Route::prefix('/reset-password')->group(function() {
+    Route::post('/request', [PasswordController::class, 'resetPassword']);
+    Route::post('/verify', [PasswordController::class, 'verifyOtp']);
+    Route::post('/set-password', [PasswordController::class, 'setPassword']);
+    
+});
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

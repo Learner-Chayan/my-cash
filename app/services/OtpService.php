@@ -11,6 +11,7 @@ class OtpService {
 
     public function otp($user_id,$user_id_type):int
     {
+        //user_id means email or phone
         $otp = Otp::where("".$user_id_type, $user_id)->first();
         if($otp){
             $otp->delete();
