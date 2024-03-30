@@ -35,7 +35,7 @@ class PasswordController extends Controller
            $otp =  $this->otpService->otp($request->user_id,$request->user_id_type);
 
            if($otp){
-                return response(['status' => true, 'message' => "Otp send to your".$request->user_id_type." . Otp = ".$otp]);
+                return response(['status' => true, 'message' => "Otp send to your ".$request->user_id_type." . Otp = ".$otp]);
            }
 
            return response(['status' => false, 'message' => "Failed !! Try Again"]);
