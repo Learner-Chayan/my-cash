@@ -3,7 +3,7 @@
 namespace App\Services;
 
 
-use App\Enums\AdsAdminApprovalEnums;
+use App\Enums\PermissionStatusEnums;
 use App\Models\Ad;
 use Illuminate\Http\Request;
 
@@ -12,7 +12,7 @@ class AdsApprovalService
 
     public function index()
     {
-        return Ad::with('user')->orderBy('admin_status','asc')->get();
+        return Ad::with('user')->orderBy('permission_status','asc')->get();
     }
     public function get($id)
     {
@@ -21,14 +21,14 @@ class AdsApprovalService
     public function changeStatus($id)
     {
         $ad = $this->get($id);
-        if ($ad->admin_status === AdsAdminApprovalEnums::APPROVED){
+        if ($ad->permission_status === PermissionStatusEnums::APPROVED){
 
-            $ad->admin_status = AdsAdminApprovalEnums::CHECKING;
+            $ad->permission_status = PermissionStatusEnums::CHECKING;
             $ad->save();
 
         }else{
 
-            $ad->admin_status = AdsAdminApprovalEnums::APPROVED;
+            $ad->permission_status = PermissionStatusEnums::APPROVED;
             $ad->save();
         }
         return $ad;

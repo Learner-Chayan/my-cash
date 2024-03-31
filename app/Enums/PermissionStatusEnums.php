@@ -4,5 +4,5 @@ namespace App\Enums;
 
 interface PermissionStatusEnums {
     const APPROVED = 73;
-    const PENDING = 75;
+    const CHECKING = 75;
 }

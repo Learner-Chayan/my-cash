@@ -12,16 +12,12 @@
                     <div class="row">
                         @php
                             $adminStatusNames = [
-                                \App\Enums\AdsAdminApprovalEnums::APPROVED => 'Approved',
-                                \App\Enums\AdsAdminApprovalEnums::CHECKING => 'Pending',
+                                \App\Enums\PermissionStatusEnums::APPROVED => 'Approved',
+                                \App\Enums\PermissionStatusEnums::CHECKING => 'Pending',
                             ];
                             $assetNames = [
-                                \App\Enums\AssetTypeEnums::GOLD => 'Gold',
-                                \App\Enums\AssetTypeEnums::BDT => 'BDT',
-                            ];
-                            $statusNames = [
-                                \App\Enums\Status::ACTIVE => 'Active',
-                                \App\Enums\Status::INACTIVE => 'Inactive',
+                                \App\Enums\AssetTypeEnums::GOLD->value => 'Gold',
+                                \App\Enums\AssetTypeEnums::BDT->value => 'BDT',
                             ];
                             $adTypeNames = [
                                 \App\Enums\AdsTypeEnums::SELL => 'Sell',
@@ -40,7 +36,7 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <h4>
-                                                <i>Admin Status: {{ $adminStatusNames[$ad->admin_status] ?? 'Unknown' }}</i>
+                                                <i>Admin Status: {{ $adminStatusNames[$ad->permission_status] ?? 'Unknown' }}</i>
                                                 <small class="float-right">Post Date: {{\Carbon\Carbon::parse($ad->date)->format('d M, Y')}}</small>
                                             </h4>
                                         </div>
@@ -68,7 +64,7 @@
                                         <!-- /.col -->
                                         <div class="col-sm-4 invoice-col">
                                             <b>Ad Number #{{$ad->ads_unique_num}}</b><br>
-                                            <b>Ad Status:</b> {{$statusNames[$ad->staus] ?? 'Unknown'  }}<br>
+                                            <b>Ad Status:</b> {{$adminStatusNames[$ad->permission_status] ?? 'Unknown'  }}<br>
                                             <b>Ad Type:</b> {{ $adTypeNames[$ad->ad_type] ?? 'Unknown' }}<br>
                                             <b>Price Type:</b> {{ $priceNames[$ad->price_type] ?? 'Unknown' }}<br>
                                             <b>Total Amount:</b> {{ $ad->total_amount }}<br>
