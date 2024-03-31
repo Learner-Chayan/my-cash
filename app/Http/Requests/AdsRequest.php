@@ -27,6 +27,8 @@ class AdsRequest extends FormRequest
             "total_amount" => ["required", "numeric", "min:0.1"],
             "sell_price" => ["required", "numeric", "min:0.1"],
             "price_type" => ["required", "numeric"],
+            "order_limit_min" => ["required", "numeric"],
+            "order_limit_max" => ["required", "numeric"],
         ];
     }
 }
@@ -40,10 +42,11 @@ class AdsRequest extends FormRequest
 // "unit_price",
 // "highest_price",
 
-
 //from request ---------
 // "sell_price",
 // "price_type",
 // "total_amount",
 // "ad_type",
 // "asset_type",
+// order_limit_min
+// order_limit_max

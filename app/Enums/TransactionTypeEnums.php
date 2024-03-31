@@ -3,7 +3,8 @@
 namespace App\Enums;
 
 
-interface TransactionTypeEnums{
+
+interface TransactionTypeEnums {
     const DEPOSIT  = 30;
     const SEND = 31;
     const RECEIVED = 32;
