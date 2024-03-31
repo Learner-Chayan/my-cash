@@ -2,11 +2,11 @@
 
 namespace App\Enums;
 
-enum TransactionStatusEnums : int {
-    case RECEIVED_FAILED = 24;
-    case SENT    = 25;
-    case PENDING = 26;
-    case CLAIMED = 27;
-    case EXPIRED = 28;
-    case REFUNDED  = 29;
+interface TransactionStatusEnums {
+    const RECEIVED_FAILED = 24;
+    const SENT    = 25;
+    const PENDING = 26;
+    const CLAIMED = 27;
+    const EXPIRED = 28;
+    const REFUNDED  = 29;
 }

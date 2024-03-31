@@ -3,13 +3,13 @@
 namespace App\Enums;
 
 
-enum TransactionTypeEnums: int {
-    case DEPOSIT  = 30;
-    case SEND = 31;
-    case RECEIVED = 32;
-    case REFUND = 33;
-    case GIFT = 34;
-    case TOPUP = 35;
-    case WITHDRAW  = 36;
+interface TransactionTypeEnums {
+    const DEPOSIT  = 30;
+    const SEND = 31;
+    const RECEIVED = 32;
+    const REFUND = 33;
+    const GIFT = 34;
+    const TOPUP = 35;
+    const WITHDRAW  = 36;
 
 }
