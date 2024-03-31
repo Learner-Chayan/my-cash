@@ -85,7 +85,8 @@ class AdsService
                     "sell_price" => $request->sell_price,
                     "price_type" => $request->price_type,
                     "total_amount" => $request->total_amount,
-                    "status" => Status::ACTIVE,
+                    "order_limit_min" => $request->order_limit_min,
+                    "order_limit_max" => $request->order_limit_max,
                     "date" => $date,
            ];
 

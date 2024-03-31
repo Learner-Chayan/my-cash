@@ -24,7 +24,7 @@ class TransactionHistoryResource extends JsonResource
                 "status" => $this->status,
                 "note"  => $this->note,
                 "date"  => Carbon::parse($this->date)->format('Y-m-d h:i A'),
-                "pin"   => $this->transaction_type === TransactionTypeEnums::SEND ?  $this->transactionPin?->pin : null,
+                "pin"   => (int)$this->transaction_type === TransactionTypeEnums::SEND ? (int)$this->transactionPin?->pin : null,
 
                 // opposite user info
                  "name" =>  $this->model?->name ?? null,

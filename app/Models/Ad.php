@@ -21,7 +21,15 @@ class Ad extends Model
         "sell_price",
         "price_type",
         "total_amount",
-        "status",
+        "order_limit_min",
+        "order_limit_max",
+        "delete_status",
+        "permission_status",
+        "visibility_status",
         "date",
     ];
 }
+
+
+
+

@@ -6,7 +6,9 @@ use App\Enums\PriceTypeEnums;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Enums\Status;
+use App\Enums\DeleteStatusEnums;
+use App\Enums\PermissionStatusEnums;
+use App\Enums\VisibilityStatusEnums;
 
 return new class extends Migration
 {
@@ -26,7 +28,11 @@ return new class extends Migration
             $table->double('sell_price', 16,6);
             $table->unsignedTinyInteger('price_type')->default(PriceTypeEnums::FIXED)->comment(PriceTypeEnums::FIXED."= Fixed , ".PriceTypeEnums::FLOATING."= Floating");
             $table->double("total_amount",16,6);
-            $table->unsignedTinyInteger('status')->comment(Status::ACTIVE."= Active , ".Status::INACTIVE."= Inactive");
+            $table->double("order_limit_min",16,6);
+            $table->double("order_limit_max",16,6);
+            $table->unsignedTinyInteger("delete_status")->default(DeleteStatusEnums::NOT_DELETED)->comment(DeleteStatusEnums::DELETED."= Deleted , ".DeleteStatusEnums::NOT_DELETED."= Not Delete");
+            $table->unsignedTinyInteger("permission_status")->default(PermissionStatusEnums::PENDING)->comment(PermissionStatusEnums::APPROVED."= Approved , ".PermissionStatusEnums::PENDING."= Pending");
+            $table->unsignedTinyInteger("visibility_status")->default(VisibilityStatusEnums::ENABLE)->comment(VisibilityStatusEnums::ENABLE."= Enable , ".VisibilityStatusEnums::DISABLE."= Disable");
             $table->dateTime('date');
             $table->timestamps();
         });
