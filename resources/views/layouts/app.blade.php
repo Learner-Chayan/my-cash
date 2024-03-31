@@ -22,7 +22,7 @@
     <div class="card">
         <div class="card-body login-card-body">
             <div class="login-logo">
-                <a href="{{route('/')}}"><img src="{{asset('/logo.png')}}" alt="{{$basic->title}}"></a>
+                <a href="{{route('/')}}"><img width="100" src="{{asset('/logo.png')}}" alt="{{$basic->title}}"></a>
             </div>
             <h4 class="text-center" style="color:indianred;font-family: 'Droid Serif';">{{$page_title}}</h4>
             <hr>

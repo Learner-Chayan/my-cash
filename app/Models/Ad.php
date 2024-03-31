@@ -24,4 +24,9 @@ class Ad extends Model
         "status",
         "date",
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
 }

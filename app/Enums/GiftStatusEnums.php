@@ -2,8 +2,8 @@
 
 namespace App\Enums;
 
-enum GiftStatusEnums:int{
+interface GiftStatusEnums{
 
-    case PUBLISH = 55;
-    case HIDE = 56;
+    const PUBLISH = 55;
+    const HIDE = 56;
 }

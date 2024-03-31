@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Enums\AdsAdminApprovalEnums;
 use App\Enums\AdsTypeEnums;
 use App\Enums\PriceTypeEnums;
 use Illuminate\Database\Migrations\Migration;
@@ -28,6 +29,7 @@ return new class extends Migration
             $table->double("total_amount",16,6);
             $table->unsignedTinyInteger('status')->comment(Status::ACTIVE."= Active , ".Status::INACTIVE."= Inactive");
             $table->dateTime('date');
+            $table->unsignedTinyInteger('admin_status')->comment(AdsAdminApprovalEnums::APPROVED."= approved , ".AdsAdminApprovalEnums::CHECKING ."= checking ");
             $table->timestamps();
         });
     }

@@ -32,6 +32,20 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-header text-uppercase">Manage Ads Post</li>
+                <li class="nav-item {{Route::currentRouteNamed('ads.index') || Route::currentRouteNamed('ads.create') || Route::currentRouteNamed('ads.edit') ? 'menu-open' : ''}}">
+                    <a href="#" class="nav-link {{Route::currentRouteNamed('ads.index') || Route::currentRouteNamed('ads.create') || Route::currentRouteNamed('ads.edit') ? 'active' : ''}}">
+                        <i class="nav-icon fas fa-blog"></i><p>Ads Post<i class="fas fa-angle-left right"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('ads.index')}}" class="nav-link {{Route::currentRouteNamed('ads.index') || Route::currentRouteNamed('ads.edit')  ? 'active' : ''}}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Ads Post List</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
                 <li class="nav-header text-uppercase">Manage Gift Post</li>
                 <li class="nav-item {{Route::currentRouteNamed('gift.index') || Route::currentRouteNamed('gift.create') || Route::currentRouteNamed('gift.edit') ? 'menu-open' : ''}}">

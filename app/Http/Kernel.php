@@ -71,7 +71,6 @@ class Kernel extends HttpKernel
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             ThrottleRequests::class.':api',
             SubstituteBindings::class,
-//            \App\Http\Middleware\JsonMiddleware::class,
            // HandleUnauthorizedApi::class,
         ],
     ];

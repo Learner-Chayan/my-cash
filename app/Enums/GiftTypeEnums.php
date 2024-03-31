@@ -2,8 +2,8 @@
 
 namespace App\Enums;
 
-enum GiftTypeEnums:int {
+interface GiftTypeEnums {
 
-    case ALLUSER = 60;
-    case NEWUSER = 61;
+    const ALLUSER = 60;
+    const NEWUSER = 61;
 }

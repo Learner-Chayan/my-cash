@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdsApprovalController;
 use App\Http\Controllers\AssetPriceController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\CustomerController;
@@ -73,6 +74,7 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function () {
 
         Route::resource('asset-price',AssetPriceController::class);
         Route::resource('gift',GiftController::class);
+        Route::resource('ads',AdsApprovalController::class);
 
     });
     Route::group(['prefix' =>'customer' ,'middleware' => ['Setting','check_role:super-admin|admin']], function () {

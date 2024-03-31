@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ad;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -44,6 +45,7 @@ class HomeController extends Controller
          $data['page_title'] = "Dashboard";
          $data['totalCustomer']    = User::role('regular')->count();
          $data['totalTransaction'] = Transaction::count();
+         $data['totalPost'] = Ad::count();
 
          return view('admin.dashboard.dashboard',$data);
     }

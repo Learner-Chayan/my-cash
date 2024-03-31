@@ -28,12 +28,14 @@ class Handler extends ExceptionHandler
             //
         });
 
-        $this->renderable(function(ValidationException $exception) {
-            return response()->json([
-                'status' => false,
-                'message' => $exception->getMessage(),
-                'errors' => $exception->errors(),
-            ], $exception->status);
+        $this->renderable(function(ValidationException $exception,$request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'status' => false,
+                    'message' => $exception->getMessage(),
+                    'errors' => $exception->errors(),
+                ], $exception->status);
+            }
         });
     }
 }

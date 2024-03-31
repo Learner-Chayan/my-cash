@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GiftRequest;
 use App\Services\GiftService;
 use Exception;
 use Illuminate\Http\Request;
@@ -40,6 +41,15 @@ class GiftController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'title' => 'required',
+            'asset_type' => 'required',
+            'gift_type' => 'required',
+            'amount' => 'required|numeric',
+            'image' => 'image|mimes:png,jpg,webp,svg,jpeg'
+        ]);
+
+
         try {
             DB::beginTransaction();
             $in = $request->except('_token');
@@ -49,7 +59,7 @@ class GiftController extends Controller
 
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->withErrors($e->getMessage())->withInput();
+            return redirect()->back()->withErrors($e->getMessage());
         }
     }
 
@@ -76,7 +86,7 @@ class GiftController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(GiftRequest $request, string $id)
     {
         try {
             DB::beginTransaction();
