@@ -1,6 +1,7 @@
-<?php 
+<?php
 
 namespace App\Enums;
+
 
 
 interface TransactionTypeEnums {

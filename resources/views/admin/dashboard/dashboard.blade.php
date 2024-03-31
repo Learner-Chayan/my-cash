@@ -17,20 +17,20 @@
             </div>
         </div>
         <!-- ./col -->
-{{--        <div class="col-lg-4 col-6">--}}
-{{--            <!-- small box -->--}}
-{{--            <div class="small-box bg-success">--}}
-{{--                <div class="inner">--}}
-{{--                    <h3>53<sup style="font-size: 20px">%</sup></h3>--}}
+        <div class="col-lg-4 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+                <div class="inner">
+                    <h3>{{$totalPost}}</h3>
 
-{{--                    <p>Agent</p>--}}
-{{--                </div>--}}
-{{--                <div class="icon">--}}
-{{--                    <i class="ion ion-person-stalker"></i>--}}
-{{--                </div>--}}
-{{--                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>--}}
-{{--            </div>--}}
-{{--        </div>--}}
+                    <p>Ad Post</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-document-text"></i>
+                </div>
+                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
         <!-- ./col -->
         <div class="col-lg-4 col-6">
             <!-- small box -->

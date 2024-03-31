@@ -22,10 +22,10 @@ class AssetPriceRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-
-            'price' => 'required',
-            'highest_price' => 'required',
+            'price' => 'required|numeric',
+            'highest_price' => 'required|numeric',
         ];
+
         return $rules;
     }
 }

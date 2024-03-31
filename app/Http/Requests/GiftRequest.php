@@ -25,7 +25,7 @@ class GiftRequest extends FormRequest
             'title' => 'required',
             'asset_type' => 'required',
             'gift_type' => 'required',
-            'amount' => 'required',
+            'amount' => 'required|numeric',
             'image' => 'image|mimes:png,jpg,webp,svg,jpeg'
         ];
         return $rules;

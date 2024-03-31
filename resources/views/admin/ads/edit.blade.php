@@ -32,13 +32,8 @@
                                     <label for="exampleInputEmail1">Asset</label>
                                     <select class="select2bs4" name="asset_type" required data-placeholder="Select a State" style="width: 100%;">
                                         <option value="">Choose One</option>
-                                        @php
-                                            $reflection = new ReflectionClass(\App\Enums\AssetTypeEnums::class);
-                                            $assets = $reflection->getConstants();
-                                        @endphp
-
-                                        @foreach($assets as $name => $value)
-                                            <option value="{{$value}}" {{$gift->asset_type == $value ? 'selected' : ''}}>{{$name}}</option>
+                                        @foreach(\App\Enums\AssetTypeEnums::cases() as $asset)
+                                            <option value="{{$asset->value}}" {{$gift->asset_type == $asset->value ? 'selected' : ''}}>{{$asset->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -46,12 +41,8 @@
                                     <label for="exampleInputEmail1">Status</label>
                                     <select class="select2bs4" name="status" required data-placeholder="Select a State" style="width: 100%;">
                                         <option value="">Choose One</option>
-                                        @php
-                                            $reflection = new ReflectionClass(\App\Enums\GiftStatusEnums::class);
-                                            $giftStatus = $reflection->getConstants();
-                                        @endphp
-                                        @foreach($giftStatus as $name => $value)
-                                            <option value="{{$value}}" {{$gift->status == $value ? 'selected' : ''}}>{{$name}}</option>
+                                        @foreach(\App\Enums\GiftStatusEnums::cases() as $giftStatus)
+                                            <option value="{{$giftStatus->value}}" {{$gift->status == $giftStatus->value ? 'selected' : ''}}>{{$giftStatus->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -65,12 +56,8 @@
                                     <label for="exampleInputEmail1">Gift Type</label>
                                     <select class="select2bs4" name="gift_type" required data-placeholder="Select a State" style="width: 100%;">
                                         <option value="">Choose One</option>
-                                        @php
-                                            $reflection = new ReflectionClass(\App\Enums\GiftTypeEnums::class);
-                                            $giftTypes = $reflection->getConstants();
-                                        @endphp
-                                        @foreach($giftTypes as $name => $value)
-                                            <option value="{{$value}}" {{$gift->gift_type == $value ? 'selected' : ''}}>{{$name}}</option>
+                                        @foreach(\App\Enums\GiftTypeEnums::cases() as $giftType)
+                                            <option value="{{$giftType->value}}" {{$gift->gift_type == $giftType->value ? 'selected' : ''}}>{{$giftType->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>

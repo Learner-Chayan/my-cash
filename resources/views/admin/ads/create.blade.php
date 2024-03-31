@@ -19,26 +19,20 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('gift.update', $gift->id) }}" method="post" enctype="multipart/form-data">
+                    <form action="{{route('gift.store')}}" method="post" enctype="multipart/form-data">
                         @csrf
-                        @method('PUT')
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Title</label>
-                                    <input type="text" class="form-control"  name="title" value="{{$gift->title}}" required  placeholder="Title">
+                                    <input type="text" class="form-control"  name="title" value="{{old('title')}}" required  placeholder="Title">
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Asset</label>
                                     <select class="select2bs4" name="asset_type" required data-placeholder="Select a State" style="width: 100%;">
                                         <option value="">Choose One</option>
-                                        @php
-                                            $reflection = new ReflectionClass(\App\Enums\AssetTypeEnums::class);
-                                            $assets = $reflection->getConstants();
-                                        @endphp
-
-                                        @foreach($assets as $name => $value)
-                                            <option value="{{$value}}" {{$gift->asset_type == $value ? 'selected' : ''}}>{{$name}}</option>
+                                        @foreach(\App\Enums\AssetTypeEnums::cases() as $asset)
+                                            <option value="{{$asset->value}}" {{old('asset_type') == $asset->value ? 'selected' : ''}}>{{$asset->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -46,12 +40,8 @@
                                     <label for="exampleInputEmail1">Status</label>
                                     <select class="select2bs4" name="status" required data-placeholder="Select a State" style="width: 100%;">
                                         <option value="">Choose One</option>
-                                        @php
-                                            $reflection = new ReflectionClass(\App\Enums\GiftStatusEnums::class);
-                                            $giftStatus = $reflection->getConstants();
-                                        @endphp
-                                        @foreach($giftStatus as $name => $value)
-                                            <option value="{{$value}}" {{$gift->status == $value ? 'selected' : ''}}>{{$name}}</option>
+                                        @foreach(\App\Enums\GiftStatusEnums::cases() as $giftStatus)
+                                            <option value="{{$giftStatus->value}}" {{old('status') == $giftStatus->value ? 'selected' : ''}}>{{$giftStatus->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -59,18 +49,14 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Amount</label>
-                                    <input type="text" class="form-control"  name="amount" value="{{$gift->amount}}" required  placeholder="Gift Amount">
+                                    <input type="text" class="form-control"  name="amount" value="{{old('amount')}}" required  placeholder="Gift Amount">
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Gift Type</label>
                                     <select class="select2bs4" name="gift_type" required data-placeholder="Select a State" style="width: 100%;">
                                         <option value="">Choose One</option>
-                                        @php
-                                            $reflection = new ReflectionClass(\App\Enums\GiftTypeEnums::class);
-                                            $giftTypes = $reflection->getConstants();
-                                        @endphp
-                                        @foreach($giftTypes as $name => $value)
-                                            <option value="{{$value}}" {{$gift->gift_type == $value ? 'selected' : ''}}>{{$name}}</option>
+                                        @foreach(\App\Enums\GiftTypeEnums::cases() as $gift)
+                                            <option value="{{$gift->value}}" {{old('gift_type') == $gift->value ? 'selected' : ''}}>{{$gift->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -78,14 +64,11 @@
                                     <label class="text-uppercase text-bold">Gift Banner</label>
                                     <div class="input-group">
                                         <div class="fileinput fileinput-new" data-provides="fileinput">
-                                            <div class="fileinput-new thumbnail" style="width: 215px; height: 100px; padding: 0px;" data-trigger="fileinput">
-                                                @php
-                                                    $giftService = new \App\Services\GiftService();
-                                                    $image = $giftService->getImage($gift->id)
-                                                @endphp
-                                                <img style="width: 215px" src="{{$image}}" alt="Please Select Your Image......">
+                                            <div class="fileinput-new thumbnail" style="width: 215px; height: 215px; padding: 0px;" data-trigger="fileinput">
+
+                                                <img style="width: 215px" src="" alt="Please Select Your Image......">
                                             </div>
-                                            <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 215px; max-height: 100px"></div>
+                                            <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 215px; max-height: 215px"></div>
                                             <div>
                                                 <span class="btn btn-info btn-file">
                                                     <span class="fileinput-new bold uppercase"><i class="fa fa-file-image-o"></i> Select Your Image</span>
@@ -99,8 +82,8 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- /.card-body -->
                         <button type="submit" class="btn btn-primary float-right">Submit</button>
+
                     </form>
                 </div>
                 <!-- /.card -->

@@ -16,11 +16,6 @@
                     <div class="card card-primary card-outline">
                         <div class="card-header">
                             <h3 class="card-title">{{$page_title}}</h3>
-                            <div class="pull-right box-tools">
-                                <div class="float-right mt-1">
-                                    <a class="btn btn-primary uppercase text-bold" href="{{ route('gift.create') }}"> New Gift Post</a>
-                                </div>
-                            </div>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -29,50 +24,43 @@
                                     <thead>
                                     <tr>
                                         <th class="text-bold text-uppercase">#SL</th>
-                                        <th class="text-bold text-uppercase">Image</th>
-                                        <th class="text-bold text-uppercase">Title</th>
+                                        <th class="text-bold text-uppercase">Name</th>
                                         <th class="text-bold text-uppercase">Asset</th>
-                                        <th class="text-bold text-uppercase">Gift To</th>
                                         <th class="text-bold text-uppercase">Amount</th>
                                         <th class="text-bold text-uppercase">Status</th>
                                         <th class="text-bold text-uppercase">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach ($gifts as $key => $gift)
+                                    @foreach ($ads as $key => $ad)
                                         @php
-                                            $giftService = new \App\Services\GiftService();
-                                            $image = $giftService->getImage($gift->id);
+                                            $permissionStatus = $ad->admin_status; // Example value
+                                            $statusNames = [
+                                                \App\Enums\AdsAdminApprovalEnums::APPROVED => 'Approved',
+                                                \App\Enums\AdsAdminApprovalEnums::CHECKING => 'Pending',
+                                            ];
                                             $assetNames = [
                                                 \App\Enums\AssetTypeEnums::GOLD => 'Gold',
                                                 \App\Enums\AssetTypeEnums::BDT => 'BDT',
                                             ];
-                                            $typeNames = [
-                                                \App\Enums\GiftTypeEnums::ALLUSER => 'All User',
-                                                \App\Enums\GiftTypeEnums::NEWUSER => 'New User',
-                                            ];
-                                            $statusNames = [
-                                                \App\Enums\GiftStatusEnums::PUBLISH => 'Publish',
-                                                \App\Enums\GiftStatusEnums::HIDE => 'Hide',
-                                            ];
 
                                         @endphp
+
+
                                         <tr>
-                                            <td>{{ ++$key }}</td>
-                                            <td><img src="{{ $image }}" alt="User Image" style="width: 100px; height: auto;"></td>
-                                            <td>{{ $gift->title }}</td>
-                                            <td>{{ $assetNames[$gift->asset_type] ?? 'Default' }}</td>
-                                            <td>{{ $typeNames[$gift->gift_type] ?? 'Default' }}</td>
-                                            <td>{{ $gift->amount }}</td>
-                                            <td>{{ $statusNames[$gift->status] ?? 'Default' }}</td>
+                                            <td>{{ $ad->ads_unique_num  }}</td>
+                                            <td>{{ $ad->user->name }}</td>
+                                            <td>{{ $assetNames[$ad->asset_type] ?? 'Unknown' }}</td>
+                                            <td>{{ $ad->total_amount }}</td>
+                                            <td>{{ $statusNames[$permissionStatus] ?? 'Unknown' }}</td>
 
                                             <td>
-                                                <a class="btn btn-sm btn-primary fa fa-edit" href="{{ route('gift.edit',$gift->id) }}" title="Edit"></a>
-                                                @can('delete')
-                                                    <button title="Delete" class="btn btn-sm btn-danger bold uppercase delete_button" data-toggle="modal" data-target="#DelModal" data-id="{{ $gift->id }}">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                 @endcan
+                                                <a class="btn btn-sm btn-primary fa fa-eye" href="{{ route('ads.show',$ad->id) }}" title="Show"></a>
+{{--                                                @can('delete')--}}
+{{--                                                    <button title="Delete" class="btn btn-sm btn-danger bold uppercase delete_button" data-toggle="modal" data-target="#DelModal" data-id="{{ $ad->id }}">--}}
+{{--                                                        <i class="fa fa-trash"></i>--}}
+{{--                                                    </button>--}}
+{{--                                                 @endcan--}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -105,7 +93,7 @@
                     <p>Are you sure you want to Delete ?</p>
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <form action="{{route('gift.destroy',0)}}" method="post" id="deleteForm">
+                    <form action="{{route('ads.destroy',0)}}" method="post" id="deleteForm">
                         {!! csrf_field() !!}
                         {!! method_field('DELETE') !!}
                         <input type="hidden" name="id" id="delete_id" class="delete_id" value="0">
@@ -146,7 +134,7 @@
         $(document).ready(function () {
             $(document).on("click", '.delete_button', function (e) {
                 var id = $(this).data('id');
-                var url = '{{ route("gift.destroy",":id") }}';
+                var url = '{{ route("ads.destroy",":id") }}';
                 url = url.replace(':id',id);
                 $("#deleteForm").attr("action",url);
                 $("#delete_id").val(id);

@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Enums\AdsAdminApprovalEnums;
 use App\Enums\AdsTypeEnums;
 use App\Enums\PriceTypeEnums;
 use Illuminate\Database\Migrations\Migration;
@@ -34,6 +35,7 @@ return new class extends Migration
             $table->unsignedTinyInteger("permission_status")->default(PermissionStatusEnums::PENDING)->comment(PermissionStatusEnums::APPROVED."= Approved , ".PermissionStatusEnums::PENDING."= Pending");
             $table->unsignedTinyInteger("visibility_status")->default(VisibilityStatusEnums::ENABLE)->comment(VisibilityStatusEnums::ENABLE."= Enable , ".VisibilityStatusEnums::DISABLE."= Disable");
             $table->dateTime('date');
+            $table->unsignedTinyInteger('admin_status')->comment(AdsAdminApprovalEnums::APPROVED."= approved , ".AdsAdminApprovalEnums::CHECKING ."= checking ");
             $table->timestamps();
         });
     }
