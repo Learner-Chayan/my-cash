@@ -2,10 +2,10 @@
 
 namespace App\Enums;
 
-interface AssetTypeEnums {
-    const BDT = 100;
-    const GOLD = 101;
-    const PLATINUM = 102;
-    const PALLADIUM = 103;
-    const SILVER = 104;
+enum AssetTypeEnums:int {
+    case BDT = 100;
+    case GOLD = 101;
+    case PLATINUM = 102;
+    case PALLADIUM = 103;
+    case SILVER = 104;
 }

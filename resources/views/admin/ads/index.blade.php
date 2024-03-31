@@ -32,20 +32,23 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach ($ads as $key => $ad)
-                                        @php
-                                            $permissionStatus = $ad->admin_status; // Example value
+
+                                    <?php
                                             $statusNames = [
-                                                \App\Enums\AdsAdminApprovalEnums::APPROVED => 'Approved',
-                                                \App\Enums\AdsAdminApprovalEnums::CHECKING => 'Pending',
+                                                \App\Enums\PermissionStatusEnums::APPROVED => 'Approved',
+                                                \App\Enums\PermissionStatusEnums::CHECKING => 'Pending',
                                             ];
                                             $assetNames = [
-                                                \App\Enums\AssetTypeEnums::GOLD => 'Gold',
-                                                \App\Enums\AssetTypeEnums::BDT => 'BDT',
+                                                \App\Enums\AssetTypeEnums::GOLD->value => 'Gold',
+                                                \App\Enums\AssetTypeEnums::BDT->value => 'BDT',
                                             ];
 
-                                        @endphp
+                                        ?>
+                                    @foreach($ads as $key => $ad)
 
+                                    <?php 
+                                           $permissionStatus = $ad->permission_status; // Example value
+                                    ?>
 
                                         <tr>
                                             <td>{{ $ad->ads_unique_num  }}</td>

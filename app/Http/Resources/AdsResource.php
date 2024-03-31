@@ -25,8 +25,10 @@ class AdsResource extends JsonResource
             "sell_price" => $this->sell_price,
             "price_type" => $this->price_type,
             "total_amount" => $this->total_amount,
-            "status" => $this->status,
+            "order_limit_min" => $this->order_limit_min,
+            "order_limit_max" => $this->order_limit_max,
             "date" => Carbon::parse($this->date)->format('Y-m-d h:i A'),
+            "image" => $this->image
         ];
     }
 }

@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Enums\AdsTypeEnums;
 use App\Enums\AssetStatus;
+use App\Enums\PermissionStatusEnums;
 use App\Enums\Status;
 use App\Http\Requests\AdsRequest;
 use App\Models\Account;
@@ -27,7 +28,7 @@ class AdsService
             $requests = $request->all();
 
             $ads =  Ad::where('user_id', $user->id)
-                ->where('status', Status::ACTIVE)
+                ->where('permission_status', PermissionStatusEnums::APPROVED)
                 ->where(function($query) use ($requests) {
                     if(isset($requests['start_date']) && isset($requests['end_date'])){
                         $start_date =  date('Y-m-d', strtotime($requests['start_date']));
@@ -40,6 +41,7 @@ class AdsService
                         $query->whereDate('date' , '>=' , $start_date)->whereDate('date', '<=' , $end_date);
                     }
                 })
+                ->orderBy('id', 'DESC')
                 ->get();
 
            return $ads;
@@ -65,7 +67,6 @@ class AdsService
                 // running ads 
                 $running_ads_amount = Ad::where('user_id', $user->id)->where('asset_type',$request->asset_type)
                                      ->where('ad_type', $request->ad_type)
-                                     ->where('status', Status::ACTIVE)
                                      ->sum('total_amount');
 
                 $acc = Account::where('asset_type', $request->asset_type)->where('user_id', $user->id)->first();
@@ -90,10 +91,15 @@ class AdsService
                     "date" => $date,
            ];
 
-           Ad::create($data);
+           $ad = Ad::create($data);
            Ad_Backup::create($data);
 
-           return response(["status" => true, "message" => "Ads Created Successfully"], 422);
+           if ($request->image) {
+                $ad->clearMediaCollection('ads');
+                $ad->addMediaFromRequest('image')->toMediaCollection('ads');
+            }
+
+           return response(["status" => true, "message" => "Ads Created Successfully"]);
 
 
         } catch (Exception $e) {

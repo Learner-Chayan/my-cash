@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Ad extends Model
+class Ad extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
 
     protected $table = "ads";
 
@@ -28,6 +31,14 @@ class Ad extends Model
         "visibility_status",
         "date",
     ];
+
+    public function getImageAttribute(): string
+    {
+        if (!empty($this->getFirstMediaUrl('ads'))) {
+            return asset($this->getFirstMediaUrl('ads'));
+        }
+        return asset('images/default/ads.png');
+    }
 
     public function user()
     {
