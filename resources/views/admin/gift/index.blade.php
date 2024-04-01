@@ -43,10 +43,6 @@
                                         @php
                                             $giftService = new \App\Services\GiftService();
                                             $image = $giftService->getImage($gift->id);
-                                            $assetNames = [
-                                                \App\Enums\AssetTypeEnums::GOLD => 'Gold',
-                                                \App\Enums\AssetTypeEnums::BDT => 'BDT',
-                                            ];
                                             $typeNames = [
                                                 \App\Enums\GiftTypeEnums::ALLUSER => 'All User',
                                                 \App\Enums\GiftTypeEnums::NEWUSER => 'New User',
@@ -61,7 +57,7 @@
                                             <td>{{ ++$key }}</td>
                                             <td><img src="{{ $image }}" alt="User Image" style="width: 100px; height: auto;"></td>
                                             <td>{{ $gift->title }}</td>
-                                            <td>{{ $assetNames[$gift->asset_type] ?? 'Default' }}</td>
+                                            <td>{{ \App\Enums\AssetTypeEnums::tryFrom($gift->asset_type)->name ?? 'Default' }}</td>
                                             <td>{{ $typeNames[$gift->gift_type] ?? 'Default' }}</td>
                                             <td>{{ $gift->amount }}</td>
                                             <td>{{ $statusNames[$gift->status] ?? 'Default' }}</td>
