@@ -31,7 +31,7 @@ return new class extends Migration
             $table->double("order_limit_min",16,6);
             $table->double("order_limit_max",16,6);
             $table->unsignedTinyInteger("delete_status")->default(DeleteStatusEnums::NOT_DELETED)->comment(DeleteStatusEnums::DELETED."= Deleted , ".DeleteStatusEnums::NOT_DELETED."= Not Delete");
-            $table->unsignedTinyInteger("permission_status")->default(PermissionStatusEnums::CHECKING)->comment(PermissionStatusEnums::APPROVED."= Approved , ".PermissionStatusEnums::PENDING."= Pending");
+            $table->unsignedTinyInteger("permission_status")->default(PermissionStatusEnums::CHECKING)->comment(PermissionStatusEnums::APPROVED."= Approved , ".PermissionStatusEnums::CHECKING."= Pending");
             $table->unsignedTinyInteger("visibility_status")->default(VisibilityStatusEnums::ENABLE)->comment(VisibilityStatusEnums::ENABLE."= Enable , ".VisibilityStatusEnums::DISABLE."= Disable");
             $table->dateTime('date');
             $table->timestamps();

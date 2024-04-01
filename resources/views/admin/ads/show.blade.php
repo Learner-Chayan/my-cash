@@ -71,11 +71,19 @@
                                         </div>
                                         <!-- /.col -->
                                     </div>
+                                    @if($adminStatusNames[$ad->permission_status] == 'Approved')
                                     <div class="row no-print">
                                         <div class="col-12">
-                                            <button type="button" class="btn btn-success float-right delete_button" data-toggle="modal" data-target="#DelModal" data-id="{{ $ad->id }}"><i class="far fa-check-circle"></i> Admin Approval</button>
+                                            <button type="button" class="btn btn-warning float-right delete_button" data-toggle="modal" data-target="#DelModal" data-id="{{ $ad->id }}"><i class="far fa-check-circle"></i> Make Pending</button>
                                         </div>
                                     </div>
+                                    @else
+                                        <div class="row no-print">
+                                            <div class="col-12">
+                                                <button type="button" class="btn btn-success float-right delete_button" data-toggle="modal" data-target="#DelModal" data-id="{{ $ad->id }}"><i class="far fa-check-circle"></i> Admin Approval</button>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div><!-- /.card-body -->
                             </div>
                             <!-- /.card -->

@@ -31,13 +31,8 @@
                                     <label for="exampleInputEmail1">Asset</label>
                                     <select class="select2bs4" name="asset_type" required data-placeholder="Select a State" style="width: 100%;">
                                         <option value="">Choose One</option>
-                                        @php
-                                            $reflection = new ReflectionClass(\App\Enums\AssetTypeEnums::class);
-                                            $assets = $reflection->getConstants();
-                                        @endphp
-
-                                        @foreach($assets as $name => $value)
-                                            <option value="{{$value}}" {{old('asset_type') == $value ? 'selected' : ''}}>{{$name}}</option>
+                                        @foreach(\App\Enums\AssetTypeEnums::cases() as $asset)
+                                            <option value="{{$asset->value}}" {{old('asset_type') == $asset->value ? 'selected' : ''}}>{{$asset->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
