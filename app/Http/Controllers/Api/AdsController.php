@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AdsRequest;
 use App\Http\Resources\AdsResource;
 use App\Services\AdsService;
+use Exception;
 use Illuminate\Http\Request;
+use App\Models\Ad;
 
 class AdsController extends Controller
 {
@@ -20,7 +22,16 @@ class AdsController extends Controller
     {
         try{
             return AdsResource::collection($this->adsService->list($request));
-        }catch(\Exception $e) {
+        }catch(Exception $e) {
+            return response([ "status" => false, "message" => $e->getMessage()], 422);
+        }
+    }
+
+    public function userAdslist(Request $request)
+    {
+        try{
+            return AdsResource::collection($this->adsService->userAdslist($request));
+        }catch(Exception $e) {
             return response([ "status" => false, "message" => $e->getMessage()], 422);
         }
     }
@@ -29,7 +40,15 @@ class AdsController extends Controller
     {
         try{
             return $this->adsService->store($request);
-        }catch(\Exception $e) {
+        }catch(Exception $e) {
+            return response([ "status" => false, "message" => $e->getMessage()], 422);
+        }
+    }
+
+    public function details(Ad $ad) {
+        try {
+            return new AdsResource($this->adsService->details($ad));
+        } catch (Exception $e) {
             return response([ "status" => false, "message" => $e->getMessage()], 422);
         }
     }

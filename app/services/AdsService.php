@@ -27,8 +27,37 @@ class AdsService
             $user = auth()->user();
             $requests = $request->all();
 
+            $ads =  Ad::where('permission_status', PermissionStatusEnums::APPROVED)
+                ->where(function($query) use ($requests) {
+                    if(isset($requests['start_date']) && isset($requests['end_date'])){
+                        $start_date =  date('Y-m-d', strtotime($requests['start_date']));
+                        $end_date   = date('Y-m-d', strtotime($requests['end_date']));
+                        $query->whereDate('date' , '>=' , $start_date)->whereDate('date', '<=' , $end_date);
+                    }else {
+                        $today = Carbon::now();
+                        $start_date = date('Y-m-d', strtotime($today->subDays(7)->toDateString()));
+                        $end_date   = date('Y-m-d');
+                        $query->whereDate('date' , '>=' , $start_date)->whereDate('date', '<=' , $end_date);
+                    }
+                })
+                ->orderBy('id', 'DESC')
+                ->get();
+
+           return $ads;
+
+        } catch (Exception $e) {
+            return response(["status" => false, "message" => $e->getMessage()], 422);
+        }
+    }
+
+    public function userAdslist(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $requests = $request->all();
+
             $ads =  Ad::where('user_id', $user->id)
-                ->where('permission_status', PermissionStatusEnums::APPROVED)
+                //->where('permission_status', PermissionStatusEnums::APPROVED)
                 ->where(function($query) use ($requests) {
                     if(isset($requests['start_date']) && isset($requests['end_date'])){
                         $start_date =  date('Y-m-d', strtotime($requests['start_date']));
@@ -102,6 +131,14 @@ class AdsService
            return response(["status" => true, "message" => "Ads Created Successfully"]);
 
 
+        } catch (Exception $e) {
+            return response(["status" => false, "message" => $e->getMessage()], 422);
+        }
+    }
+
+    public function details(Ad $ad) {
+        try {
+            return $ad;
         } catch (Exception $e) {
             return response(["status" => false, "message" => $e->getMessage()], 422);
         }
