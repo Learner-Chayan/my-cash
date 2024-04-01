@@ -76,7 +76,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //ads
     Route::prefix('ads')->group(function() {
         Route::get('/getAllAds', [AdsController::class, 'list']);
+        Route::get('/user-ads', [AdsController::class, 'userAdslist']);
         Route::post('/store', [AdsController::class, 'store']);
+        Route::get('/details/{ad}', [AdsController::class, 'details']);
     });
 
     //assets

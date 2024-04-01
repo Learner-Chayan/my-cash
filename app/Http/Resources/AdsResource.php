@@ -16,7 +16,7 @@ class AdsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-
+            "id" => $this->id,
             "ads_unique_num" => $this->ads_unique_num,
             "ad_type" => $this->ad_type,
             "asset_type" => $this->asset_type,
