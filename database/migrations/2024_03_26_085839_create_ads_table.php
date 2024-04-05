@@ -2,6 +2,7 @@
 
 
 use App\Enums\AdsTypeEnums;
+use App\Enums\AssetTypeEnums;
 use App\Enums\PriceTypeEnums;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -23,10 +24,12 @@ return new class extends Migration
             $table->string('ads_unique_num',20)->unique();
             $table->unsignedTinyInteger('ad_type')->comment(AdsTypeEnums::BUY."= buy , ".AdsTypeEnums::SELL."= Sell");
             $table->unsignedTinyInteger('asset_type');
-            $table->double('unit_price', 16,6);
-            $table->double('highest_price', 16,6);
-            $table->double('sell_price', 16,6);
+            $table->double('unit_price_floor', 16,6);
+            $table->double('unit_price_ceil', 16,6);
+            $table->dateTime('price_updated_at');
+            $table->double('user_price', 16,6);
             $table->unsignedTinyInteger('price_type')->default(PriceTypeEnums::FIXED)->comment(PriceTypeEnums::FIXED."= Fixed , ".PriceTypeEnums::FLOATING."= Floating");
+            $table->unsignedTinyInteger('payable_with')->default(AssetTypeEnums::BDT);
             $table->double("total_amount",16,6);
             $table->double("order_limit_min",16,6);
             $table->double("order_limit_max",16,6);

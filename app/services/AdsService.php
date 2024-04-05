@@ -5,7 +5,10 @@ namespace App\Services;
 
 use App\Enums\AdsTypeEnums;
 use App\Enums\AssetStatus;
+use App\Enums\AssetTypeEnums;
 use App\Enums\PermissionStatusEnums;
+use App\Enums\PriceTypeEnums;
+use App\Enums\Role;
 use App\Enums\Status;
 use App\Http\Requests\AdsRequest;
 use App\Models\Account;
@@ -28,6 +31,7 @@ class AdsService
             $requests = $request->all();
 
             $ads =  Ad::where('permission_status', PermissionStatusEnums::APPROVED)
+                ->where('user_id','!=', $user->id)
                 ->where(function($query) use ($requests) {
                     if(isset($requests['start_date']) && isset($requests['end_date'])){
                         $start_date =  date('Y-m-d', strtotime($requests['start_date']));
@@ -87,9 +91,36 @@ class AdsService
            $unique_num = substr(md5(time()), 0, 10);
            $date = Date("Y-m-d H:i:s");
 
+           // user Should be agent type 
+           if($user->getRole() !== Role::AGENT){
+                return response(["status" => false, "message" => "Unauthorized!! Only agent can create ads."], 422);
+           }
+
+           //check  asset GOLD or Not , should be gold
+           if($request->asset_type !== AssetTypeEnums::GOLD){
+            return response(["status" => false, "message" => "Only gold ads can be create right now."], 422);
+           }
+
+           // price type should be BDT
+           if($request->payable_with !== AssetTypeEnums::BDT){
+            return response(["status" => false, "message" => "Payable with should be BDT."], 422);
+           }
+
            if(!$asset_info){
                 return response(["status" => false, "message" => "Price not set yet."], 422);
             }
+
+            // user price should be in range : between price and highest_price
+            if($request->user_price < $asset_info->unit_price || $request->user_price > $asset_info->highest_price){
+                return response(["status" => false, "message" => "Price should be between .". $asset_info->pricet." to"
+                .$asset_info->highest_price], 422);
+            }
+
+            // Should be order_limit_max <= user_price * total_amount
+            if($request->order_limit_max > ($request->user_price * $request->total_amount)) {
+                return response(["status" => false, "message" => "Order Limit Maximum should be less than .".$request->user_price * $request->total_amount], 422);
+            }
+
             // Check balance sufficient or not
             if($request->ad_type === AdsTypeEnums::SELL) {
 
@@ -110,10 +141,12 @@ class AdsService
                     "ads_unique_num" => $unique_num,
                     "ad_type" => $request->ad_type,
                     "asset_type" => $request->asset_type,
-                    "unit_price" => $asset_info->price,
-                    "highest_price" => $asset_info->highest_price,
-                    "sell_price" => $request->sell_price,
+                    "unit_price_floor" => $asset_info->price,
+                    "unit_price_ceil" => $asset_info->highest_price,
+                    "price_updated_at" => $asset_info->date,
+                    "user_price" => $request->user_price,
                     "price_type" => $request->price_type,
+                    "payable_with" => AssetTypeEnums::BDT,
                     "total_amount" => $request->total_amount,
                     "order_limit_min" => $request->order_limit_min,
                     "order_limit_max" => $request->order_limit_max,
@@ -122,11 +155,6 @@ class AdsService
 
            $ad = Ad::create($data);
            Ad_Backup::create($data);
-
-           if ($request->image) {
-                $ad->clearMediaCollection('ads');
-                $ad->addMediaFromRequest('image')->toMediaCollection('ads');
-            }
 
            return response(["status" => true, "message" => "Ads Created Successfully"]);
 

@@ -21,7 +21,6 @@ return new class extends Migration
             $table->double('amount', 16,6);
             $table->string('add_trans_id', 20);
             $table->string('method')->default("Halal Pay");
-            $table->unsignedTinyInteger('status')->default(Status::ACTIVE)->comment(Status::ACTIVE."= Active , ".Status::INACTIVE."= Inactive");
             $table->dateTime('date');
             $table->timestamps();
         });

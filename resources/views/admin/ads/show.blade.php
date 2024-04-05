@@ -56,9 +56,9 @@
                                             Asset Details
                                             <address>
                                                 <strong>Asset: {{ $assetNames[$ad->asset_type] ?? 'Unknown'  }}</strong><br>
-                                                Unit Price: {{$ad->unit_price}}<br>
+                                                Unit Price: {{$ad->unit_price_floor}}<br>
                                                 Highest Price: {{$ad->highest_price}}<br>
-                                                Sell Price: {{$ad->sell_price}}<br>
+                                                Sell Price: {{$ad->user_price}}<br>
                                             </address>
                                         </div>
                                         <!-- /.col -->
