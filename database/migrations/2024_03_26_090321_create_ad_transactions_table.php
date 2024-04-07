@@ -17,8 +17,10 @@ return new class extends Migration
             $table->foreignId('ad_id')->constrained('ads');
             $table->foreignId('sell_by')->constrained('users');
             $table->foreignId('purchase_by')->constrained('users');
-            $table->double('quantity', 16,6);
-            $table->double('amount', 16,6);
+            $table->double('payable_asset_type', 16,6);
+            $table->double('payable_amount', 16,6); // BDT or other
+            $table->double('receivable_asset_type', 16,6);
+            $table->double('receivable_amount', 16,6); // GOLD or other
             $table->string('add_trans_id', 20);
             $table->string('method')->default("Halal Pay");
             $table->dateTime('date');

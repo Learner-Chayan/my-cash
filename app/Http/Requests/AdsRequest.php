@@ -24,7 +24,7 @@ class AdsRequest extends FormRequest
         return [  
             "ad_type" => ['required','numeric'],
             "asset_type" => ['required','numeric'],
-            "total_amount" => ["required", "numeric", "min:0.1"],
+            "advertise_total_amount" => ["required", "numeric", "min:0.1"],
             "user_price" => ["required", "numeric", "min:0.1"],
             "price_type" => ["required", "numeric"],
             "order_limit_min" => ["required", "numeric"],
@@ -45,7 +45,7 @@ class AdsRequest extends FormRequest
 //from request ---------
 // "sell_price", user_price
 // "price_type",
-// "total_amount",
+// "advertise_total_amount",
 // "ad_type",
 // "asset_type",
 // order_limit_min

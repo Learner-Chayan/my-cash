@@ -23,7 +23,7 @@ class Ad extends Model
         "user_price",
         "price_type",
         "payable_with",
-        "total_amount",
+        "advertise_total_amount",
         "order_limit_min",
         "order_limit_max",
         "delete_status",

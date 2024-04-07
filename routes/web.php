@@ -25,7 +25,7 @@ Route::get('/clear', function() {
 //    return redirect()->route('dashboard');
 });
 
-Route::get('/run-storage-link', function () {
+Route::get('/link', function () {
     Artisan::call('storage:link');
     return 'Storage link created successfully!';
 });

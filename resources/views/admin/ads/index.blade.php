@@ -54,7 +54,7 @@
                                             <td>{{ $ad->ads_unique_num  }}</td>
                                             <td>{{ $ad->user->name }}</td>
                                             <td>{{ $assetNames[$ad->asset_type] ?? 'Unknown' }}</td>
-                                            <td>{{ $ad->total_amount }}</td>
+                                            <td>{{ $ad->advertise_total_amount }}</td>
                                             <td>{{ $statusNames[$permissionStatus] ?? 'Unknown' }}</td>
 
                                             <td>

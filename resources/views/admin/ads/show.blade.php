@@ -67,7 +67,7 @@
                                             <b>Ad Status:</b> {{$adminStatusNames[$ad->permission_status] ?? 'Unknown'  }}<br>
                                             <b>Ad Type:</b> {{ $adTypeNames[$ad->ad_type] ?? 'Unknown' }}<br>
                                             <b>Price Type:</b> {{ $priceNames[$ad->price_type] ?? 'Unknown' }}<br>
-                                            <b>Total Amount:</b> {{ $ad->total_amount }}<br>
+                                            <b>Total Amount:</b> {{ $ad->advertise_total_amount }}<br>
                                         </div>
                                         <!-- /.col -->
                                     </div>

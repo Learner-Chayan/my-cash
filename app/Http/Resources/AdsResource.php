@@ -25,7 +25,7 @@ class AdsResource extends JsonResource
             "user_price" => $this->user_price,
             "price_type" => $this->price_type,
             "payable_withy" => $this->payable_with,
-            "total_amount" => $this->total_amount,
+            "advertise_total_amount" => $this->advertise_total_amount,
             "order_limit_min" => $this->order_limit_min,
             "order_limit_max" => $this->order_limit_max,
             "date" => Carbon::parse($this->date)->format('Y-m-d h:i A'),
