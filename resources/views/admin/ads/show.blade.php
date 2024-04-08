@@ -56,9 +56,9 @@
                                             Asset Details
                                             <address>
                                                 <strong>Asset: {{ $assetNames[$ad->asset_type] ?? 'Unknown'  }}</strong><br>
-                                                Unit Price: {{$ad->unit_price}}<br>
+                                                Unit Price: {{$ad->unit_price_floor}}<br>
                                                 Highest Price: {{$ad->highest_price}}<br>
-                                                Sell Price: {{$ad->sell_price}}<br>
+                                                Sell Price: {{$ad->user_price}}<br>
                                             </address>
                                         </div>
                                         <!-- /.col -->
@@ -67,7 +67,7 @@
                                             <b>Ad Status:</b> {{$adminStatusNames[$ad->permission_status] ?? 'Unknown'  }}<br>
                                             <b>Ad Type:</b> {{ $adTypeNames[$ad->ad_type] ?? 'Unknown' }}<br>
                                             <b>Price Type:</b> {{ $priceNames[$ad->price_type] ?? 'Unknown' }}<br>
-                                            <b>Total Amount:</b> {{ $ad->total_amount }}<br>
+                                            <b>Total Amount:</b> {{ $ad->advertise_total_amount }}<br>
                                         </div>
                                         <!-- /.col -->
                                     </div>

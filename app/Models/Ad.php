@@ -4,13 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Ad extends Model implements HasMedia
+class Ad extends Model  
 {
     use HasFactory;
-    use InteractsWithMedia;
 
     protected $table = "ads";
 
@@ -19,11 +17,13 @@ class Ad extends Model implements HasMedia
         "ads_unique_num",
         "ad_type",
         "asset_type",
-        "unit_price",
-        "highest_price",
-        "sell_price",
+        "unit_price_floor",
+        "unit_price_ceil",
+        "price_updated_at",
+        "user_price",
         "price_type",
-        "total_amount",
+        "payable_with",
+        "advertise_total_amount",
         "order_limit_min",
         "order_limit_max",
         "delete_status",
@@ -32,13 +32,6 @@ class Ad extends Model implements HasMedia
         "date",
     ];
 
-    public function getImageAttribute(): string
-    {
-        if (!empty($this->getFirstMediaUrl('ads'))) {
-            return asset($this->getFirstMediaUrl('ads'));
-        }
-        return asset('images/default/ads.png');
-    }
 
     public function user()
     {

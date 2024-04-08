@@ -20,15 +20,18 @@ class AdsResource extends JsonResource
             "ads_unique_num" => $this->ads_unique_num,
             "ad_type" => $this->ad_type,
             "asset_type" => $this->asset_type,
-            "unit_price" => $this->unit_price,
-            "highest_price" => $this->highest_price,
-            "sell_price" => $this->sell_price,
+            "unit_price_floor" => $this->unit_price_floor,
+            "unit_price_ceil" => $this->unit_price_ceil,
+            "user_price" => $this->user_price,
             "price_type" => $this->price_type,
-            "total_amount" => $this->total_amount,
+            "payable_with" => $this->payable_with,
+            "advertise_total_amount" => $this->advertise_total_amount,
             "order_limit_min" => $this->order_limit_min,
             "order_limit_max" => $this->order_limit_max,
+            "permission_status" => $this->permission_status,
+            "delete_status" => $this->delete_status,
+            "visibility_status" => $this->visibility_status,
             "date" => Carbon::parse($this->date)->format('Y-m-d h:i A'),
-            "image" => $this->image
         ];
     }
 }

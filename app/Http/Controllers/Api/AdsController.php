@@ -52,4 +52,20 @@ class AdsController extends Controller
             return response([ "status" => false, "message" => $e->getMessage()], 422);
         }
     }
+
+    public function buy(Ad $ad, Request $request) {
+        try {
+            return $this->adsService->buy($ad, $request);
+        } catch (Exception $e) {
+            return response([ "status" => false, "message" => $e->getMessage()], 422);
+        }
+    }
+
+    public function sell(Ad $ad, Request $request) {
+        try {
+            return $this->adsService->sell($ad, $request);
+        } catch (Exception $e) {
+            return response([ "status" => false, "message" => $e->getMessage()], 422);
+        }
+    }
 }
