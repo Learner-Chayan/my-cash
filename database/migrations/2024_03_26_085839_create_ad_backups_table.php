@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Schema;
 use App\Enums\DeleteStatusEnums;
 use App\Enums\PermissionStatusEnums;
 use App\Enums\VisibilityStatusEnums;
+use App\Enums\AssetTypeEnums;
 
 return new class extends Migration
 {
@@ -24,14 +25,15 @@ return new class extends Migration
             $table->string('ads_unique_num',20)->unique();
             $table->unsignedTinyInteger('ad_type')->comment(AdsTypeEnums::BUY."= buy , ".AdsTypeEnums::SELL."= Sell");
             $table->unsignedTinyInteger('asset_type');
-            $table->double('unit_price_floor', 16,6);
-            $table->double('unit_price_ceil', 16,6);
+            $table->double('unit_price_floor', 16,6); // BDT or payable asset type
+            $table->double('unit_price_ceil', 16,6);  // BDT  or payable asset type
             $table->dateTime('price_updated_at');
             $table->double('user_price', 16,6);
             $table->unsignedTinyInteger('price_type')->default(PriceTypeEnums::FIXED)->comment(PriceTypeEnums::FIXED."= Fixed , ".PriceTypeEnums::FLOATING."= Floating");
-            $table->double("advertise_total_amount",16,6);
-            $table->double("order_limit_min",16,6);
-            $table->double("order_limit_max",16,6);
+            $table->unsignedTinyInteger('payable_with')->default(AssetTypeEnums::BDT->value);
+            $table->double("advertise_total_amount",16,6); // GOLD or sell/buy asset type depends on ads type
+            $table->double("order_limit_min",16,6); // BDT or payable asset type
+            $table->double("order_limit_max",16,6); // BDT  or payable asset type
             $table->unsignedTinyInteger("delete_status")->default(DeleteStatusEnums::NOT_DELETED)->comment(DeleteStatusEnums::DELETED."= Deleted , ".DeleteStatusEnums::NOT_DELETED."= Not Delete");
             $table->unsignedTinyInteger("permission_status")->default(PermissionStatusEnums::CHECKING)->comment(PermissionStatusEnums::APPROVED."= Approved , ".PermissionStatusEnums::CHECKING."= Pending");
             $table->unsignedTinyInteger("visibility_status")->default(VisibilityStatusEnums::ENABLE)->comment(VisibilityStatusEnums::ENABLE."= Enable , ".VisibilityStatusEnums::DISABLE."= Disable");

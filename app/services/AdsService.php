@@ -15,7 +15,7 @@ use App\Enums\VisibilityStatusEnums;
 use App\Http\Requests\AdsRequest;
 use App\Models\Account;
 use App\Models\Ad_Backup;
-use App\Models\AddTransaction;
+use App\Models\AdTransaction;
 use App\Models\Asset;
 use App\Models\AssetPrice;
 use App\Models\User;
@@ -100,13 +100,14 @@ class AdsService
                 return response(["status" => false, "message" => "Unauthorized!! Only agent can create ads."], 422);
            }
 
+
            //check  asset GOLD or Not , should be gold
-           if($request->asset_type !== AssetTypeEnums::GOLD){
+           if($request->asset_type !== AssetTypeEnums::GOLD->value){
             return response(["status" => false, "message" => "Only gold ads can be create right now."], 422);
            }
 
            // price type should be BDT
-           if($request->payable_with !== AssetTypeEnums::BDT){
+           if($request->payable_with !== AssetTypeEnums::BDT->value){
             return response(["status" => false, "message" => "Payable with should be BDT."], 422);
            }
 
@@ -135,7 +136,20 @@ class AdsService
 
                 $acc = Account::where('asset_type', $request->asset_type)->where('user_id', $user->id)->first();
                 if($acc->balance < ( $request->advertise_total_amount + $running_ads_amount)){
-                    return response(["status" => false, "message" => "Insufficient Balance"], 422);
+                    return response(["status" => false, "message" => "Insufficient Balance . Check previous ads and current balance"], 422);
+                }
+            }
+
+            if($request->ad_type === AdsTypeEnums::BUY) {
+
+                // running ads 
+                $running_ads_amount = Ad::where('user_id', $user->id)->where('asset_type',$request->asset_type)
+                                     ->where('ad_type', $request->ad_type)
+                                     ->sum('payable_with');
+
+                $acc = Account::where('asset_type', $request->asset_type)->where('user_id', $user->id)->first();
+                if($acc->balance < ( $request->advertise_total_amount + $running_ads_amount)){
+                    return response(["status" => false, "message" => "Insufficient Balance . Check previous ads and current balance"], 422);
                 }
             }
 
@@ -150,7 +164,7 @@ class AdsService
                     "price_updated_at" => $asset_info->date,
                     "user_price" => $request->user_price,
                     "price_type" => $request->price_type,
-                    "payable_with" => AssetTypeEnums::BDT,
+                    "payable_with" => AssetTypeEnums::BDT->value,
                     "advertise_total_amount" => $request->advertise_total_amount,
                     "order_limit_min" => $request->order_limit_min,
                     "order_limit_max" => $request->order_limit_max,
@@ -195,7 +209,9 @@ class AdsService
 
            $receivable_amount  =  $request->payable_amount / $ad->user_price;
 
-           if($ad->permission_status !== PermissionStatusEnums::APPROVED || $ad->visibility_status !== VisibilityStatusEnums::ENABLE
+           if($ad->user_id == $user->id){
+            return response(["status" => false, "message" => "Failed !! Self ads can not be buy."], 422);
+           }else if($ad->permission_status !== PermissionStatusEnums::APPROVED || $ad->visibility_status !== VisibilityStatusEnums::ENABLE
            || $ad->delete_status !== DeleteStatusEnums::NOT_DELETED){
                 return response(["status" => false, "message" => "Failed !! The ad is not approved or invisible or deleted."], 422);
            }else if ($ad->ad_type !== AdsTypeEnums::SELL){
@@ -226,16 +242,16 @@ class AdsService
             $sellers_account->save();
 
             // increase seller's payable_with balance
-            $buyers_account = Account::where('user_id', $ad->user_id)->where('asset_type', $ad->payable_with)->first();
-            $buyers_account->balance = $buyers_account->balance +  $request->payable_amount;
-            $buyers_account->save();
+            $sellers_account = Account::where('user_id', $ad->user_id)->where('asset_type', $ad->payable_with)->first();
+            $sellers_account->balance = $sellers_account->balance +  $request->payable_amount;
+            $sellers_account->save();
 
             // now update ads information 
             $ad->advertise_total_amount = $ad->advertise_total_amount -  $receivable_amount;
             $ad->save(); 
 
             // now insert information's to ads_transaction table
-            AddTransaction::create([
+            AdTransaction::create([
                 'ad_id' => $ad->id,
                 'sell_by' => $sellers_account->user_id,
                 'purchase_by' => $buyers_account->user_id,
@@ -248,7 +264,7 @@ class AdsService
             ]);
            });
 
-           return response(["status" => true, "message" => 'Success !! '], 422);
+           return response(["status" => true, "message" => 'Success !! Balance transfered to your account. '], 422);
 
         } catch (Exception $e) {
             DB::rollBack();
@@ -307,16 +323,16 @@ class AdsService
             $sellers_account->save();
 
             // increase seller's payable_with balance
-            $buyers_account = Account::where('user_id', $ad->user_id)->where('asset_type', $ad->asset_type)->first();
-            $buyers_account->balance = $buyers_account->balance +  $receivable_amount;
-            $buyers_account->save();
+            $sellers_account = Account::where('user_id', $ad->user_id)->where('asset_type', $ad->asset_type)->first();
+            $sellers_account->balance = $sellers_account->balance +  $receivable_amount;
+            $sellers_account->save();
 
             // now update ads information 
             $ad->advertise_total_amount = $ad->advertise_total_amount -  $receivable_amount;
             $ad->save(); 
 
             // now insert information's to ads_transaction table
-            AddTransaction::create([
+            AdTransaction::create([
                 'ad_id' => $ad->id,
                 'sell_by' => $sellers_account->user_id,
                 'purchase_by' => $buyers_account->user_id,
@@ -329,7 +345,7 @@ class AdsService
             ]);
            });
 
-           return response(["status" => true, "message" => 'Success !! '], 422);
+           return response(["status" => true, "message" => 'Success !! Balance transfered to your account. '], 422);
 
         } catch (Exception $e) {
             DB::rollBack();

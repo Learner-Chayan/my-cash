@@ -24,7 +24,7 @@ class AdsResource extends JsonResource
             "unit_price_ceil" => $this->unit_price_ceil,
             "user_price" => $this->user_price,
             "price_type" => $this->price_type,
-            "payable_withy" => $this->payable_with,
+            "payable_with" => $this->payable_with,
             "advertise_total_amount" => $this->advertise_total_amount,
             "order_limit_min" => $this->order_limit_min,
             "order_limit_max" => $this->order_limit_max,

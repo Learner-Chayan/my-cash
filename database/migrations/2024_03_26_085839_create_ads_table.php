@@ -29,7 +29,7 @@ return new class extends Migration
             $table->dateTime('price_updated_at');
             $table->double('user_price', 16,6);
             $table->unsignedTinyInteger('price_type')->default(PriceTypeEnums::FIXED)->comment(PriceTypeEnums::FIXED."= Fixed , ".PriceTypeEnums::FLOATING."= Floating");
-            $table->unsignedTinyInteger('payable_with')->default(AssetTypeEnums::BDT);
+            $table->unsignedTinyInteger('payable_with')->default(AssetTypeEnums::BDT->value);
             $table->double("advertise_total_amount",16,6); // GOLD or sell/buy asset type depends on ads type
             $table->double("order_limit_min",16,6); // BDT or payable asset type
             $table->double("order_limit_max",16,6); // BDT  or payable asset type

@@ -63,7 +63,7 @@ class AdsController extends Controller
 
     public function sell(Ad $ad, Request $request) {
         try {
-            return $this->adsService->buy($ad, $request);
+            return $this->adsService->sell($ad, $request);
         } catch (Exception $e) {
             return response([ "status" => false, "message" => $e->getMessage()], 422);
         }

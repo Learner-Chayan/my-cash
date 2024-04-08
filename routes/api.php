@@ -82,7 +82,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         // buy ads
         Route::post('/buy/{ad}', [AdsController::class, 'buy']);
-        Route::post('/sell/{ad}', [AdsController::class, 'buy']);
+        Route::post('/sell/{ad}', [AdsController::class, 'sell']);
     });
 
     //assets
