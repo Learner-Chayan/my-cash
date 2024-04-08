@@ -117,7 +117,7 @@ class AdsService
 
             // user price should be in range : between price and highest_price
             if($request->user_price < $asset_info->unit_price || $request->user_price > $asset_info->highest_price){
-                return response(["status" => false, "message" => "Price should be between .". $asset_info->pricet." to"
+                return response(["status" => false, "message" => "Price should be between .". $asset_info->price." to"
                 .$asset_info->highest_price], 422);
             }
 
@@ -211,10 +211,10 @@ class AdsService
 
            if($ad->user_id == $user->id){
             return response(["status" => false, "message" => "Failed !! Self ads can not be buy."], 422);
-           }else if($ad->permission_status !== PermissionStatusEnums::APPROVED || $ad->visibility_status !== VisibilityStatusEnums::ENABLE
-           || $ad->delete_status !== DeleteStatusEnums::NOT_DELETED){
+           }else if($ad->permission_status != PermissionStatusEnums::APPROVED || $ad->visibility_status != VisibilityStatusEnums::ENABLE
+           || $ad->delete_status != DeleteStatusEnums::NOT_DELETED){
                 return response(["status" => false, "message" => "Failed !! The ad is not approved or invisible or deleted."], 422);
-           }else if ($ad->ad_type !== AdsTypeEnums::SELL){
+           }else if ($ad->ad_type != AdsTypeEnums::SELL){
                 return response(["status" => false, "message" => "Failed !! Only sell type ads can be buy."], 422);
            }else if($request->payable_amount < $ad->order_limit_min){
                 return response(["status" => false, "message" => "Failed !! Minimum Order Limit is .". $ad->order_limit_min], 422);
@@ -292,10 +292,10 @@ class AdsService
 
            $receivable_amount  =  $request->payable_amount / $ad->user_price;
 
-           if($ad->permission_status !== PermissionStatusEnums::APPROVED || $ad->visibility_status !== VisibilityStatusEnums::ENABLE
-           || $ad->delete_status !== DeleteStatusEnums::NOT_DELETED){
+           if($ad->permission_status != PermissionStatusEnums::APPROVED || $ad->visibility_status != VisibilityStatusEnums::ENABLE
+           || $ad->delete_status != DeleteStatusEnums::NOT_DELETED){
                 return response(["status" => false, "message" => "Failed !! The ad is not approved or invisible or deleted."], 422);
-           }else if ($ad->ad_type !== AdsTypeEnums::BUY){
+           }else if ($ad->ad_type != AdsTypeEnums::BUY){
                 return response(["status" => false, "message" => "Failed !! Only sell type ads can be buy."], 422);
            }else if($request->payable_amount < $ad->order_limit_min){
                 return response(["status" => false, "message" => "Failed !! Minimum Order Limit is .". $ad->order_limit_min], 422);

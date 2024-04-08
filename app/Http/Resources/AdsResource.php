@@ -28,6 +28,9 @@ class AdsResource extends JsonResource
             "advertise_total_amount" => $this->advertise_total_amount,
             "order_limit_min" => $this->order_limit_min,
             "order_limit_max" => $this->order_limit_max,
+            "permission_status" => $this->permission_status,
+            "delete_status" => $this->delete_status,
+            "visibility_status" => $this->visibility_status,
             "date" => Carbon::parse($this->date)->format('Y-m-d h:i A'),
         ];
     }
