@@ -96,7 +96,7 @@ class AdsService
            $date = Date("Y-m-d H:i:s");
 
            // user Should be agent type 
-           if($user->getRole() !== Role::AGENT){
+           if($user->getUserRoleAttribute() !== Role::AGENT){
                 return response(["status" => false, "message" => "Unauthorized!! Only agent can create ads."], 422);
            }
 
@@ -257,7 +257,91 @@ class AdsService
     }
 
 
+    
+    public function sell(Ad $ad, Request $request) {
+        try {
+           // validate request 
+           $request->validate([
+            'payable_amount' => 'required|numeric' //  BDT  
+           ]);
+
+           // Checking Part
+           $user = auth()->user(); //buyer
+           $buyers_account = Account::where('user_id', $user->id)->where('asset_type', $ad->asset_type)->first();
+           $sellers_account = Account::where('user_id', $ad->user_id)->where('asset_type', $ad->payable_with)->first();
+
+           // how many asset will get the buyer 
+           // if user_price (unit_price) = 10 BDT (with_payable)
+           // then if payable_amount 200 , then 200 / 10 = 20 
+
+           $receivable_amount  =  $request->payable_amount / $ad->user_price;
+
+           if($ad->permission_status !== PermissionStatusEnums::APPROVED || $ad->visibility_status !== VisibilityStatusEnums::ENABLE
+           || $ad->delete_status !== DeleteStatusEnums::NOT_DELETED){
+                return response(["status" => false, "message" => "Failed !! The ad is not approved or invisible or deleted."], 422);
+           }else if ($ad->ad_type !== AdsTypeEnums::BUY){
+                return response(["status" => false, "message" => "Failed !! Only sell type ads can be buy."], 422);
+           }else if($request->payable_amount < $ad->order_limit_min){
+                return response(["status" => false, "message" => "Failed !! Minimum Order Limit is .". $ad->order_limit_min], 422);
+           }else if($request->payable_amount > $ad->order_limit_max){
+            return response(["status" => false, "message" => "Failed !! Maximum Order Limit is .". $ad->order_limit_max], 422);
+           }else if($sellers_account->balance < $request->payable_amount) {
+            return response(["status" => false, "message" => "Failed !! Seller has insufficient balance "], 422);
+           }else if( $buyers_account->balance < $receivable_amount) {
+            return response(["status" => false, "message" => "Failed !! Insufficient balance to buy "], 422);
+           }
+
+           // if all's are okay then update the informations 
+           DB::transaction(function () use ($user,$request, $ad, $buyers_account, $sellers_account,  $receivable_amount) { 
+            // reduce buyer's payable_with balance
+            $buyers_account->balance =  $buyers_account->balance -  $receivable_amount;
+            $buyers_account->save();
+
+            // increase buyer's account ad's asset type
+            $buyers_account = Account::where('user_id', $user->id)->where('asset_type', $ad->payable_with)->first();
+            $buyers_account->balance = $buyers_account->balance + $request->payable_amount;
+            $buyers_account->save();
+
+            // reduce seller's ad asset type balance
+            $sellers_account->balance = $sellers_account->balance - $request->payable_amount;
+            $sellers_account->save();
+
+            // increase seller's payable_with balance
+            $buyers_account = Account::where('user_id', $ad->user_id)->where('asset_type', $ad->asset_type)->first();
+            $buyers_account->balance = $buyers_account->balance +  $receivable_amount;
+            $buyers_account->save();
+
+            // now update ads information 
+            $ad->advertise_total_amount = $ad->advertise_total_amount -  $receivable_amount;
+            $ad->save(); 
+
+            // now insert information's to ads_transaction table
+            AddTransaction::create([
+                'ad_id' => $ad->id,
+                'sell_by' => $sellers_account->user_id,
+                'purchase_by' => $buyers_account->user_id,
+                'payable_asset_type' => $ad->payable_with,
+                'payable_amount' => $request->payable_amount,
+                'receivable_asset_type' =>$ad->asset_type,
+                'receivable_amount' => $receivable_amount,
+                'add_trans_id' => substr(md5(time()), 0, 10),
+                'date' => Date("Y-m-d H:i:s"),
+            ]);
+           });
+
+           return response(["status" => true, "message" => 'Success !! '], 422);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response(["status" => false, "message" => $e->getMessage()], 422);
+        }
+    }
+
+
 }
+
+// for BUY the ads 
+//..................
 // Checking points
 //......................
 // Check the add is permitted,not_deleted,visible 
@@ -272,4 +356,6 @@ class AdsService
 //Decrease Seller's GOLD (ad asset type) balance , increase payable with [BDT]
 //update ads information 
 // insert ads_transaction information 
-//
+
+
+// for SELL by the ads process is totally opposite of BUY ads
