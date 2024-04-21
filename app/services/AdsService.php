@@ -102,12 +102,12 @@ class AdsService
 
 
            //check  asset GOLD or Not , should be gold
-           if($request->asset_type !== AssetTypeEnums::GOLD->value){
+           if($request->asset_type != AssetTypeEnums::GOLD->value){
             return response(["status" => false, "message" => "Only gold ads can be create right now."], 422);
            }
 
            // price type should be BDT
-           if($request->payable_with !== AssetTypeEnums::BDT->value){
+           if($request->payable_with != AssetTypeEnums::BDT->value){
             return response(["status" => false, "message" => "Payable with should be BDT."], 422);
            }
 
@@ -127,7 +127,7 @@ class AdsService
             }
 
             // Check balance sufficient or not
-            if($request->ad_type === AdsTypeEnums::SELL) {
+            if($request->ad_type == AdsTypeEnums::SELL) {
 
                 // running ads 
                 $running_ads_amount = Ad::where('user_id', $user->id)->where('asset_type',$request->asset_type)
@@ -140,7 +140,7 @@ class AdsService
                 }
             }
 
-            if($request->ad_type === AdsTypeEnums::BUY) {
+            if($request->ad_type == AdsTypeEnums::BUY) {
 
                 // running ads 
                 $running_ads_amount = Ad::where('user_id', $user->id)->where('asset_type',$request->asset_type)
@@ -259,7 +259,7 @@ class AdsService
                 'payable_amount' => $request->payable_amount,
                 'receivable_asset_type' =>$ad->asset_type,
                 'receivable_amount' => $receivable_amount,
-                'add_trans_id' => substr(md5(time()), 0, 10),
+                'ad_trans_id' => substr(md5(time()), 0, 10),
                 'date' => Date("Y-m-d H:i:s"),
             ]);
            });
@@ -340,7 +340,7 @@ class AdsService
                 'payable_amount' => $request->payable_amount,
                 'receivable_asset_type' =>$ad->asset_type,
                 'receivable_amount' => $receivable_amount,
-                'add_trans_id' => substr(md5(time()), 0, 10),
+                'ad_trans_id' => substr(md5(time()), 0, 10),
                 'date' => Date("Y-m-d H:i:s"),
             ]);
            });
@@ -349,6 +349,40 @@ class AdsService
 
         } catch (Exception $e) {
             DB::rollBack();
+            return response(["status" => false, "message" => $e->getMessage()], 422);
+        }
+    }
+
+    public function transactions(Request $request){
+    
+        try {
+            $user = auth()->user();
+            $requests = $request->all();
+
+            $transactions =  AdTransaction::with('seller','buyer','ad')
+                ->where(function($query) use($user) {
+                    $query->where('sell_by', $user->id)
+                    ->orWhere('purchase_by', $user->id);
+                })
+                ->where(function($query) use ($requests) {
+                    if(isset($requests['start_date']) && isset($requests['end_date'])){
+                        $start_date =  date('Y-m-d', strtotime($requests['start_date']));
+                        $end_date   = date('Y-m-d', strtotime($requests['end_date']));
+                        $query->whereDate('date' , '>=' , $start_date)->whereDate('date', '<=' , $end_date);
+                    }
+                    
+                    // else {
+                    //     $today = Carbon::now();
+                    //     $start_date = date('Y-m-d', strtotime($today->subDays(7)->toDateString()));
+                    //     $end_date   = date('Y-m-d');
+                    //     $query->whereDate('date' , '>=' , $start_date)->whereDate('date', '<=' , $end_date);
+                    // }
+                })
+                ->get();
+
+           return $transactions;
+
+        } catch (Exception $e) {
             return response(["status" => false, "message" => $e->getMessage()], 422);
         }
     }

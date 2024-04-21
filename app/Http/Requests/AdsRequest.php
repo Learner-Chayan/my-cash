@@ -22,13 +22,13 @@ class AdsRequest extends FormRequest
     public function rules(): array
     {
         return [  
-            "ad_type" => ['required','numeric'],
-            "asset_type" => ['required','numeric'],
-            "advertise_total_amount" => ["required", "numeric", "min:0.1"],
-            "user_price" => ["required", "numeric", "min:0.1"],
-            "price_type" => ["required", "numeric"],
-            "order_limit_min" => ["required", "numeric"],
-            "order_limit_max" => ["required", "numeric"],
+            "ad_type" => ['required'],
+            "asset_type" => ['required'],
+            "advertise_total_amount" => ["required", "min:0.1"],
+            "user_price" => ["required", "min:0.1"],
+            "price_type" => ["required"],
+            "order_limit_min" => ["required"],
+            "order_limit_max" => ["required"],
         ];
     }
 }

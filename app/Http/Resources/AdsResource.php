@@ -16,6 +16,7 @@ class AdsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            "name" => $this->user?->name,
             "id" => $this->id,
             "ads_unique_num" => $this->ads_unique_num,
             "ad_type" => $this->ad_type,
@@ -32,6 +33,7 @@ class AdsResource extends JsonResource
             "delete_status" => $this->delete_status,
             "visibility_status" => $this->visibility_status,
             "date" => Carbon::parse($this->date)->format('Y-m-d h:i A'),
+            "image" => $this->user->image
         ];
     }
 }
