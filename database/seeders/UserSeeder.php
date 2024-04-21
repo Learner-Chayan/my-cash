@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'phone' => '01704211895',
             'pay_id'=> 1234567892,
-            'password' => bcrypt('1234567'),
+            'password' => bcrypt('12345678'),
             'status' => Status::ACTIVE,
         ]);
         User::create([
@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
             'email' => 'agent@gmail.com',
             'phone' => '01707211895',
             'pay_id'=> 1234567893,
-            'password' => bcrypt('1234567'),
+            'password' => bcrypt('12345678'),
             'status' => Status::ACTIVE,
         ]);
         User::create([
@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
             'email' => 'customer@gmail.com',
             'phone' => '01707217895',
             'pay_id'=> 1234567894,
-            'password' => bcrypt('1234567'),
+            'password' => bcrypt('12345678'),
             'status' => Status::ACTIVE,
         ]);
     }

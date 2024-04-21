@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\AssetTypeEnums;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AuthenticationRequest;
 use App\Http\Requests\updateImageRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Account;
@@ -165,6 +166,38 @@ class ProfileController extends Controller
                 "status" => false,
                 "message" => $th->getMessage()
             ]);
+        }
+    }
+
+    public function authenticate(AuthenticationRequest $request){
+        try {
+            $user = User::find(auth()->user()->id);
+            if ($request->front_side) {
+                $user->clearMediaCollection('frontSide');
+                $user->addMediaFromRequest('front_side')->toMediaCollection('frontSide');
+            }
+
+            if ($request->back_side) {
+                $user->clearMediaCollection('backSide');
+                $user->addMediaFromRequest('back_side')->toMediaCollection('backSide');
+            }
+
+            if ($request->selfie) {
+                $user->clearMediaCollection('selfie');
+                $user->addMediaFromRequest('selfie')->toMediaCollection('selfie');
+            }
+
+
+            $user->save();
+            return response([
+                "status" => true,
+                "front_side" => $user->frontSide,
+                "back_side" => $user->backSide,
+                "selfie" => $user->selfie,
+                "message"   => "Authentication request submitted successfully"
+            ]);
+        } catch (\Exception $exception) {
+            return response(['status' => false, 'message' => $exception->getMessage()], 422);
         }
     }
 }

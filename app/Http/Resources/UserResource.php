@@ -22,6 +22,7 @@ class UserResource extends JsonResource
                 "phone" => $this->phone ? $this->phone : null,
                 "pay_id" => $this->pay_id ? $this->pay_id : null,
                 "verified" => $this->status == Status::ACTIVE ? true : false,
+                "is_authenticated" => $this->is_authenticated ? true : false,
                 "account_type" =>  $this->UserRoleName,
                 "image" => $this->image
 

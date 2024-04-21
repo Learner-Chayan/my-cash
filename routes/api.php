@@ -53,6 +53,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('check-pay-pin-status', [ProfileController::class,'payPin']);
         Route::post('set-pay-pin', [ProfileController::class,'payPinStore']);
         Route::match(['put','patch'],'/change-password', [ProfileController::class,'changePassword']);
+        Route::post('/authenticate', [ProfileController::class, 'authenticate']);
      });
 
     Route::prefix('send')->group(function () {
