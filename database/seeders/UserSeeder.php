@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
             'name' => 'agent',
             'email' => 'agent@gmail.com',
             'phone' => '01707211895',
-            'pay_id'=> 1234567893,
+        'pay_id'=> 1234567893,
             'password' => bcrypt('12345678'),
             'status' => Status::ACTIVE,
         ]);
