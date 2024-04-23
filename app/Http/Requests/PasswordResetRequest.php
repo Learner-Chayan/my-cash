@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Enums\UserIdTypeEnums;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class PasswordResetRequest extends FormRequest
 {
@@ -22,11 +24,48 @@ class PasswordResetRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules =  [
             'user_id_type' => ['required','string','in:email,phone'],
             'user_id'  => $this->input('user_id_type') == UserIdTypeEnums::EMAIL ?  ['required','email','max:255'] : 
                         ['required','string','min:10','max:14','regex:/^[0-9]+$/'],
-            "password" => ["required","min:8"],
+            "password" => ['required',
+                            'min:8',
+                            'max:32',],
+        ];
+
+
+        Validator::extend('char_required', function ($attribute, $value, $parameters, $validator) {
+            return preg_match('/[a-z]/', $value);
+        });
+        Validator::extend('capital_char_required', function ($attribute, $value, $parameters, $validator) {
+            return preg_match('/[A-Z]/', $value);
+        });
+        Validator::extend('digit_required', function ($attribute, $value, $parameters, $validator) {
+            return preg_match('/\d/', $value);
+        });
+        Validator::extend('no_user_id_in_password', function ($attribute, $value, $parameters, $validator) {
+            $user_id = $validator->getData()['user_id']; 
+            // Check if the password does not contain the user_id (email or phone) as a substring
+            return strpos($value, $user_id) === false;
+        });
+
+        // Add custom rule names to the 'password' field
+        $rules['password'][] = 'char_required';
+        $rules['password'][] = 'capital_char_required';
+        $rules['password'][] = 'digit_required';
+        $rules['password'][] = 'no_user_id_in_password';
+
+        return $rules;
+    }
+
+
+    public function messages()
+    {
+        return [
+            'password.char_required' => 'At least one letter is required',
+            'password.capital_char_required' => 'At least one capital letter is required',
+            'password.digit_required' => 'At least one digit is required',
+            'password.no_user_id_in_password' => 'Email or phone should not contain in password',
         ];
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdsRequest;
 use App\Http\Resources\AdsResource;
+use App\Http\Resources\AdTransactionsResource;
 use App\Services\AdsService;
 use Exception;
 use Illuminate\Http\Request;
@@ -64,6 +65,14 @@ class AdsController extends Controller
     public function sell(Ad $ad, Request $request) {
         try {
             return $this->adsService->sell($ad, $request);
+        } catch (Exception $e) {
+            return response([ "status" => false, "message" => $e->getMessage()], 422);
+        }
+    }
+
+    public function transactions(Request $request){
+        try {
+            return AdTransactionsResource::collection($this->adsService->transactions($request));
         } catch (Exception $e) {
             return response([ "status" => false, "message" => $e->getMessage()], 422);
         }

@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('pay_id')->unique();
             $table->string('pay_pin')->nullable()->default(null);
             $table->unsignedTinyInteger('status')->default(Status::INACTIVE)->comment(Status::ACTIVE."= Active , ".Status::INACTIVE."= Inactive");
+            $table->boolean('is_authenticated')->nullable()->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

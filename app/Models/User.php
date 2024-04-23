@@ -28,7 +28,8 @@ class User extends Authenticatable implements HasMedia
         'email',
         'password',
         'phone',
-        'pay_id'
+        'pay_id',
+        'is_authenticated'
     ];
 
     /**
@@ -69,4 +70,29 @@ class User extends Authenticatable implements HasMedia
         }
         return asset('images/default/profile.png');
     }
+
+    public function getFrontSideAttribute(): string
+    {
+        if (!empty($this->getFirstMediaUrl('frontSide'))) {
+            return asset($this->getFirstMediaUrl('frontSide'));
+        }
+        return null;
+    }
+
+    public function getBackSideAttribute(): string
+    {
+        if (!empty($this->getFirstMediaUrl('backSide'))) {
+            return asset($this->getFirstMediaUrl('backSide'));
+        }
+        return null;
+    }
+
+    public function getSelfieAttribute(): string
+    {
+        if (!empty($this->getFirstMediaUrl('selfie'))) {
+            return asset($this->getFirstMediaUrl('selfie'));
+        }
+        return null;
+    }
+    
 }

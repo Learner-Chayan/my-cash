@@ -53,6 +53,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('check-pay-pin-status', [ProfileController::class,'payPin']);
         Route::post('set-pay-pin', [ProfileController::class,'payPinStore']);
         Route::match(['put','patch'],'/change-password', [ProfileController::class,'changePassword']);
+        Route::post('/authenticate', [ProfileController::class, 'authenticate']);
      });
 
     Route::prefix('send')->group(function () {
@@ -83,6 +84,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         // buy ads
         Route::post('/buy/{ad}', [AdsController::class, 'buy']);
         Route::post('/sell/{ad}', [AdsController::class, 'sell']);
+
+        // sold/bought ads of user
+        Route::get('/transactions', [AdsController::class, 'transactions']);
     });
 
     //assets
