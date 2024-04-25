@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomerRequest;
+use App\Models\User;
 use App\Services\CustomerService;
+use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 
 class CustomerController extends Controller
@@ -51,6 +53,62 @@ class CustomerController extends Controller
         $media = $data['customer']->getMedia('user')->first();
         $data['image'] = $media ? $media->getUrl() : asset('default-user.png');
         return view('admin.customer.show',$data);
+    }
+    public function verificationRequest()
+    {
+        $data['page_title'] = "Verification request";
+        $data['customers'] = $this->customerService->getCustomerAgent();
+        return view('admin.customer.request',$data);
+    }
+    public function verifyRequest($id)
+    {
+        $data['page_title'] = "Verifiy request";
+        $data['customer']   = $this->customerService->getSingle($id);
+        //profile picture
+        $media = $data['customer']->getMedia('user')->first();
+        $data['image'] = $media ? $media->getUrl() : asset('default-user.png');
+        // front side
+        $frontSidemMedia = $data['customer']->getMedia('frontSide')->first();
+        $data['frontSide'] = $frontSidemMedia ? $frontSidemMedia->getUrl() : '0';
+
+        // back side
+        $backSidemMedia = $data['customer']->getMedia('backSide')->first();
+        $data['backSide'] = $backSidemMedia ? $backSidemMedia->getUrl() : '0';
+
+        // back side
+        $selfiMedia = $data['customer']->getMedia('selfie')->first();
+        $data['selfi'] = $selfiMedia ? $selfiMedia->getUrl() : '0';
+        return view('admin.customer.request-show',$data);
+    }
+
+    public function verificationRequestUpdate($id)
+    {
+        $this->customerService->updateVerification($id);
+        session()->flash('success','Update successfully.');
+        return redirect()->route('request');
+    }
+    // need to remove
+    public function verificationRequestStore(Request $request)
+    {
+        $user = User::find($request->customer_id);
+        if ($request->front_side) {
+            $user->clearMediaCollection('frontSide');
+            $user->addMediaFromRequest('front_side')->toMediaCollection('frontSide');
+        }
+
+        if ($request->back_side) {
+            $user->clearMediaCollection('backSide');
+            $user->addMediaFromRequest('back_side')->toMediaCollection('backSide');
+        }
+
+        if ($request->selfie) {
+            $user->clearMediaCollection('selfie');
+            $user->addMediaFromRequest('selfie')->toMediaCollection('selfie');
+        }
+
+
+        $user->save();
+        return redirect()->back();
     }
 
 }

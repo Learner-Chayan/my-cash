@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\AssetStatus;
 use App\Models\Asset;
 use App\Models\User;
+use http\Exception\InvalidArgumentException;
 
 class CustomerService
 {
@@ -12,6 +13,11 @@ class CustomerService
     public function getCustomer($type)
     {
         return User::role($type)->latest()->get();
+    }
+
+    public function getCustomerAgent()
+    {
+        return User::role(['regular','agent'])->latest()->get();
     }
 
     public function getSingle($id)
@@ -29,6 +35,14 @@ class CustomerService
         $user->roles()->sync($roleId ?? []);
         return $user;
 
+    }
+
+    public function updateVerification($id)
+    {
+        $customer = $this->getSingle($id);
+        $customer->is_authenticated = $customer->is_authenticated == 1 ? 0 : 1;
+        $customer->save();
+        return $customer;
     }
 
 }

@@ -77,13 +77,22 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function () {
         Route::resource('ads',AdsApprovalController::class);
 
     });
+    Route::group(['prefix' =>'verification' ,'middleware' => ['Setting','check_role:super-admin|admin']], function () {
+        Route::get('request', [CustomerController::class, 'verificationRequest'])->name('request');
+        Route::get('verify-request/{id}', [CustomerController::class, 'verifyRequest'])->name('verify-request');
+        Route::post('request-store', [CustomerController::class, 'verificationRequestStore'])->name('request-store');
+        Route::get('request-update/{id}', [CustomerController::class, 'verificationRequestUpdate'])->name('request-update');
+
+    });
     Route::group(['prefix' =>'customer' ,'middleware' => ['Setting','check_role:super-admin|admin']], function () {
 
         Route::get('/{type}', [CustomerController::class, 'index'])->name('customer');
         Route::get('edit/{id}', [CustomerController::class, 'edit'])->name('edit');
         Route::patch('customer-update/{customer}', [CustomerController::class, 'update'])->name('customer-update');
         Route::get('show/{id}', [CustomerController::class, 'show'])->name('show');
+
     });
+
     Route::group(['middleware' => ['Setting','check_role:super-admin']], function () {
          Route::resource('roles',RoleController::class);
          Route::resource('permissions',PermissionController::class);
