@@ -90,11 +90,17 @@
                 </li>
 
                 <li class="nav-header text-uppercase">Manage Customer</li>
-                <li class="nav-item {{Route::currentRouteNamed('customer') || Route::currentRouteNamed('edit') || Route::currentRouteNamed('show') ? 'menu-open' : ''}}">
+                <li class="nav-item {{Route::currentRouteNamed('request') || Route::currentRouteNamed('verify-request') || Route::currentRouteNamed('customer') || Route::currentRouteNamed('edit') || Route::currentRouteNamed('show') ? 'menu-open' : ''}}">
                     <a href="#" class="nav-link {{Route::currentRouteNamed('customer') || Route::currentRouteNamed('show') ? 'active' : ''}}">
                         <i class="nav-icon fas fa-users"></i><p>Customer<i class="fas fa-angle-left right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('request')}}" class="nav-link {{Request::is('admin/verification/request') || Route::currentRouteNamed('verify-request') ? 'active' : ''}}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Verification Request</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="{{route('customer','regular')}}" class="nav-link {{Request::is('admin/customer/regular') || Route::currentRouteNamed('edit') ? 'active' : ''}}">
                                 <i class="far fa-circle nav-icon"></i>
