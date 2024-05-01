@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\Api\LoginController;
 use App\Http\Controllers\Api\TransactionHistoryController;
 use App\Http\Controllers\Api\SendController;
 use App\Http\Controllers\Api\PasswordController;
+use App\Http\Controllers\Api\UserIdUpdateController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -55,6 +56,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::match(['put','patch'],'/change-password', [ProfileController::class,'changePassword']);
         Route::post('/authenticate', [ProfileController::class, 'authenticate']);
      });
+
+     Route::prefix('/reset-user-id')->group(function() {
+        Route::post('/request', [UserIdUpdateController::class, 'resetUserId']);
+        Route::post('/verify', [UserIdUpdateController::class, 'verifyOtp']);
+        Route::post('/update', [UserIdUpdateController::class, 'updateId']);
+        
+    });
 
     Route::prefix('send')->group(function () {
         Route::get('get-receiver', [SendController::class,'index']);

@@ -17,7 +17,7 @@ class CustomerService
 
     public function getCustomerAgent()
     {
-        return User::role(['regular','agent'])->latest()->get();
+        return User::role(['regular','agent'])->whereIn('is_authenticated',[0,1])->latest()->get();
     }
 
     public function getSingle($id)

@@ -264,7 +264,7 @@ class AdsService
             ]);
            });
 
-           return response(["status" => true, "message" => 'Success !! Balance transfered to your account. '], 422);
+           return response(["status" => true, "message" => 'Success !! Balance transfered to your account. '], 201);
 
         } catch (Exception $e) {
             DB::rollBack();
@@ -345,7 +345,7 @@ class AdsService
             ]);
            });
 
-           return response(["status" => true, "message" => 'Success !! Balance transfered to your account. '], 422);
+           return response(["status" => true, "message" => 'Success !! Balance transfered to your account. '], 201);
 
         } catch (Exception $e) {
             DB::rollBack();
