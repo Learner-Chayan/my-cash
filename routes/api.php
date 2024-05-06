@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AdsController;
 use App\Http\Controllers\Api\AssetsController;
+use App\Http\Controllers\Api\HomeNotificationController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Auth\Api\RegisterController;
 use App\Http\Controllers\Auth\Api\LoginController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Api\TransactionHistoryController;
 use App\Http\Controllers\Api\SendController;
 use App\Http\Controllers\Api\PasswordController;
 use App\Http\Controllers\Api\UserIdUpdateController;
+use App\Http\Controllers\Api\DepositAgentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -108,5 +110,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
 
+    //deposit agents
+
+    Route::get('/deposit-agents', [DepositAgentController::class, 'list']);
+    Route::get('/home-notification', [HomeNotificationController::class, 'list']);
 
 });

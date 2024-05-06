@@ -14,4 +14,12 @@ class HomeNotification extends Model implements HasMedia
     protected $fillable = [
         'title', 'description'
     ];
+
+    public function getImageAttribute(): string
+    {
+        if (!empty($this->getFirstMediaUrl('home_notification'))) {
+            return asset($this->getFirstMediaUrl('home_notification'));
+        }
+        return '';
+    }
 }
