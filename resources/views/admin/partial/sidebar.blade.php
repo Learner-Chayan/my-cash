@@ -89,9 +89,53 @@
                     </ul>
                 </li>
 
+                <li class="nav-header text-uppercase">Home Notification</li>
+                <li class="nav-item {{Route::currentRouteNamed('home-notification.index') || Route::currentRouteNamed('home-notification.create') || Route::currentRouteNamed('home-notification.edit') ? 'menu-open' : ''}}">
+                    <a href="#" class="nav-link {{Route::currentRouteNamed('home-notification.index') || Route::currentRouteNamed('home-notification.create') || Route::currentRouteNamed('home-notification.edit')  ? 'active' : ''}}">
+                        <i class="nav-icon fas fa-bell"></i><p>Home Notification<i class="fas fa-angle-left right"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('home-notification.create')}}" class="nav-link {{Route::currentRouteNamed('home-notification.create') ? 'active' : ''}}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Add New Notification</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('home-notification.index')}}" class="nav-link {{Route::currentRouteNamed('home-notification.index') || Route::currentRouteNamed('home-notification.edit') ? 'active' : ''}}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Home Notification List</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <li class="nav-header text-uppercase">Deposit Agent</li>
+                <li class="nav-item {{Route::currentRouteNamed('deposit-agent.index') || Route::currentRouteNamed('deposit-agent.create') || Route::currentRouteNamed('deposit-agent.edit') ? 'menu-open' : ''}}">
+                    <a href="#" class="nav-link {{Route::currentRouteNamed('deposit-agent.index') || Route::currentRouteNamed('deposit-agent.create') || Route::currentRouteNamed('deposit-agent.edit')  ? 'active' : ''}}">
+                        <i class="nav-icon fas fa-user-shield"></i><p>Deposit Agent<i class="fas fa-angle-left right"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('deposit-agent.create')}}" class="nav-link {{Route::currentRouteNamed('deposit-agent.create') ? 'active' : ''}}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Add New Agent</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('deposit-agent.index')}}" class="nav-link {{Route::currentRouteNamed('deposit-agent.index') || Route::currentRouteNamed('deposit-agent.edit') ? 'active' : ''}}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Deposit Agent List</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
                 <li class="nav-header text-uppercase">Manage Customer</li>
                 <li class="nav-item {{Route::currentRouteNamed('request') || Route::currentRouteNamed('verify-request') || Route::currentRouteNamed('customer') || Route::currentRouteNamed('edit') || Route::currentRouteNamed('show') ? 'menu-open' : ''}}">
-                    <a href="#" class="nav-link {{Route::currentRouteNamed('customer') || Route::currentRouteNamed('show') ? 'active' : ''}}">
+                    <a href="#" class="nav-link {{Route::currentRouteNamed('request') || Route::currentRouteNamed('verify-request') || Route::currentRouteNamed('customer') || Route::currentRouteNamed('edit') || Route::currentRouteNamed('show') ? 'active' : ''}}">
                         <i class="nav-icon fas fa-users"></i><p>Customer<i class="fas fa-angle-left right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">

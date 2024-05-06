@@ -4,7 +4,9 @@ use App\Http\Controllers\AdsApprovalController;
 use App\Http\Controllers\AssetPriceController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DepositAgentController;
 use App\Http\Controllers\GiftController;
+use App\Http\Controllers\HomeNotificationController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -75,7 +77,8 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function () {
         Route::resource('asset-price',AssetPriceController::class);
         Route::resource('gift',GiftController::class);
         Route::resource('ads',AdsApprovalController::class);
-
+        Route::resource('deposit-agent',DepositAgentController::class);
+        Route::resource('home-notification',HomeNotificationController::class);
     });
     Route::group(['prefix' =>'verification' ,'middleware' => ['Setting','check_role:super-admin|admin']], function () {
         Route::get('request', [CustomerController::class, 'verificationRequest'])->name('request');

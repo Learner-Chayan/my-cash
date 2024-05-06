@@ -29,7 +29,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Phone</label>
-                                    <input type="text" class="form-control"  name="phone" value="{{$customer->phone}}" required  placeholder="User Phone Number">
+                                    <input type="text" class="form-control"  name="phone" value="{{$customer->phone}}"   placeholder="User Phone Number">
                                 </div>
 
                             </div>

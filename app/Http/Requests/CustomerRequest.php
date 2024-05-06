@@ -24,17 +24,12 @@ class CustomerRequest extends FormRequest
     {
         $rules = [
             'name'  => 'required',
-            'phone' => 'required|unique:users,phone',
             'email' => 'required|email|unique:users,email'
         ];
 
                 // If the request is an update, modify the 'title' rule to ignore the current record.
         if ($this->isMethod('patch') || $this->isMethod('put')) {
             $customerId = $this->route('customer'); // Assuming 'customer' is the name of your route parameter
-            $rules['phone'] = [
-                'required',
-                Rule::unique('users', 'phone')->ignore($customerId),
-            ];
             $rules['email'] = [
                 'required',
                 'email',
