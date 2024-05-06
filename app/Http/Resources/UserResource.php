@@ -24,7 +24,8 @@ class UserResource extends JsonResource
                 "verified" => $this->status == Status::ACTIVE ? true : false,
                 "is_authenticated" => $this->is_authenticated ? true : false,
                 "account_type" =>  $this->UserRoleName,
-                "image" => $this->image
+                "image" => $this->image,
+                "thumb"   => $this->thumb,
 
         ];
     }

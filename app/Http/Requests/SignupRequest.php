@@ -51,9 +51,9 @@ class SignupRequest extends FormRequest
 
 
 
-        Validator::extend('char_required', function ($attribute, $value, $parameters, $validator) {
-            return preg_match('/[a-z]/', $value);
-        });
+        // Validator::extend('char_required', function ($attribute, $value, $parameters, $validator) {
+        //     return preg_match('/[a-z]/', $value);
+        // });
         Validator::extend('capital_char_required', function ($attribute, $value, $parameters, $validator) {
             return preg_match('/[A-Z]/', $value);
         });
@@ -67,7 +67,7 @@ class SignupRequest extends FormRequest
         });
 
         // Add custom rule names to the 'password' field
-        $rules['password'][] = 'char_required';
+       // $rules['password'][] = 'char_required';
         $rules['password'][] = 'capital_char_required';
         $rules['password'][] = 'digit_required';
         $rules['password'][] = 'no_user_id_in_password';
@@ -80,7 +80,7 @@ class SignupRequest extends FormRequest
     public function messages()
     {
         return [
-            'password.char_required' => 'At least one letter is required',
+            //'password.char_required' => 'At least one letter is required',
             'password.capital_char_required' => 'At least one capital letter is required',
             'password.digit_required' => 'At least one digit is required',
             'password.no_user_id_in_password' => 'Email or phone should not contain in password',
