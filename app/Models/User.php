@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 
 class User extends Authenticatable implements HasMedia
@@ -71,6 +72,15 @@ class User extends Authenticatable implements HasMedia
         return asset('images/default/profile.png');
     }
 
+    public function getThumbAttribute(): string
+    {
+        if (!empty($this->getFirstMediaUrl('profile'))) {
+            $profile = $this->getMedia('profile')->last();
+            return $profile->getUrl('thumb');
+        }
+        return asset('images/required/profile.png');
+    }
+
     public function getFrontSideAttribute(): string
     {
         if (!empty($this->getFirstMediaUrl('frontSide'))) {
@@ -93,6 +103,11 @@ class User extends Authenticatable implements HasMedia
             return asset($this->getFirstMediaUrl('selfie'));
         }
         return null;
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')->crop('crop-center', 225, 225)->keepOriginalImageFormat()->sharpen(10);
     }
     
 }
