@@ -28,7 +28,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Phone</label>
-                                    <input type="text" class="form-control"  name="phone" value="{{old('phone')}}" required  placeholder="User Phone Number">
+                                    <input type="text" class="form-control"  name="phone" value="{{old('phone')}}"  placeholder="User Phone Number">
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Email</label>
