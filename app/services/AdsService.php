@@ -195,13 +195,19 @@ class AdsService
         try {
            // validate request 
            $request->validate([
-            'payable_amount' => 'required|numeric' //  BDT 
+            'payable_amount' => 'required|numeric', //  BDT
+            'pay_pin'        => 'required' 
            ]);
 
            // Checking Part
            $user = auth()->user(); //buyer
            $buyers_account = Account::where('user_id', $user->id)->where('asset_type', $ad->payable_with)->first();
            $sellers_account = Account::where('user_id', $ad->user_id)->where('asset_type', $ad->asset_type)->first();
+
+
+           if($user->pay_pin != $request->pay_pin){
+            return response(["status" => false, "message" => "Failed !! Invalid pay pin."], 422);
+           }
 
            // how many asset will get the buyer 
            // if user_price (unit_price) = 10 BDT (with_payable)
@@ -278,13 +284,21 @@ class AdsService
         try {
            // validate request 
            $request->validate([
-            'payable_amount' => 'required|numeric' //  BDT  
+            'payable_amount' => 'required|numeric', //  BDT  
+            'pay_pin'        => 'required'
            ]);
 
            // Checking Part
            $user = auth()->user(); //buyer
            $buyers_account = Account::where('user_id', $user->id)->where('asset_type', $ad->asset_type)->first();
            $sellers_account = Account::where('user_id', $ad->user_id)->where('asset_type', $ad->payable_with)->first();
+
+           if($user->pay_pin != $request->pay_pin){
+                return response(["status" => false, "message" => "Failed !! Invalid pay pin."], 422);
+           }
+           
+
+
 
            // how many asset will get the buyer 
            // if user_price (unit_price) = 10 BDT (with_payable)

@@ -29,7 +29,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Description <code>*</code></label>
-                                    <textarea id="summernote" name="description"></textarea>
+                                    <textarea class="form-control" id="summernote" name="description"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label class="text-uppercase text-bold">Image</label>
@@ -71,15 +71,15 @@
     <!-- Summernote -->
     <script src="{{asset('/assets')}}/summernote/summernote-bs4.min.js"></script>
     <script>
-        $(function () {
-            // Summernote
-            $('#summernote').summernote()
+        // $(function () {
+        //     // Summernote
+        //     $('#summernote').summernote()
 
-            // CodeMirror
-            CodeMirror.fromTextArea(document.getElementById("codeMirrorDemo"), {
-                mode: "htmlmixed",
-                theme: "monokai"
-            });
-        })
+        //     // CodeMirror
+        //     CodeMirror.fromTextArea(document.getElementById("codeMirrorDemo"), {
+        //         mode: "htmlmixed",
+        //         theme: "monokai"
+        //     });
+        // })
     </script>
 @endpush
