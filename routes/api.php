@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\SendController;
 use App\Http\Controllers\Api\PasswordController;
 use App\Http\Controllers\Api\UserIdUpdateController;
 use App\Http\Controllers\Api\DepositAgentController;
+use App\Http\Controllers\Api\GiftController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -114,5 +115,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/deposit-agents', [DepositAgentController::class, 'list']);
     Route::get('/home-notification', [HomeNotificationController::class, 'list']);
+    Route::get('/gifts', [GiftController::class, 'index']);
 
 });
