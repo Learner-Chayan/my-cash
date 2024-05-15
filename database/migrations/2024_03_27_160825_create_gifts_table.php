@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('gifts', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('description');
+            $table->string('identifier');
             $table->integer('asset_type');
             $table->integer('gift_type');
             $table->double('amount',15,6);

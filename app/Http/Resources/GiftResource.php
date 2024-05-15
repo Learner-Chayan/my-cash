@@ -17,6 +17,8 @@ class GiftResource extends JsonResource
     {
         return [
             "title" => $this->title,
+            "description" => $this->description,
+            "identifier" => $this->identifier,
             "asset_type" => $this->asset_type,
             "gift_type" => $this->gift_type,
             "amount" => $this->amount,

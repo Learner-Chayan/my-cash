@@ -31,6 +31,8 @@
                                         <th class="text-bold text-uppercase">#SL</th>
                                         <th class="text-bold text-uppercase">Image</th>
                                         <th class="text-bold text-uppercase">Title</th>
+                                        <th class="text-bold text-uppercase">Description</th>
+                                        <th class="text-bold text-uppercase">Identifier</th>
                                         <th class="text-bold text-uppercase">Asset</th>
                                         <th class="text-bold text-uppercase">Gift To</th>
                                         <th class="text-bold text-uppercase">Amount</th>
@@ -57,6 +59,8 @@
                                             <td>{{ ++$key }}</td>
                                             <td><img src="{{ $image }}" alt="User Image" style="width: 100px; height: auto;"></td>
                                             <td>{{ $gift->title }}</td>
+                                            <td>{{ $gift->description }}</td>
+                                            <td>{{ $gift->identifier }}</td>
                                             <td>{{ \App\Enums\AssetTypeEnums::tryFrom($gift->asset_type)->name ?? 'Default' }}</td>
                                             <td>{{ $typeNames[$gift->gift_type] ?? 'Default' }}</td>
                                             <td>{{ $gift->amount }}</td>

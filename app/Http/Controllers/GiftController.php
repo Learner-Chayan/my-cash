@@ -43,6 +43,8 @@ class GiftController extends Controller
     {
         $request->validate([
             'title' => 'required',
+            'description' => 'required',
+            'identifier' => 'required',
             'asset_type' => 'required',
             'gift_type' => 'required',
             'amount' => 'required|numeric',

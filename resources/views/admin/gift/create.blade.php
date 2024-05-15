@@ -28,6 +28,10 @@
                                     <input type="text" class="form-control"  name="title" value="{{old('title')}}" required  placeholder="Title">
                                 </div>
                                 <div class="form-group">
+                                    <label for="exampleInputEmail1">Description</label>
+                                    <input type="text" class="form-control"  name="description" value="{{old('description')}}" required  placeholder="Description">
+                                </div>
+                                <div class="form-group">
                                     <label for="exampleInputEmail1">Asset</label>
                                     <select class="select2bs4" name="asset_type" required data-placeholder="Select a State" style="width: 100%;">
                                         <option value="">Choose One</option>
@@ -51,6 +55,10 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Identifier</label>
+                                    <input type="text" class="form-control"  name="identifier" value="{{old('identifier')}}" required  placeholder="Identifier">
+                                </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Amount</label>
                                     <input type="text" class="form-control"  name="amount" value="{{old('amount')}}" required  placeholder="Gift Amount">

@@ -12,6 +12,6 @@ class Gift extends Model implements HasMedia
     use HasFactory,InteractsWithMedia;
 
     protected $fillable = [
-        'title','asset_type','gift_type','amount','date','status'
+        'title','asset_type','gift_type','amount','date','status', 'description','identifier'
     ];
 }
